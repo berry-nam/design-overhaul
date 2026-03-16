@@ -99,6 +99,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .section{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:16px;position:relative;overflow:visible;scroll-margin-top:120px}
 .section-title{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .section-title .icon{font-size:18px}
+.section-detail-link{margin-left:auto;font-size:12.5px;font-weight:500;color:var(--brand);text-decoration:none;white-space:nowrap;transition:var(--transition);opacity:.7}
+.section-detail-link:hover{opacity:1;text-decoration:underline}
 
 /* Charts */
 .chart-container{position:relative;border-radius:var(--radius);overflow:hidden}
@@ -663,7 +665,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <div class="section" style="position:relative">
       <span class="design-note dn-green">5개년 데이터, 연간/분기 토글. 막대 폭 40px 간격 60px. 매출=Blue-500 영업이익=Amber-400</span>
       <span class="design-note dn-blue" style="right:auto;left:8px">차트 높이 280px. 기간 필터 5개(3M~MAX) pill 버튼. 범례 우상단. 막대 위 값 라벨 12px/600</span>
-      <div class="section-title"><span class="icon">📊</span> 매출 · 영업이익(영업이익률) 추이</div>
+      <div class="section-title"><span class="icon">📊</span> 매출 · 영업이익(영업이익률) 추이 <a href="#" class="section-detail-link" onclick="switchTab('finance',null,{scrollTo:'earnings-section'});return false">상세보기 →</a></div>
       <div class="chart-controls">
         <div class="time-range">
           <button class="time-btn" onclick="setTimeRange(this)">3M</button>
@@ -686,7 +688,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <!-- 2. Financial Summary Table -->
     <div class="section" style="position:relative">
       <span class="design-note dn-green">8행×6열 테이블. 숫자 우측정렬 Tabular nums. 증감: ▲Green-600 ▼Red-600. 행 44px 헤더 Gray-50</span>
-      <div class="section-title"><span class="icon">📋</span> 재무 요약</div>
+      <div class="section-title"><span class="icon">📋</span> 재무 요약 <a href="#" class="section-detail-link" onclick="switchTab('finance',null);return false">상세보기 →</a></div>
       <table class="fin-table">
         <thead><tr><th>항목</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead>
         <tbody>
@@ -704,7 +706,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <div class="section" style="position:relative">
       <span class="design-note dn-green">워터폴 5~8항목. 시작/끝=Gray-400, 양수=Blue-500, 음수=Red-400. 연결 점선 Gray-300</span>
       <span class="design-note dn-yellow" style="right:auto;left:8px">hover 시 툴팁(값+비율). 바 위 값 라벨 11px. 높이 240px. 카테고리 라벨 수평 배치</span>
-      <div class="section-title"><span class="icon">🏗️</span> 매출 구성 워터폴</div>
+      <div class="section-title"><span class="icon">🏗️</span> 매출 구성 워터폴 <a href="#" class="section-detail-link" onclick="switchTab('finance',null,{scrollTo:'earnings-section'});return false">상세보기 →</a></div>
       <div class="chart-container">
         <canvas id="waterfallChart" style="width:100%" height="260"></canvas>
       </div>
@@ -798,7 +800,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <div class="section paywall-section" style="position:relative">
       <span class="design-note dn-green">도넛 200×200+범례. 최대 6주주 나머지 '기타'. 비율 13px/Bold 중앙. 우측 상세 테이블 4열</span>
       <span class="design-note dn-red" style="right:auto;left:8px">Paywall L2: 🍪39. Blur 8px+CTA 버튼. 비구매 시 상위 3명만, 나머지 블러 처리</span>
-      <div class="section-title"><span class="icon">🥧</span> 주주현황</div>
+      <div class="section-title"><span class="icon">🥧</span> 주주현황 <a href="#" class="section-detail-link" onclick="switchTab('people',null);return false">상세보기 →</a></div>
       <span class="paywall-inline-badge">🔒 열람 시 39🍪 필요</span>
       <div>
         <div class="donut-wrap">
@@ -825,7 +827,8 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       <span class="design-note dn-yellow" style="right:auto;left:8px">뷰 토글: 아이콘 버튼 2개, active=Blue-600 배경. 전환 fade 150ms. 기본=테이블 뷰</span>
       <div class="section-title">
         <span class="icon">👥</span> 경영진
-        <div style="margin-left:auto;display:flex;gap:4px">
+        <a href="#" class="section-detail-link" onclick="switchTab('people',null);return false" style="margin-right:8px">상세보기 →</a>
+        <div style="display:flex;gap:4px">
           <button class="chart-toggle-btn active" onclick="toggleView('exec','table',this)" style="font-size:11px;padding:3px 10px">테이블</button>
           <button class="chart-toggle-btn" onclick="toggleView('exec','card',this)" style="font-size:11px;padding:3px 10px">카드</button>
         </div>
@@ -858,7 +861,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <div class="section" style="position:relative">
       <span class="design-note dn-green">면적 차트 높이 180px. X축 5개년, Y축 인원. 그라데이션 Blue-100→Blue-50. 포인트 마커 6px</span>
       <span class="design-note dn-blue" style="right:auto;left:8px">하단 요약 카드 3개: 현재 인원·증감률·평균 근속. 숫자 20px/Bold, 라벨 11px/Gray-500</span>
-      <div class="section-title"><span class="icon">👥</span> 인원현황</div>
+      <div class="section-title"><span class="icon">👥</span> 인원현황 <a href="#" class="section-detail-link" onclick="switchTab('people',null);return false">상세보기 →</a></div>
       <div class="chart-container">
         <canvas id="employeeChart" style="width:100%" height="220"></canvas>
       </div>
@@ -900,7 +903,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <!-- 9. News feed (moved from tab) -->
     <div class="section" style="position:relative">
       <span class="design-note dn-yellow">뉴스 카드: 제목 14px/600 1줄, 요약 13px 2줄 말줄임, 시간 '3시간 전' 형식. 썸네일 64×64 radius-8</span>
-      <div class="section-title"><span class="icon">📰</span> 최신 뉴스</div>
+      <div class="section-title"><span class="icon">📰</span> 최신 뉴스 <a href="#" class="section-detail-link" onclick="switchTab('community',null);return false">상세보기 →</a></div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div style="padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
           <div style="font-size:14px;font-weight:600;margin-bottom:4px">에이치비테크놀로지, AI 반도체 검사 솔루션으로 글로벌 시장 진출</div>
@@ -1795,8 +1798,15 @@ function switchTab(tabId, el, opts) {
   // Re-render pins (only visible anchors will show pins — automatic tab scoping)
   if (typeof renderPins === 'function') renderPins();
   if (!opts.skipScroll) {
-    var tabsWrap = document.querySelector('.tabs-wrap');
-    window.scrollTo({top: tabsWrap.offsetTop - 56, behavior: 'smooth'});
+    if (opts.scrollTo) {
+      setTimeout(function(){
+        var target = document.getElementById(opts.scrollTo);
+        if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+      }, 200);
+    } else {
+      var tabsWrap = document.querySelector('.tabs-wrap');
+      window.scrollTo({top: tabsWrap.offsetTop - 56, behavior: 'smooth'});
+    }
   }
   if (tabId === 'finance') {
     setTimeout(function(){
