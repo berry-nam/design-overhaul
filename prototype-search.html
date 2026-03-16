@@ -1126,9 +1126,9 @@ function renderTable(){
   if(mode === 'compact'){
     thead.innerHTML = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th><th>기업명</th><th>업종</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY</th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY</th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th>';
   } else if(mode === 'spacious'){
-    thead.innerHTML = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th><th>기업명</th><th>업종</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\'24 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\'24 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th class="td-actions"></th>';
+    thead.innerHTML = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th><th>기업명</th><th>업종</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th class="td-actions"></th>';
   } else {
-    thead.innerHTML = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th><th>기업명</th><th>업종</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\'24 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\'24 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th class="td-actions"></th>';
+    thead.innerHTML = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th><th>기업명</th><th>업종</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th class="td-actions"></th>';
   }
 
   var tbody = document.getElementById('tableBody');
@@ -1211,11 +1211,10 @@ function renderTable(){
         +  '<div class="detail-rev-top"><span class="revenue-val">'+c.revenue+'억</span><span class="revenue-yoy '+revenueGClass+'">'+revenueGArrow+' '+revenueGText+'</span></div>'
         +  revBarDot
         +'</div></td>'
-        // Profit: value + margin + YoY + bar with dot
+        // Profit: value + YoY on same line, margin below, bar with dot
         +'<td><div class="detail-profit">'
-        +  '<div class="detail-profit-top"><span class="profit-val '+profitClass+'">'+c.profit+'억</span></div>'
+        +  '<div class="detail-profit-top"><span class="profit-val '+profitClass+'">'+c.profit+'억</span><span class="revenue-yoy '+profitClass+'">'+profitArrow+' '+profitGText+'</span></div>'
         +  '<div class="detail-profit-rate"><div class="detail-profit-dot" style="background:'+profitDotColor+'"></div><span>영업이익률 '+profitRate+'%</span></div>'
-        +  '<div style="font-size:10.5px;margin-top:2px" class="'+profitClass+'">'+profitArrow+' '+profitGText+'</div>'
         +  profBarDot
         +'</div></td>'
         // Employee
