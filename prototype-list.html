@@ -74,6 +74,23 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sidebar-footer{padding:12px;border-top:1px solid var(--border)}
 .sidebar-add-btn{width:100%;padding:8px 12px;border:1px dashed var(--border);border-radius:var(--radius);background:transparent;color:var(--text-sub);font-size:13px;font-family:inherit;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px}
 .sidebar-add-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-bg)}
+/* SIDEBAR QUICK-ACCESS SECTIONS */
+.sidebar-section{border-top:1px solid var(--border-light)}
+.sidebar-section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;transition:var(--transition);font-size:12px;font-weight:600;color:var(--text-sub);letter-spacing:.02em}
+.sidebar-section-header:hover{background:var(--slate-50)}
+.sidebar-section-label{display:flex;align-items:center;gap:6px}
+.sidebar-section-count{font-size:11px;font-weight:500;color:var(--text-muted);background:var(--slate-100);padding:1px 7px;border-radius:10px}
+.sidebar-section-chevron{transition:transform .2s ease;color:var(--text-muted);font-size:11px}
+.sidebar-section.open .sidebar-section-chevron{transform:rotate(90deg)}
+.sidebar-section-list{max-height:0;overflow:hidden;transition:max-height .25s ease}
+.sidebar-section.open .sidebar-section-list{max-height:320px;overflow-y:auto}
+.sidebar-section-item{display:flex;align-items:center;gap:10px;padding:7px 16px;font-size:12.5px;cursor:pointer;transition:var(--transition);text-decoration:none;color:var(--text)}
+.sidebar-section-item:hover{background:var(--slate-50)}
+.sidebar-section-item-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.sidebar-section-item-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.sidebar-section-item-sub{font-size:11px;color:var(--text-muted);white-space:nowrap}
+.sidebar-section-more{padding:6px 16px 10px;font-size:11.5px;color:var(--brand);cursor:pointer;font-weight:500;transition:var(--transition)}
+.sidebar-section-more:hover{color:var(--brand-hover);text-decoration:underline}
 
 /* MAIN */
 .main{flex:1;overflow-y:auto;padding:24px 28px}
@@ -408,8 +425,6 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
 <div class="sub-nav">
   <a href="prototype-search.html" class="sub-nav-link">기업 탐색</a>
   <a href="prototype-list.html" class="sub-nav-link active">리스트</a>
-  <a href="#" class="sub-nav-link">열람 가능 기업</a>
-  <a href="#" class="sub-nav-link">최근 본 기업</a>
 </div>
 
 <!-- LAYOUT -->
@@ -451,6 +466,66 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
     </div>
     <div class="sidebar-footer">
       <button class="sidebar-add-btn" onclick="openNewListModal()">+ 새 리스트 만들기</button>
+    </div>
+    <!-- QUICK ACCESS: 열람 가능 기업 -->
+    <div class="sidebar-section open" id="sectionUnlocked">
+      <div class="sidebar-section-header" onclick="toggleSidebarSection('sectionUnlocked')">
+        <div class="sidebar-section-label">🔓 열람 가능 기업 <span class="sidebar-section-count">3</span></div>
+        <span class="sidebar-section-chevron">▸</span>
+      </div>
+      <div class="sidebar-section-list">
+        <a href="prototype-detail.html" class="sidebar-section-item">
+          <div class="sidebar-section-item-icon" style="background:var(--blue-50);color:var(--brand)">삼</div>
+          <div class="sidebar-section-item-name">삼성전자</div>
+          <div class="sidebar-section-item-sub">03.15</div>
+        </a>
+        <a href="prototype-detail.html" class="sidebar-section-item">
+          <div class="sidebar-section-item-icon" style="background:var(--emerald-50);color:var(--emerald-600)">에</div>
+          <div class="sidebar-section-item-name">에이치비테크놀로지</div>
+          <div class="sidebar-section-item-sub">03.14</div>
+        </a>
+        <a href="prototype-detail.html" class="sidebar-section-item">
+          <div class="sidebar-section-item-icon" style="background:var(--purple-50);color:var(--purple-500)">SK</div>
+          <div class="sidebar-section-item-name">SK하이닉스</div>
+          <div class="sidebar-section-item-sub">03.10</div>
+        </a>
+        <div class="sidebar-section-more" onclick="showToast('열람 가능 기업 전체 보기')">전체 보기 →</div>
+      </div>
+    </div>
+    <!-- QUICK ACCESS: 최근 본 기업 -->
+    <div class="sidebar-section open" id="sectionRecent">
+      <div class="sidebar-section-header" onclick="toggleSidebarSection('sectionRecent')">
+        <div class="sidebar-section-label">🕐 최근 본 기업 <span class="sidebar-section-count">5</span></div>
+        <span class="sidebar-section-chevron">▸</span>
+      </div>
+      <div class="sidebar-section-list">
+        <a href="prototype-detail.html" class="sidebar-section-item">
+          <div class="sidebar-section-item-icon" style="background:var(--emerald-50);color:var(--emerald-600)">에</div>
+          <div class="sidebar-section-item-name">에이치비테크놀로지</div>
+          <div class="sidebar-section-item-sub">방금 전</div>
+        </a>
+        <a href="prototype-detail.html" class="sidebar-section-item">
+          <div class="sidebar-section-item-icon" style="background:var(--blue-50);color:var(--brand)">넥</div>
+          <div class="sidebar-section-item-name">넥스트반도체</div>
+          <div class="sidebar-section-item-sub">2시간 전</div>
+        </a>
+        <a href="prototype-detail.html" class="sidebar-section-item">
+          <div class="sidebar-section-item-icon" style="background:var(--amber-50);color:var(--amber-600)">실</div>
+          <div class="sidebar-section-item-name">실리콘마이다스</div>
+          <div class="sidebar-section-item-sub">어제</div>
+        </a>
+        <a href="prototype-detail.html" class="sidebar-section-item">
+          <div class="sidebar-section-item-icon" style="background:var(--teal-50);color:var(--teal-500)">케</div>
+          <div class="sidebar-section-item-name">케이앤도체</div>
+          <div class="sidebar-section-item-sub">3일 전</div>
+        </a>
+        <a href="prototype-detail.html" class="sidebar-section-item">
+          <div class="sidebar-section-item-icon" style="background:var(--red-50);color:var(--red-500)">코</div>
+          <div class="sidebar-section-item-name">코어셈텍</div>
+          <div class="sidebar-section-item-sub">1주 전</div>
+        </a>
+        <div class="sidebar-section-more" onclick="showToast('최근 본 기업 전체 보기')">전체 보기 →</div>
+      </div>
     </div>
   </aside>
 
@@ -1245,6 +1320,10 @@ function drawRadarChart(comps) {
 
 // ── NEW LIST MODAL ──
 var selectedColor = '#0549CC';
+function toggleSidebarSection(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
 function openNewListModal() {
   document.getElementById('newListModal').classList.add('open');
   document.getElementById('newListName').value = '';
