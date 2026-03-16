@@ -664,6 +664,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <div class="tab" onclick="switchTab('people',this)">인물 <span class="tab-badge">12</span></div>
     <div class="tab" onclick="switchTab('similar',this)">유사기업 <span class="tab-badge">18</span></div>
     <div class="tab" onclick="switchTab('competitors',this)">경쟁사</div>
+    <div class="tab" onclick="switchTab('news',this)">뉴스</div>
     <div class="tab" onclick="switchTab('community',this)">커뮤니티</div>
   </div>
 </div>
@@ -732,7 +733,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <div class="section" style="position:relative">
       <span class="design-note dn-yellow">네트워크 맵: 중앙=대상기업(Blue border-2), 좌=구매처(Green), 우=판매처(Orange). 선 두께=거래비중 1~3px</span>
       <span class="design-note dn-green" style="right:auto;left:8px;top:4px">각 측 최대 5노드. 노드 120×60, 회사명 13px/600+비율 11px. 간격 16px. 영역 최대 800×400</span>
-      <div class="section-title"><span class="icon">🔗</span> 주요 구매처 · 판매처 네트워크</div>
+      <div class="section-title"><span class="icon">🔗</span> 주요 구매처 · 판매처 네트워크 <a href="#" class="section-detail-link" onclick="switchTab('finance',null,{scrollTo:'supply-chain-section'});return false">상세보기 →</a></div>
       <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
       <div class="network-wrap" id="networkGraphWrap">
         <div class="network-toggle">
@@ -843,7 +844,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       <span class="design-note dn-yellow" style="right:auto;left:8px">뷰 토글: 아이콘 버튼 2개, active=Blue-600 배경. 전환 fade 150ms. 기본=테이블 뷰</span>
       <div class="section-title">
         <span class="icon">👥</span> 경영진
-        <a href="#" class="section-detail-link" onclick="switchTab('people',null);return false" style="margin-right:8px">상세보기 →</a>
+        <a href="#" class="section-detail-link" onclick="switchTab('people',null,{scrollTo:'executives-detail-section'});return false" style="margin-right:8px">상세보기 →</a>
         <div style="display:flex;gap:4px">
           <button class="chart-toggle-btn active" onclick="toggleView('exec','table',this)" style="font-size:11px;padding:3px 10px">테이블</button>
           <button class="chart-toggle-btn" onclick="toggleView('exec','card',this)" style="font-size:11px;padding:3px 10px">카드</button>
@@ -877,7 +878,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <div class="section" style="position:relative">
       <span class="design-note dn-green">면적 차트 높이 180px. X축 5개년, Y축 인원. 그라데이션 Blue-100→Blue-50. 포인트 마커 6px</span>
       <span class="design-note dn-blue" style="right:auto;left:8px">하단 요약 카드 3개: 현재 인원·증감률·평균 근속. 숫자 20px/Bold, 라벨 11px/Gray-500</span>
-      <div class="section-title"><span class="icon">👥</span> 인원현황 <a href="#" class="section-detail-link" onclick="switchTab('people',null);return false">상세보기 →</a></div>
+      <div class="section-title"><span class="icon">👥</span> 인원현황 <a href="#" class="section-detail-link" onclick="switchTab('people',null,{scrollTo:'employee-detail-section'});return false">상세보기 →</a></div>
       <div class="chart-container">
         <canvas id="employeeChart" style="width:100%" height="220"></canvas>
       </div>
@@ -919,7 +920,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <!-- 9. News feed (moved from tab) -->
     <div class="section" style="position:relative">
       <span class="design-note dn-yellow">뉴스 카드: 제목 14px/600 1줄, 요약 13px 2줄 말줄임, 시간 '3시간 전' 형식. 썸네일 64×64 radius-8</span>
-      <div class="section-title"><span class="icon">📰</span> 최신 뉴스</div>
+      <div class="section-title"><span class="icon">📰</span> 최신 뉴스 <a href="#" class="section-detail-link" onclick="switchTab('news',null);return false">상세보기 →</a></div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div style="padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
           <div style="font-size:14px;font-weight:600;margin-bottom:4px">에이치비테크놀로지, AI 반도체 검사 솔루션으로 글로벌 시장 진출</div>
@@ -1516,25 +1517,130 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       </div>
     </div>
 
+    <!-- S9: 공급망 상세 (KoDATA ENPcust0001 + ENPsupp0001) -->
+    <div class="section paywall-section" style="position:relative" id="supply-chain-section">
+      <div class="section-title"><span class="icon">🔗</span> 공급망 상세 (구매처 · 판매처)</div>
+      <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <!-- 구매처 -->
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-sub);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="width:3px;height:14px;border-radius:2px;background:var(--emerald-500);display:inline-block"></span> 주요 구매처 (10개)</div>
+          <table class="fs-detail-table">
+            <thead><tr><th class="fs-col-label">구매처명</th><th class="fs-col-val">거래비중</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600">도쿄정밀</td><td>32.0%</td></tr>
+              <tr><td style="font-weight:600">한국소재</td><td>25.0%</td></tr>
+              <tr><td style="font-weight:600">글로벌테크</td><td>20.0%</td></tr>
+              <tr><td>삼성전기</td><td>5.2%</td></tr>
+              <tr><td>코리아프리시전</td><td>4.8%</td></tr>
+              <tr><td>디에스테크노</td><td>3.5%</td></tr>
+              <tr><td>미쓰비시머티리얼</td><td>3.1%</td></tr>
+              <tr><td>에이엠티테크</td><td>2.4%</td></tr>
+              <tr><td>하나마이크론</td><td>2.0%</td></tr>
+              <tr><td>기타</td><td>2.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- 판매처 -->
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-sub);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="width:3px;height:14px;border-radius:2px;background:var(--orange-500);display:inline-block"></span> 주요 판매처 (10개)</div>
+          <table class="fs-detail-table">
+            <thead><tr><th class="fs-col-label">판매처명</th><th class="fs-col-val">거래비중</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600">삼성전자</td><td>28.0%</td></tr>
+              <tr><td style="font-weight:600">SK하이닉스</td><td>22.0%</td></tr>
+              <tr><td style="font-weight:600">TSMC</td><td>15.0%</td></tr>
+              <tr><td>DB하이텍</td><td>8.5%</td></tr>
+              <tr><td>키옥시아</td><td>6.2%</td></tr>
+              <tr><td>르네사스일렉트로닉스</td><td>5.0%</td></tr>
+              <tr><td>매그나칩반도체</td><td>4.3%</td></tr>
+              <tr><td>앰코테크놀로지</td><td>3.8%</td></tr>
+              <tr><td>SFA반도체</td><td>3.2%</td></tr>
+              <tr><td>기타</td><td>4.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 구매처 집중도 분석 -->
+      <div style="margin-top:20px;padding:16px;background:var(--slate-50);border-radius:var(--radius)">
+        <div style="font-size:12.5px;font-weight:600;margin-bottom:8px">공급망 집중도 분석</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <div><div style="font-size:11px;color:var(--text-muted)">구매 상위 3사 비중</div><div style="font-size:17px;font-weight:700;color:var(--red-600)">77.0%</div><div style="font-size:11px;color:var(--red-500)">높은 의존도</div></div>
+          <div><div style="font-size:11px;color:var(--text-muted)">판매 상위 3사 비중</div><div style="font-size:17px;font-weight:700;color:var(--amber-600)">65.0%</div><div style="font-size:11px;color:var(--amber-500)">보통 집중도</div></div>
+          <div><div style="font-size:11px;color:var(--text-muted)">해외 구매처 비율</div><div style="font-size:17px;font-weight:700">35.1%</div><div style="font-size:11px;color:var(--text-sub)">도쿄정밀 외</div></div>
+          <div><div style="font-size:11px;color:var(--text-muted)">해외 판매처 비율</div><div style="font-size:17px;font-weight:700">30.0%</div><div style="font-size:11px;color:var(--text-sub)">TSMC, 키옥시아 외</div></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ═══ PEOPLE TAB ═══ -->
   <div class="tab-panel" id="panel-people">
+
+    <!-- S1: 대표자 정보 (KoDATA ENPrepe0003) -->
+    <div class="section" style="position:relative" id="ceo-detail-section">
+      <div class="section-title"><span class="icon">👤</span> 대표자 정보</div>
+      <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:16px;flex:1;min-width:280px">
+          <div class="person-avatar" style="background:var(--brand);width:64px;height:64px;font-size:22px;border-radius:var(--radius-lg)">김</div>
+          <div>
+            <div style="font-size:18px;font-weight:700;margin-bottom:2px">김현우</div>
+            <div style="font-size:13px;color:var(--text-sub)">대표이사 · 표시대표자</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px">취임 2011.03 · 현직</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;flex:2;min-width:300px">
+          <div style="background:var(--slate-50);padding:12px 16px;border-radius:var(--radius)">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:2px">동업계 경력</div>
+            <div style="font-size:18px;font-weight:700">15년 3월</div>
+          </div>
+          <div style="background:var(--slate-50);padding:12px 16px;border-radius:var(--radius)">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:2px">보통주 보유</div>
+            <div style="font-size:18px;font-weight:700">420,000주</div>
+            <div style="font-size:11px;color:var(--brand)">42.0%</div>
+          </div>
+          <div style="background:var(--slate-50);padding:12px 16px;border-radius:var(--radius)">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:2px">경영능력 평가</div>
+            <div style="font-size:18px;font-weight:700;color:var(--brand)">우수</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2: 경영진 현황 (KoDATA ENPmngr0000) -->
+    <div class="section" style="position:relative" id="executives-detail-section">
+      <div class="section-title"><span class="icon">👥</span> 경영진 현황 <span class="tab-badge" style="font-size:12px">8명</span></div>
+      <div style="overflow-x:auto">
+        <table class="fs-detail-table">
+          <thead><tr><th class="fs-col-label">성명</th><th class="fs-col-val">직위</th><th class="fs-col-val">구분</th><th class="fs-col-val">등기여부</th><th class="fs-col-val">경영실권자 관계</th><th class="fs-col-val">기준일</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600">김현우</td><td>대표이사</td><td>대표이사</td><td>Y</td><td>본인</td><td>2025.01</td></tr>
+            <tr><td style="font-weight:600">박진영</td><td>CTO</td><td>이사</td><td>Y</td><td>타인</td><td>2025.01</td></tr>
+            <tr><td style="font-weight:600">이수진</td><td>CFO</td><td>이사</td><td>Y</td><td>타인</td><td>2025.01</td></tr>
+            <tr><td style="font-weight:600">정다운</td><td>COO</td><td>이사</td><td>Y</td><td>타인</td><td>2025.01</td></tr>
+            <tr><td>한서연</td><td>VP Engineering</td><td>미등기임원</td><td>N</td><td>타인</td><td>2025.01</td></tr>
+            <tr><td>최민호</td><td>영업본부장</td><td>미등기임원</td><td>N</td><td>타인</td><td>2025.01</td></tr>
+            <tr><td>송영민</td><td>감사</td><td>감사</td><td>Y</td><td>타인</td><td>2025.01</td></tr>
+            <tr><td>김태호</td><td>사외이사</td><td>사외이사</td><td>Y</td><td>타인</td><td>2025.01</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- S3: 주요 인물 카드 (DART + KoDATA 병합) -->
     <div class="section" style="position:relative">
-      <span class="design-note dn-green">인물 카드: 48×48 아바타(이니셜), 이름 15px/Bold, 직위 13px/Gray-500, 경력 12px 2줄. 너비 280px</span>
-      <span class="design-note dn-blue" style="right:auto;left:8px">Figma 컴포넌트: Avatar(Image/Initial variant)+이름+직위 Auto Layout vertical 간격 4px</span>
-      <div class="section-title"><span class="icon">👥</span> 주요 인물 <span class="tab-badge" style="font-size:12px">12명</span></div>
+      <div class="section-title"><span class="icon">📇</span> 주요 인물 카드</div>
       <div class="people-grid">
-        <div class="person-card"><div class="person-avatar" style="background:var(--brand)">김</div><div><div class="person-name">김현우</div><div class="person-title">대표이사</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--emerald-600)">박</div><div><div class="person-name">박진영</div><div class="person-title">CTO</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--purple-500)">이</div><div><div class="person-name">이수진</div><div class="person-title">CFO</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--teal-500)">정</div><div><div class="person-name">정다운</div><div class="person-title">COO</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--amber-500)">한</div><div><div class="person-name">한서연</div><div class="person-title">VP Engineering</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--red-500)">최</div><div><div class="person-name">최민호</div><div class="person-title">영업본부장</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
+        <div class="person-card"><div class="person-avatar" style="background:var(--brand)">김</div><div><div class="person-name">김현우</div><div class="person-title">대표이사 · 경영총괄</div><div style="font-size:11px;color:var(--text-muted)">2011.03 취임 · 등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
+        <div class="person-card"><div class="person-avatar" style="background:var(--emerald-600)">박</div><div><div class="person-name">박진영</div><div class="person-title">CTO · 기술총괄</div><div style="font-size:11px;color:var(--text-muted)">2015.06 취임 · 등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
+        <div class="person-card"><div class="person-avatar" style="background:var(--purple-500)">이</div><div><div class="person-name">이수진</div><div class="person-title">CFO · 재무총괄</div><div style="font-size:11px;color:var(--text-muted)">2018.01 취임 · 등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
+        <div class="person-card"><div class="person-avatar" style="background:var(--teal-500)">정</div><div><div class="person-name">정다운</div><div class="person-title">COO · 운영총괄</div><div style="font-size:11px;color:var(--text-muted)">2019.09 취임 · 등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
+        <div class="person-card"><div class="person-avatar" style="background:var(--amber-500)">한</div><div><div class="person-name">한서연</div><div class="person-title">VP Engineering</div><div style="font-size:11px;color:var(--text-muted)">2020.03 취임 · 미등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
+        <div class="person-card"><div class="person-avatar" style="background:var(--red-500)">최</div><div><div class="person-name">최민호</div><div class="person-title">영업본부장</div><div style="font-size:11px;color:var(--text-muted)">2021.01 취임 · 미등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
       </div>
     </div>
     <div class="section paywall-section" style="position:relative">
-      <span class="design-note dn-red">Paywall L1: 🍪60. 상위 4명 공개, 이후 blur+🔒 오버레이. '추가 열람' CTA 버튼 중앙</span>
       <span class="paywall-inline-badge">🔒 열람 시 60🍪 필요</span>
       <div>
         <div class="people-grid">
@@ -1548,7 +1654,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       </div>
     </div>
 
-    <!-- Shareholders Detail -->
+    <!-- S4: 주주현황 상세 (KoDATA ENPsthr0001) -->
     <div class="section" style="position:relative" id="shareholders-detail-section">
       <div class="section-title"><span class="icon">🥧</span> 주주현황 상세</div>
       <div>
@@ -1556,24 +1662,51 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
           <canvas id="donutChartPeople" width="160" height="160"></canvas>
           <div style="flex:1;min-width:0">
             <table class="fs-detail-table">
-              <thead><tr><th class="fs-col-label">주주명</th><th class="fs-col-val">보통주</th><th class="fs-col-val">우선주</th><th class="fs-col-val">주식수</th><th class="fs-col-val">지분율</th><th class="fs-col-val">관계</th></tr></thead>
+              <thead><tr><th class="fs-col-label">주주명</th><th class="fs-col-val">구분</th><th class="fs-col-val">보통주</th><th class="fs-col-val">우선주</th><th class="fs-col-val">주식수</th><th class="fs-col-val">지분율</th><th class="fs-col-val">회사관계</th></tr></thead>
               <tbody>
-                <tr><td style="font-weight:600">김현우</td><td>420,000</td><td>—</td><td>420,000</td><td>42.0%</td><td>대표이사</td></tr>
-                <tr><td style="font-weight:600">미래에셋벤처투자</td><td>250,000</td><td>—</td><td>250,000</td><td>25.0%</td><td>재무적투자자</td></tr>
-                <tr><td style="font-weight:600">박진영</td><td>150,000</td><td>—</td><td>150,000</td><td>15.0%</td><td>CTO</td></tr>
-                <tr><td>이수진</td><td>30,000</td><td>—</td><td>30,000</td><td>3.0%</td><td>CFO</td></tr>
-                <tr><td>정다운</td><td>20,000</td><td>—</td><td>20,000</td><td>2.0%</td><td>COO</td></tr>
-                <tr><td>한서연</td><td>10,000</td><td>—</td><td>10,000</td><td>1.0%</td><td>VP Engineering</td></tr>
-                <tr><td>우리사주조합</td><td>20,000</td><td>—</td><td>20,000</td><td>2.0%</td><td>—</td></tr>
-                <tr><td>자사주</td><td>80,000</td><td>—</td><td>80,000</td><td>8.0%</td><td>—</td></tr>
-                <tr><td>기타 주주</td><td>20,000</td><td>—</td><td>20,000</td><td>2.0%</td><td>—</td></tr>
-                <tr class="fs-row-bold"><td>합계</td><td>1,000,000</td><td>—</td><td>1,000,000</td><td>100.0%</td><td></td></tr>
+                <tr><td style="font-weight:600">김현우</td><td>개인</td><td>420,000</td><td>—</td><td>420,000</td><td>42.0%</td><td>대표이사</td></tr>
+                <tr><td style="font-weight:600">미래에셋벤처투자</td><td>법인</td><td>250,000</td><td>—</td><td>250,000</td><td>25.0%</td><td>재무적투자자</td></tr>
+                <tr><td style="font-weight:600">박진영</td><td>개인</td><td>150,000</td><td>—</td><td>150,000</td><td>15.0%</td><td>CTO</td></tr>
+                <tr><td>이수진</td><td>개인</td><td>30,000</td><td>—</td><td>30,000</td><td>3.0%</td><td>CFO</td></tr>
+                <tr><td>정다운</td><td>개인</td><td>20,000</td><td>—</td><td>20,000</td><td>2.0%</td><td>COO</td></tr>
+                <tr><td>한서연</td><td>개인</td><td>10,000</td><td>—</td><td>10,000</td><td>1.0%</td><td>임원</td></tr>
+                <tr><td>우리사주조합</td><td>조합</td><td>20,000</td><td>—</td><td>20,000</td><td>2.0%</td><td>—</td></tr>
+                <tr><td>자사주</td><td>자사주</td><td>80,000</td><td>—</td><td>80,000</td><td>8.0%</td><td>—</td></tr>
+                <tr><td>기타 주주</td><td>개인</td><td>20,000</td><td>—</td><td>20,000</td><td>2.0%</td><td>—</td></tr>
+                <tr class="fs-row-bold"><td>합계</td><td></td><td>1,000,000</td><td>—</td><td>1,000,000</td><td>100.0%</td><td></td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- S5: 인원현황 (KoDATA ENPemst0004 — 국민연금 5개년) -->
+    <div class="section" style="position:relative" id="employee-detail-section">
+      <div class="section-title"><span class="icon">📊</span> 인원현황 추이 <span style="font-size:12px;color:var(--text-muted);font-weight:400">(국민연금 가입자 기준)</span></div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap">
+        <div style="flex:2;min-width:300px">
+          <canvas id="employeeChartPeople" style="width:100%" height="200"></canvas>
+        </div>
+        <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:10px">
+          <div style="background:var(--slate-50);padding:14px 18px;border-radius:var(--radius)">
+            <div style="font-size:11px;color:var(--text-muted)">현재 인원 (2025)</div>
+            <div style="font-size:24px;font-weight:800">186명</div>
+            <div style="font-size:12px;color:var(--emerald-600);font-weight:500">+12.7% YoY</div>
+          </div>
+          <div style="background:var(--slate-50);padding:14px 18px;border-radius:var(--radius)">
+            <div style="font-size:11px;color:var(--text-muted)">5년 증가율</div>
+            <div style="font-size:24px;font-weight:800">+72%</div>
+            <div style="font-size:12px;color:var(--text-sub)">108명 → 186명</div>
+          </div>
+          <div style="background:var(--slate-50);padding:14px 18px;border-radius:var(--radius)">
+            <div style="font-size:11px;color:var(--text-muted)">연평균 증가</div>
+            <div style="font-size:24px;font-weight:800">+15.6명/년</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ═══ SIMILAR COMPANIES TAB (B7) ═══ -->
@@ -1709,6 +1842,79 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
           <tr><td>지역</td><td class="target">서울 강남</td><td>경기 수원</td><td>서울 금천</td><td>경기 화성</td></tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- ═══ NEWS TAB ═══ -->
+  <div class="tab-panel" id="panel-news">
+    <div class="section" style="position:relative">
+      <div class="section-title"><span class="icon">📰</span> 최신 뉴스</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+            <div style="flex:1">
+              <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, AI 반도체 검사 솔루션으로 글로벌 시장 진출</div>
+              <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">에이치비테크놀로지가 자체 개발한 AI 기반 반도체 검사 솔루션 'HB-Vision'을 앞세워 대만·일본 시장 공략에 나선다. 이번 솔루션은 기존 대비 검사 속도 30% 향상과 불량률 0.01% 미만의 정확도를 자랑한다.</div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:12px;color:var(--text-muted)">전자신문</span>
+                <span style="font-size:11px;color:var(--border)">|</span>
+                <span style="font-size:12px;color:var(--text-muted)">2025.02.28</span>
+                <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--blue-50);color:var(--brand)">AI/기술</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">"반도체 후공정 핵심 장비 국산화" 에이치비테크, 정부 과제 선정</div>
+          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">산업통상자원부의 '소재·부품·장비 기술개발사업'에 에이치비테크놀로지가 주관기업으로 선정됐다. 3년간 총 120억원 규모의 정부 지원을 받아 차세대 반도체 테스트 장비를 개발할 예정이다.</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--text-muted)">매일경제</span>
+            <span style="font-size:11px;color:var(--border)">|</span>
+            <span style="font-size:12px;color:var(--text-muted)">2025.01.15</span>
+            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--emerald-50);color:var(--emerald-600)">정부과제</span>
+          </div>
+        </div>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, 2024년 매출 342억 달성 "역대 최고"</div>
+          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">반도체 검사장비 전문기업 에이치비테크놀로지가 2024년 연간 매출 342억원을 기록하며 역대 최고 실적을 달성했다. 전년 대비 10.3% 성장이며, 영업이익률도 8.2%로 전년 대비 개선됐다.</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--text-muted)">한국경제</span>
+            <span style="font-size:11px;color:var(--border)">|</span>
+            <span style="font-size:12px;color:var(--text-muted)">2025.01.08</span>
+            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--amber-50);color:var(--amber-600)">실적</span>
+          </div>
+        </div>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, 삼성전자 2차 벤더 등록 완료</div>
+          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">에이치비테크놀로지가 삼성전자 반도체 사업부의 2차 벤더 등록 절차를 완료하고 본격적인 납품을 시작한다. 이로써 삼성전자와의 거래 규모가 전년 대비 2배 이상 확대될 전망이다.</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--text-muted)">디지털데일리</span>
+            <span style="font-size:11px;color:var(--border)">|</span>
+            <span style="font-size:12px;color:var(--text-muted)">2024.11.20</span>
+            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--purple-50);color:var(--purple-500)">사업확장</span>
+          </div>
+        </div>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">[인터뷰] 김현우 에이치비테크 대표 "HBM 검사 장비 시장, 국산화가 답"</div>
+          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">김현우 대표는 "HBM 시대에 반도체 검사 장비의 중요성이 더욱 커지고 있다"며 "일본·미국 장비에 의존하던 시장에서 국산 장비의 경쟁력을 입증하겠다"고 밝혔다.</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--text-muted)">조선비즈</span>
+            <span style="font-size:11px;color:var(--border)">|</span>
+            <span style="font-size:12px;color:var(--text-muted)">2024.09.05</span>
+            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--slate-100);color:var(--text-sub)">인터뷰</span>
+          </div>
+        </div>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, 판교 R&D 센터 확장 이전</div>
+          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">연구개발 인력 확충에 따라 판교 테크노밸리 내 더 넓은 공간으로 R&D 센터를 이전했다. 새 센터는 기존 대비 3배 규모이며, 클린룸과 실험 시설을 갖추고 있다.</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--text-muted)">뉴스1</span>
+            <span style="font-size:11px;color:var(--border)">|</span>
+            <span style="font-size:12px;color:var(--text-muted)">2024.07.12</span>
+            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--slate-100);color:var(--text-sub)">조직</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1902,7 +2108,7 @@ function hiDPI(canvas, W, H) {
 }
 
 // ══ TAB SWITCHING ══
-var TAB_ORDER = ['overview','finance','people','similar','competitors','community'];
+var TAB_ORDER = ['overview','finance','people','similar','competitors','news','community'];
 function switchTab(tabId, el, opts) {
   opts = opts || {};
   document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
@@ -1937,7 +2143,7 @@ function switchTab(tabId, el, opts) {
     }, 150);
   }
   if (tabId === 'people') {
-    setTimeout(function(){ drawShareholderDonutPeople(); }, 150);
+    setTimeout(function(){ drawShareholderDonutPeople(); drawEmployeeChartPeople(); }, 150);
   }
 }
 
@@ -2312,6 +2518,42 @@ function drawShareholderDonutPeople() {
   ctx.fillText('주주', cx, cy - 2);
   ctx.fillStyle = '#9AA3B4'; ctx.font = '10px Pretendard Variable';
   ctx.fillText('구성', cx, cy + 12);
+}
+
+function drawEmployeeChartPeople() {
+  var canvas = document.getElementById('employeeChartPeople');
+  if (!canvas) return;
+  var W = canvas.parentElement.offsetWidth || 600, H = 200;
+  var ctx = hiDPI(canvas, W, H);
+  ctx.clearRect(0, 0, W, H);
+  var years = ['2021','2022','2023','2024','2025'];
+  var vals = [108, 128, 145, 165, 186];
+  var max = 220, padL = 50, padR = 20, padT = 20, padB = 30;
+  var chartW = W - padL - padR, chartH = H - padT - padB;
+  ctx.strokeStyle = '#E0E4EB'; ctx.lineWidth = 0.5;
+  for (var i = 0; i <= 4; i++) {
+    var y = padT + (i / 4) * chartH;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+    ctx.fillStyle = '#9AA3B4'; ctx.font = '11px Pretendard Variable'; ctx.textAlign = 'right';
+    ctx.fillText(Math.round(max - (max * i / 4)) + '명', padL - 6, y + 4);
+  }
+  var pts = vals.map(function(v, i) { return {x: padL + (i / (vals.length - 1)) * chartW, y: padT + ((max - v) / max) * chartH}; });
+  ctx.beginPath(); ctx.moveTo(pts[0].x, padT + chartH);
+  pts.forEach(function(p) { ctx.lineTo(p.x, p.y); });
+  ctx.lineTo(pts[pts.length - 1].x, padT + chartH); ctx.closePath();
+  var grad = ctx.createLinearGradient(0, padT, 0, padT + chartH);
+  grad.addColorStop(0, 'rgba(5,73,204,.15)'); grad.addColorStop(1, 'rgba(5,73,204,.02)');
+  ctx.fillStyle = grad; ctx.fill();
+  ctx.beginPath(); pts.forEach(function(p, i) { i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
+  ctx.strokeStyle = '#0549CC'; ctx.lineWidth = 2.5; ctx.stroke();
+  pts.forEach(function(p, i) {
+    ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill();
+    ctx.strokeStyle = '#0549CC'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#374151'; ctx.font = 'bold 12px Pretendard Variable'; ctx.textAlign = 'center';
+    ctx.fillText(vals[i] + '명', p.x, p.y - 12);
+    ctx.fillStyle = '#6B7689'; ctx.font = '11px Pretendard Variable';
+    ctx.fillText(years[i], p.x, padT + chartH + 16);
+  });
 }
 
 // ══ EMPLOYEE AREA CHART ══
@@ -3068,7 +3310,7 @@ var FIREBASE_CONFIG = {
 };
 var PAGE_ID = 'detail';
 var PAGE_LABEL = '에이치비테크놀로지 상세';
-var TAB_LABELS = {overview:'개요',finance:'재무',people:'인물',similar:'유사기업',competitors:'경쟁사',community:'커뮤니티'};
+var TAB_LABELS = {overview:'개요',finance:'재무',people:'인물',similar:'유사기업',competitors:'경쟁사',news:'뉴스',community:'커뮤니티'};
 var PAGE_LABELS = {search:'기업탐색', detail:'에이치비테크놀로지 상세', detail_v2:'에이치비테크놀로지 상세', list:'잠재 고객 리스트'};
 var PAGE_URLS = {search:'prototype-search.html', detail:'prototype-detail.html', detail_v2:'prototype-detail.html', list:'prototype-list.html'};
 var COLORS = ['#0549CC','#059669','#D97706','#DC2626','#8B5CF6','#0D9488','#EA580C','#6366F1','#B45309','#14B8A6'];
