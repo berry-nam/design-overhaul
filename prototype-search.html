@@ -40,17 +40,24 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:14px}
 
 /* ══ NAV ══ */
-.nav{position:sticky;top:0;z-index:200;height:var(--nav-h);background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:8px}
-.nav-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;color:var(--brand);margin-right:28px;text-decoration:none}
-.nav-brand svg{width:28px;height:28px}
-.nav-link{font-size:13.5px;font-weight:500;color:var(--text-sub);padding:6px 14px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);text-decoration:none}
-.nav-link:hover,.nav-link.active{color:var(--brand);background:var(--brand-bg)}
-.nav-link.active{font-weight:600}
-.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-.nav-search-btn{display:flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--text-muted);cursor:pointer;background:var(--slate-50);transition:var(--transition)}
-.nav-search-btn:hover{border-color:var(--blue-300);color:var(--text-sub)}
-.nav-search-btn kbd{font-family:inherit;font-size:11px;padding:2px 6px;border-radius:4px;border:1px solid var(--border);background:#fff;color:var(--text-muted)}
-.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue-100);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--brand);cursor:pointer}
+.nav{position:sticky;top:0;z-index:200;height:var(--nav-h);background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 32px}
+.nav-brand{display:flex;align-items:center;gap:8px;text-decoration:none;margin-right:36px}
+.nav-brand svg{width:26px;height:26px}
+.nav-brand-text{font-size:18px;font-weight:700;color:var(--slate-800);letter-spacing:-.01em}
+.nav-link{font-size:15px;font-weight:500;color:var(--slate-500);padding:0 14px;text-decoration:none;cursor:pointer;transition:var(--transition)}
+.nav-link:hover{color:var(--slate-700)}
+.nav-link.active{color:var(--slate-900);font-weight:600}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:20px}
+.nav-download{font-size:14px;color:var(--text-sub);text-decoration:none;transition:var(--transition)}
+.nav-download:hover{color:var(--text)}
+.nav-profile{display:flex;align-items:center;gap:6px;cursor:pointer}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:#F97316;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff}
+.nav-chevron{color:var(--text-muted)}
+/* ══ SUB-NAV ══ */
+.sub-nav{display:flex;gap:24px;padding:0 32px;background:#fff;border-bottom:1px solid var(--border-light)}
+.sub-nav-link{font-size:14.5px;font-weight:500;color:var(--text-muted);text-decoration:none;padding:14px 0;border-bottom:2px solid transparent;transition:var(--transition);display:inline-block}
+.sub-nav-link:hover{color:var(--text-sub)}
+.sub-nav-link.active{color:var(--brand);font-weight:600;border-bottom-color:var(--brand)}
 
 /* ══ PAGE LAYOUT ══ */
 .page{max-width:1440px;margin:0 auto;padding:0 24px}
@@ -450,18 +457,27 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
 <body>
 
 <!-- ══ NAVIGATION ══ -->
-<nav class="nav" style="position:relative">
-  <div class="design-note blue" style="top:100%;left:0;margin-top:4px">NavBar 높이 56px: 로고 24px, 메뉴 14px/Medium Gray-600 hover=Blue-600. 우측 아바타 32×32</div>
+<nav class="nav">
   <a href="prototype-search.html" class="nav-brand">
     <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="#0549CC"/><circle cx="10" cy="11" r="2" fill="#fff"/><circle cx="18" cy="11" r="2" fill="#fff"/><circle cx="14" cy="17" r="1.5" fill="#fff"/><circle cx="9" cy="16" r="1.2" fill="#fff" opacity=".6"/><circle cx="19" cy="16" r="1.2" fill="#fff" opacity=".6"/></svg>
-    CookieDeal
+    <span class="nav-brand-text">deal</span>
   </a>
-  <a href="prototype-search.html" class="nav-link active">기업탐색</a>
-  <a href="prototype-list.html" class="nav-link">리스트</a>
+  <a href="prototype-search.html" class="nav-link active">기업 탐색</a>
+  <a href="#" class="nav-link">라운지</a>
   <div class="nav-right">
-    <div class="nav-avatar">남</div>
+    <a href="#" class="nav-download">앱 다운로드</a>
+    <div class="nav-profile">
+      <div class="nav-avatar">남</div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="nav-chevron"><path d="M4 6l3 2.5L10 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
   </div>
 </nav>
+<div class="sub-nav">
+  <a href="prototype-search.html" class="sub-nav-link active">기업 탐색</a>
+  <a href="prototype-list.html" class="sub-nav-link">리스트</a>
+  <a href="#" class="sub-nav-link">열람 가능 기업</a>
+  <a href="#" class="sub-nav-link">최근 본 기업</a>
+</div>
 
 <!-- ══ PAGE ══ -->
 <div class="page">
