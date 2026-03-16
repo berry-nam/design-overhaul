@@ -20,20 +20,21 @@
   --purple-50:#F5F3FF;--purple-400:#A78BFA;--purple-500:#8B5CF6;
   --teal-50:#F0FDFA;--teal-400:#2DD4BF;--teal-500:#14B8A6;
   --orange-50:#FFF7ED;--orange-500:#F97316;--orange-600:#EA580C;
-  --brand:var(--blue-500);--brand-hover:var(--blue-600);--brand-bg:var(--blue-50);
+  --brand:var(--blue-500);--brand-hover:var(--blue-600);--brand-light:var(--blue-400);
+  --brand-bg:var(--blue-50);--brand-badge:var(--blue-100);
   --bg:var(--slate-50);--bg-card:#fff;
   --text:var(--slate-900);--text-sub:var(--slate-500);--text-muted:var(--slate-400);
   --border:var(--slate-200);--border-light:var(--slate-100);
   --shadow-sm:0 1px 2px rgba(17,24,39,.04);
   --shadow:0 1px 3px rgba(17,24,39,.06),0 1px 2px rgba(17,24,39,.04);
-  --shadow-md:0 4px 6px -1px rgba(17,24,39,.06);
+  --shadow-md:0 4px 6px -1px rgba(17,24,39,.06),0 2px 4px -2px rgba(17,24,39,.04);
   --shadow-lg:0 10px 25px -5px rgba(17,24,39,.08);
   --radius:8px;--radius-sm:6px;--radius-lg:12px;--radius-xl:16px;
   --transition:.15s cubic-bezier(.4,0,.2,1);
   --nav-h:56px;
 }
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:14px}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:14px}
 
 /* NAV */
 .nav{position:sticky;top:0;z-index:200;height:var(--nav-h);background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:8px}
@@ -41,8 +42,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .nav-brand svg{width:28px;height:28px}
 .nav-link{font-size:13.5px;font-weight:500;color:var(--text-sub);padding:6px 14px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);text-decoration:none}
 .nav-link:hover,.nav-link.active{color:var(--brand);background:var(--brand-bg)}
+.nav-link.active{font-weight:600}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue-100);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--brand)}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue-100);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--brand);cursor:pointer}
 
 /* BACK */
 .back-bar{padding:12px 24px;max-width:1200px;margin:0 auto}
