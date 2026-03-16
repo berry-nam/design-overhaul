@@ -1608,29 +1608,112 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       </div>
     </div>
 
-    <!-- S3: 주요 인물 카드 (DART + KoDATA 병합) -->
-    <div class="section" style="position:relative">
-      <div class="section-title"><span class="icon">📇</span> 주요 인물 카드</div>
-      <div class="people-grid">
-        <div class="person-card"><div class="person-avatar" style="background:var(--brand)">김</div><div><div class="person-name">김현우</div><div class="person-title">대표이사 · 경영총괄</div><div style="font-size:11px;color:var(--text-muted)">2011.03 취임 · 등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--emerald-600)">박</div><div><div class="person-name">박진영</div><div class="person-title">CTO · 기술총괄</div><div style="font-size:11px;color:var(--text-muted)">2015.06 취임 · 등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--purple-500)">이</div><div><div class="person-name">이수진</div><div class="person-title">CFO · 재무총괄</div><div style="font-size:11px;color:var(--text-muted)">2018.01 취임 · 등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--teal-500)">정</div><div><div class="person-name">정다운</div><div class="person-title">COO · 운영총괄</div><div style="font-size:11px;color:var(--text-muted)">2019.09 취임 · 등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--amber-500)">한</div><div><div class="person-name">한서연</div><div class="person-title">VP Engineering</div><div style="font-size:11px;color:var(--text-muted)">2020.03 취임 · 미등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-        <div class="person-card"><div class="person-avatar" style="background:var(--red-500)">최</div><div><div class="person-name">최민호</div><div class="person-title">영업본부장</div><div style="font-size:11px;color:var(--text-muted)">2021.01 취임 · 미등기</div><div class="person-contact">연락처 보기 (15🍪)</div></div></div>
-      </div>
-    </div>
+    <!-- S3: 명함 열람 (Paywall — 쿠키로 열람) -->
     <div class="section paywall-section" style="position:relative">
-      <span class="paywall-inline-badge">🔒 열람 시 60🍪 필요</span>
-      <div>
-        <div class="people-grid">
-          <div class="person-card"><div class="person-avatar" style="background:var(--slate-400)">A</div><div><div class="person-name">XXXXXX</div><div class="person-title">반도체사업부장</div></div></div>
-          <div class="person-card"><div class="person-avatar" style="background:var(--slate-400)">B</div><div><div class="person-name">XXXXXX</div><div class="person-title">품질관리팀장</div></div></div>
-          <div class="person-card"><div class="person-avatar" style="background:var(--slate-400)">C</div><div><div class="person-name">XXXXXX</div><div class="person-title">연구소장</div></div></div>
-          <div class="person-card"><div class="person-avatar" style="background:var(--slate-400)">D</div><div><div class="person-name">XXXXXX</div><div class="person-title">해외사업팀장</div></div></div>
-          <div class="person-card"><div class="person-avatar" style="background:var(--slate-400)">E</div><div><div class="person-name">XXXXXX</div><div class="person-title">생산관리부장</div></div></div>
-          <div class="person-card"><div class="person-avatar" style="background:var(--slate-400)">F</div><div><div class="person-name">XXXXXX</div><div class="person-title">마케팅팀장</div></div></div>
+      <span class="design-note dn-red">명함 열람: 카드당 15🍪. 이름·연락처 블러, 직급만 노출. 클릭 시 결제 모달</span>
+      <div class="section-title"><span class="icon">📇</span> 명함 열람 <span class="tab-badge" style="font-size:12px">12명</span></div>
+      <span class="paywall-inline-badge">🔒 명함 1건당 15🍪</span>
+      <div class="people-grid">
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">대표이사</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
         </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">CTO</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">CFO</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">COO</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">VP Engineering</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">영업본부장</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">반도체사업부장</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">품질관리팀장</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">연구소장</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">해외사업팀장</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">생산관리부장</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+        <div class="person-card" style="cursor:pointer;position:relative" onclick="alert('🍪 15 쿠키를 사용하여 명함을 열람합니다.')">
+          <div class="person-avatar" style="background:var(--slate-300)">?</div>
+          <div style="flex:1">
+            <div class="person-name" style="color:var(--text-muted);letter-spacing:2px">XXX</div>
+            <div class="person-title">마케팅팀장</div>
+            <div style="font-size:11px;color:var(--brand);margin-top:4px;font-weight:500">🔒 명함 열람 (15🍪)</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;text-align:center">
+        <button class="paywall-cta" style="font-size:13px;padding:10px 28px">🔓 전체 명함 열람 (120🍪)</button>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:6px">개별 열람 대비 33% 할인</div>
       </div>
     </div>
 
