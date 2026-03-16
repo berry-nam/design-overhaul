@@ -114,6 +114,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .fs-row-l2 td:first-child{padding-left:52px;font-size:12.5px;color:var(--text-muted)}
 .fs-row-bold{background:var(--slate-50)}
 .fs-row-bold td{font-weight:600!important;color:var(--text)!important}
+.news-thumb{width:80px;height:80px;border-radius:var(--radius);background:linear-gradient(135deg,var(--slate-200),var(--slate-100));flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.news-thumb-lg{width:120px;height:80px}
+.news-thumb img{width:100%;height:100%;object-fit:cover}
+.news-thumb-placeholder{font-size:28px;opacity:.4}
 
 /* Charts */
 .chart-container{position:relative;border-radius:var(--radius);overflow:hidden}
@@ -922,20 +926,29 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       <span class="design-note dn-yellow">뉴스 카드: 제목 14px/600 1줄, 요약 13px 2줄 말줄임, 시간 '3시간 전' 형식. 썸네일 64×64 radius-8</span>
       <div class="section-title"><span class="icon">📰</span> 최신 뉴스 <a href="#" class="section-detail-link" onclick="switchTab('news',null);return false">상세보기 →</a></div>
       <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-          <div style="font-size:14px;font-weight:600;margin-bottom:4px">에이치비테크놀로지, AI 반도체 검사 솔루션으로 글로벌 시장 진출</div>
-          <div style="font-size:12.5px;color:var(--text-sub);line-height:1.6;margin-bottom:6px">에이치비테크놀로지가 자체 개발한 AI 기반 반도체 검사 솔루션 'HB-Vision'을 앞세워 대만·일본 시장 공략에 나선다...</div>
-          <div style="font-size:11.5px;color:var(--text-muted)">전자신문 · 2025.02.28</div>
+        <div style="padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer;display:flex;gap:14px;align-items:flex-start" onmouseover="this.style.borderColor='var(--blue-200)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px">에이치비테크놀로지, AI 반도체 검사 솔루션으로 글로벌 시장 진출</div>
+            <div style="font-size:12.5px;color:var(--text-sub);line-height:1.6;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">에이치비테크놀로지가 자체 개발한 AI 기반 반도체 검사 솔루션 'HB-Vision'을 앞세워 대만·일본 시장 공략에 나선다...</div>
+            <div style="font-size:11.5px;color:var(--text-muted)">전자신문 · 2025.02.28</div>
+          </div>
+          <div class="news-thumb"><span class="news-thumb-placeholder">🖼</span></div>
         </div>
-        <div style="padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:14px;font-weight:600;margin-bottom:4px">"반도체 후공정 핵심 장비 국산화" 에이치비테크, 정부 과제 선정</div>
-          <div style="font-size:12.5px;color:var(--text-sub);line-height:1.6;margin-bottom:6px">산업통상자원부의 '소재·부품·장비 기술개발사업'에 에이치비테크놀로지가 주관기업으로 선정됐다...</div>
-          <div style="font-size:11.5px;color:var(--text-muted)">매일경제 · 2025.01.15</div>
+        <div style="padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer;display:flex;gap:14px;align-items:flex-start" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px">"반도체 후공정 핵심 장비 국산화" 에이치비테크, 정부 과제 선정</div>
+            <div style="font-size:12.5px;color:var(--text-sub);line-height:1.6;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">산업통상자원부의 '소재·부품·장비 기술개발사업'에 에이치비테크놀로지가 주관기업으로 선정됐다...</div>
+            <div style="font-size:11.5px;color:var(--text-muted)">매일경제 · 2025.01.15</div>
+          </div>
+          <div class="news-thumb"><span class="news-thumb-placeholder">🖼</span></div>
         </div>
-        <div style="padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:14px;font-weight:600;margin-bottom:4px">에이치비테크놀로지, 2024년 매출 342억 달성 "역대 최고"</div>
-          <div style="font-size:12.5px;color:var(--text-sub);line-height:1.6;margin-bottom:6px">반도체 검사장비 전문기업 에이치비테크놀로지가 2024년 연간 매출 342억원을 기록하며 역대 최고 실적을 달성했다...</div>
-          <div style="font-size:11.5px;color:var(--text-muted)">한국경제 · 2025.01.08</div>
+        <div style="padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer;display:flex;gap:14px;align-items:flex-start" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px">에이치비테크놀로지, 2024년 매출 342억 달성 "역대 최고"</div>
+            <div style="font-size:12.5px;color:var(--text-sub);line-height:1.6;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">반도체 검사장비 전문기업 에이치비테크놀로지가 2024년 연간 매출 342억원을 기록하며 역대 최고 실적을 달성했다...</div>
+            <div style="font-size:11.5px;color:var(--text-muted)">한국경제 · 2025.01.08</div>
+          </div>
+          <div class="news-thumb"><span class="news-thumb-placeholder">🖼</span></div>
         </div>
       </div>
     </div>
@@ -1094,6 +1107,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
             <div class="earnings-legend" style="margin-top:12px">
               <span class="el-item"><span class="el-dot blue"></span> 매출</span>
               <span class="el-item"><span class="el-dot" style="background:var(--amber-500)"></span> <span id="revLegendLabel">순이익</span></span>
+              <span class="el-item" id="revLegendRate" style="display:none"><span style="display:inline-block;width:18px;height:2px;background:var(--emerald-500);vertical-align:middle;margin-right:4px;border-radius:1px"></span> 영업이익률(%)</span>
             </div>
           </div>
           <!-- Right: Revenue composition -->
@@ -1128,6 +1142,210 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
               <tr><td>당기순이익</td><td class="positive">15억</td><td class="positive">18억</td><td class="positive">20억</td></tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4: Financial Stacked Bars -->
+    <div class="section paywall-section" style="position:relative">
+      <span class="design-note dn-yellow">Stacked bar: 매출=Green-500 영업이익=Blue-500 순이익=Purple-500. 범례 상단, 바 48px. hover 강조</span>
+      <div class="section-title"><span class="icon">📊</span> 재무</div>
+      <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
+      <div>
+        <div class="chart-toggle" style="margin-bottom:12px"><button class="chart-toggle-btn active">연간</button><button class="chart-toggle-btn">분기</button></div>
+        <canvas id="financialBars" style="width:100%" height="240"></canvas>
+        <div class="expandable-trigger" onclick="toggleExpand(this)">▼ 재무제표 보기</div>
+        <div class="expandable-content">
+          <table class="fin-table" style="margin-top:8px">
+            <thead><tr><th>항목</th><th>2023</th><th>2024</th><th>2025</th></tr></thead>
+            <tbody>
+              <tr><td>매출액</td><td>31,045</td><td>32,812</td><td>34,215</td></tr>
+              <tr><td>영업이익(영업이익률)</td><td>2,200</td><td>2,500</td><td>2,800</td></tr>
+              <tr><td>순이익</td><td>1,500</td><td>1,800</td><td>2,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6: Income Statement (Full Detail) -->
+    <div class="section paywall-section" style="position:relative" id="income-statement-section">
+      <div class="section-title"><span class="icon">📋</span> 손익계산서</div>
+      <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
+      <div style="overflow-x:auto">
+        <table class="fs-detail-table">
+          <thead><tr><th class="fs-col-label">분류</th><th class="fs-col-val">2022</th><th class="fs-col-val">2023</th><th class="fs-col-val">2024</th></tr></thead>
+          <tbody>
+            <tr class="fs-row-l0"><td>매출액</td><td>29,500</td><td>31,045</td><td>34,215</td></tr>
+            <tr class="fs-row-l0"><td>매출원가</td><td>20,650</td><td>21,432</td><td>23,067</td></tr>
+            <tr class="fs-row-l1"><td>상품매출원가</td><td>8,120</td><td>8,540</td><td>9,280</td></tr>
+            <tr class="fs-row-l1"><td>제품매출원가</td><td>12,530</td><td>12,892</td><td>13,787</td></tr>
+            <tr class="fs-row-l0 fs-row-bold"><td>매출총이익(손실)</td><td>8,850</td><td>9,613</td><td>11,148</td></tr>
+            <tr class="fs-row-l0"><td>▼ 판매비와관리비</td><td>6,850</td><td>7,413</td><td>8,348</td></tr>
+            <tr class="fs-row-l1"><td>급여</td><td>2,450</td><td>2,680</td><td>3,020</td></tr>
+            <tr class="fs-row-l2"><td>임원급여</td><td>480</td><td>520</td><td>580</td></tr>
+            <tr class="fs-row-l2"><td>직원급여</td><td>1,970</td><td>2,160</td><td>2,440</td></tr>
+            <tr class="fs-row-l1"><td>퇴직급여</td><td>310</td><td>340</td><td>380</td></tr>
+            <tr class="fs-row-l1"><td>복리후생비</td><td>420</td><td>460</td><td>510</td></tr>
+            <tr class="fs-row-l1"><td>여비교통비</td><td>180</td><td>195</td><td>215</td></tr>
+            <tr class="fs-row-l1"><td>통신비</td><td>45</td><td>48</td><td>52</td></tr>
+            <tr class="fs-row-l1"><td>세금과공과</td><td>120</td><td>135</td><td>148</td></tr>
+            <tr class="fs-row-l1"><td>임차료</td><td>380</td><td>410</td><td>440</td></tr>
+            <tr class="fs-row-l1"><td>감가상각비</td><td>520</td><td>580</td><td>650</td></tr>
+            <tr class="fs-row-l1"><td>보험료</td><td>85</td><td>92</td><td>98</td></tr>
+            <tr class="fs-row-l1"><td>지급수수료</td><td>680</td><td>740</td><td>820</td></tr>
+            <tr class="fs-row-l1"><td>광고선전비</td><td>210</td><td>230</td><td>260</td></tr>
+            <tr class="fs-row-l1"><td>경상개발비</td><td>890</td><td>920</td><td>1,050</td></tr>
+            <tr class="fs-row-l1"><td>접대비</td><td>60</td><td>65</td><td>72</td></tr>
+            <tr class="fs-row-l1"><td>기타판관비</td><td>500</td><td>518</td><td>633</td></tr>
+            <tr class="fs-row-l0 fs-row-bold"><td>영업이익(손실)</td><td>2,000</td><td>2,200</td><td>2,800</td></tr>
+            <tr class="fs-row-l0"><td>▼ 영업외수익</td><td>280</td><td>320</td><td>410</td></tr>
+            <tr class="fs-row-l1"><td>이자수익</td><td>85</td><td>120</td><td>165</td></tr>
+            <tr class="fs-row-l1"><td>외환차익</td><td>62</td><td>48</td><td>78</td></tr>
+            <tr class="fs-row-l1"><td>외화환산이익</td><td>18</td><td>25</td><td>32</td></tr>
+            <tr class="fs-row-l1"><td>유형자산처분이익</td><td>—</td><td>12</td><td>—</td></tr>
+            <tr class="fs-row-l1"><td>기타영업외수익</td><td>115</td><td>115</td><td>135</td></tr>
+            <tr class="fs-row-l0"><td>▼ 영업외비용</td><td>380</td><td>420</td><td>510</td></tr>
+            <tr class="fs-row-l1"><td>이자비용</td><td>210</td><td>235</td><td>280</td></tr>
+            <tr class="fs-row-l1"><td>외환차손</td><td>45</td><td>58</td><td>72</td></tr>
+            <tr class="fs-row-l1"><td>외화환산손실</td><td>22</td><td>15</td><td>28</td></tr>
+            <tr class="fs-row-l1"><td>기부금</td><td>15</td><td>20</td><td>25</td></tr>
+            <tr class="fs-row-l1"><td>기타영업외비용</td><td>88</td><td>92</td><td>105</td></tr>
+            <tr class="fs-row-l0 fs-row-bold"><td>법인세비용차감전순손익</td><td>1,900</td><td>2,100</td><td>2,700</td></tr>
+            <tr class="fs-row-l0"><td>법인세비용</td><td>500</td><td>600</td><td>700</td></tr>
+            <tr class="fs-row-l0 fs-row-bold" style="color:var(--brand)"><td>당기순이익(순손실)</td><td>1,400</td><td>1,500</td><td>2,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- S7: Balance Sheet (Full Detail — matching screenshot) -->
+    <div class="section paywall-section" style="position:relative" id="balance-sheet-section">
+      <div class="section-title"><span class="icon">📋</span> 재무상태표</div>
+      <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
+      <div style="overflow-x:auto">
+        <table class="fs-detail-table">
+          <thead><tr><th class="fs-col-label">분류</th><th class="fs-col-val">2022</th><th class="fs-col-val">2023</th><th class="fs-col-val">2024</th></tr></thead>
+          <tbody>
+            <!-- ── 자산 ── -->
+            <tr class="fs-row-l0 fs-row-bold"><td>▼ 자산</td><td>54,088</td><td>61,000</td><td>72,000</td></tr>
+            <tr class="fs-row-l0"><td>&nbsp;&nbsp;▼ 유동자산</td><td>25,568</td><td>28,500</td><td>34,000</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 재고자산</td><td>4,120</td><td>5,280</td><td>6,150</td></tr>
+            <tr class="fs-row-l2"><td>제품</td><td>1,850</td><td>2,380</td><td>2,920</td></tr>
+            <tr class="fs-row-l2"><td>상품</td><td>—</td><td>960</td><td>1,330</td></tr>
+            <tr class="fs-row-l2"><td>원재료</td><td>1,580</td><td>1,740</td><td>—</td></tr>
+            <tr class="fs-row-l2"><td>미착품</td><td>690</td><td>—</td><td>—</td></tr>
+            <tr class="fs-row-l2"><td>기타재고자산</td><td>—</td><td>200</td><td>1,900</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 당좌자산</td><td>21,448</td><td>23,220</td><td>27,850</td></tr>
+            <tr class="fs-row-l2"><td>매출채권</td><td>5,420</td><td>6,180</td><td>7,850</td></tr>
+            <tr class="fs-row-l2"><td>매출채권(대손충당금)</td><td>—</td><td>(120)</td><td>(250)</td></tr>
+            <tr class="fs-row-l2"><td>선급금</td><td>1,480</td><td>1,350</td><td>1,580</td></tr>
+            <tr class="fs-row-l2"><td>현금 및 현금성자산</td><td>12,680</td><td>13,540</td><td>16,200</td></tr>
+            <tr class="fs-row-l2"><td>기타당좌자산</td><td>—</td><td>—</td><td>470</td></tr>
+            <tr class="fs-row-l2"><td>선급비용</td><td>420</td><td>380</td><td>450</td></tr>
+            <tr class="fs-row-l2"><td>미수금</td><td>860</td><td>1,250</td><td>980</td></tr>
+            <tr class="fs-row-l2"><td>미수금(대손충당금)</td><td>(12)</td><td>(60)</td><td>(30)</td></tr>
+            <tr class="fs-row-l2"><td>단기대여금</td><td>600</td><td>700</td><td>600</td></tr>
+            <tr class="fs-row-l0"><td>&nbsp;&nbsp;▼ 비유동자산</td><td>28,520</td><td>32,500</td><td>38,000</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 무형자산</td><td>12,480</td><td>14,200</td><td>16,500</td></tr>
+            <tr class="fs-row-l2"><td>개발비</td><td>8,920</td><td>10,350</td><td>12,180</td></tr>
+            <tr class="fs-row-l2"><td>산업재산권</td><td>1,280</td><td>1,420</td><td>1,650</td></tr>
+            <tr class="fs-row-l2"><td>기타무형자산</td><td>980</td><td>1,530</td><td>1,670</td></tr>
+            <tr class="fs-row-l2"><td>소프트웨어 등</td><td>1,300</td><td>900</td><td>1,000</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 기타비유동자산</td><td>2,240</td><td>2,500</td><td>2,800</td></tr>
+            <tr class="fs-row-l2"><td>보증금 등</td><td>2,240</td><td>2,500</td><td>2,800</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 유형자산</td><td>13,800</td><td>15,800</td><td>18,700</td></tr>
+            <tr class="fs-row-l2"><td>기타유형자산</td><td>5,820</td><td>6,450</td><td>7,200</td></tr>
+            <tr class="fs-row-l2"><td>기타유형자산(감가상각누계액)</td><td>(1,240)</td><td>(1,680)</td><td>(2,150)</td></tr>
+            <tr class="fs-row-l2"><td>공구 가구 및 비품</td><td>4,580</td><td>5,200</td><td>6,100</td></tr>
+            <tr class="fs-row-l2"><td>공구 가구 및 비품(감가상각누계액)</td><td>(1,120)</td><td>(1,450)</td><td>(1,820)</td></tr>
+            <tr class="fs-row-l2"><td>차량운반구</td><td>—</td><td>680</td><td>820</td></tr>
+            <tr class="fs-row-l2"><td>차량운반구(감가상각누계액)</td><td>—</td><td>(200)</td><td>(350)</td></tr>
+            <tr class="fs-row-l2"><td>건설중인자산</td><td>5,760</td><td>6,800</td><td>8,900</td></tr>
+
+            <!-- ── 자본 ── -->
+            <tr class="fs-row-l0 fs-row-bold"><td>▼ 자본</td><td>28,468</td><td>35,380</td><td>46,000</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 자본금</td><td>5,000</td><td>5,000</td><td>5,000</td></tr>
+            <tr class="fs-row-l2"><td>보통주자본금</td><td>4,580</td><td>4,580</td><td>4,580</td></tr>
+            <tr class="fs-row-l2"><td>우선주자본금</td><td>420</td><td>420</td><td>420</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 자본잉여금</td><td>12,000</td><td>12,000</td><td>12,000</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 자본준비금</td><td>12,000</td><td>12,000</td><td>12,000</td></tr>
+            <tr class="fs-row-l2"><td>주식발행초과금</td><td>12,000</td><td>12,000</td><td>12,000</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 이익잉여금</td><td>11,468</td><td>18,380</td><td>29,000</td></tr>
+            <tr class="fs-row-l2"><td>당기순이익</td><td>1,400</td><td>1,500</td><td>2,000</td></tr>
+            <tr class="fs-row-l2"><td>미처분이익잉여금</td><td>10,068</td><td>16,880</td><td>27,000</td></tr>
+
+            <!-- ── 부채 ── -->
+            <tr class="fs-row-l0 fs-row-bold"><td>▼ 부채</td><td>25,620</td><td>25,620</td><td>26,000</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 유동부채</td><td>14,200</td><td>14,200</td><td>14,500</td></tr>
+            <tr class="fs-row-l2"><td>미지급비용</td><td>320</td><td>410</td><td>450</td></tr>
+            <tr class="fs-row-l2"><td>선수금</td><td>1,850</td><td>2,100</td><td>2,380</td></tr>
+            <tr class="fs-row-l2"><td>유동성장기부채</td><td>—</td><td>500</td><td>—</td></tr>
+            <tr class="fs-row-l2"><td>미지급금</td><td>2,830</td><td>3,190</td><td>3,670</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 단기차입금</td><td>8,000</td><td>7,000</td><td>7,000</td></tr>
+            <tr class="fs-row-l2"><td>기타단기차입금</td><td>8,000</td><td>7,000</td><td>7,000</td></tr>
+            <tr class="fs-row-l2"><td>예수금</td><td>1,200</td><td>1,000</td><td>1,000</td></tr>
+            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 비유동부채</td><td>11,420</td><td>11,420</td><td>11,500</td></tr>
+            <tr class="fs-row-l2"><td>장기차입금</td><td>6,000</td><td>5,500</td><td>5,000</td></tr>
+            <tr class="fs-row-l2"><td>장기미지급금</td><td>2,420</td><td>2,820</td><td>3,200</td></tr>
+            <tr class="fs-row-l2"><td>퇴직급여충당부채</td><td>3,000</td><td>3,100</td><td>3,300</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- S9: 공급망 상세 (KoDATA ENPcust0001 + ENPsupp0001) -->
+    <div class="section paywall-section" style="position:relative" id="supply-chain-section">
+      <div class="section-title"><span class="icon">🔗</span> 공급망 상세 (구매처 · 판매처)</div>
+      <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <!-- 구매처 -->
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-sub);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="width:3px;height:14px;border-radius:2px;background:var(--emerald-500);display:inline-block"></span> 주요 구매처 (10개)</div>
+          <table class="fs-detail-table">
+            <thead><tr><th class="fs-col-label">구매처명</th><th class="fs-col-val">거래비중</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600">도쿄정밀</td><td>32.0%</td></tr>
+              <tr><td style="font-weight:600">한국소재</td><td>25.0%</td></tr>
+              <tr><td style="font-weight:600">글로벌테크</td><td>20.0%</td></tr>
+              <tr><td>삼성전기</td><td>5.2%</td></tr>
+              <tr><td>코리아프리시전</td><td>4.8%</td></tr>
+              <tr><td>디에스테크노</td><td>3.5%</td></tr>
+              <tr><td>미쓰비시머티리얼</td><td>3.1%</td></tr>
+              <tr><td>에이엠티테크</td><td>2.4%</td></tr>
+              <tr><td>하나마이크론</td><td>2.0%</td></tr>
+              <tr><td>기타</td><td>2.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- 판매처 -->
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-sub);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="width:3px;height:14px;border-radius:2px;background:var(--orange-500);display:inline-block"></span> 주요 판매처 (10개)</div>
+          <table class="fs-detail-table">
+            <thead><tr><th class="fs-col-label">판매처명</th><th class="fs-col-val">거래비중</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600">삼성전자</td><td>28.0%</td></tr>
+              <tr><td style="font-weight:600">SK하이닉스</td><td>22.0%</td></tr>
+              <tr><td style="font-weight:600">TSMC</td><td>15.0%</td></tr>
+              <tr><td>DB하이텍</td><td>8.5%</td></tr>
+              <tr><td>키옥시아</td><td>6.2%</td></tr>
+              <tr><td>르네사스일렉트로닉스</td><td>5.0%</td></tr>
+              <tr><td>매그나칩반도체</td><td>4.3%</td></tr>
+              <tr><td>앰코테크놀로지</td><td>3.8%</td></tr>
+              <tr><td>SFA반도체</td><td>3.2%</td></tr>
+              <tr><td>기타</td><td>4.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 구매처 집중도 분석 -->
+      <div style="margin-top:20px;padding:16px;background:var(--slate-50);border-radius:var(--radius)">
+        <div style="font-size:12.5px;font-weight:600;margin-bottom:8px">공급망 집중도 분석</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <div><div style="font-size:11px;color:var(--text-muted)">구매 상위 3사 비중</div><div style="font-size:17px;font-weight:700;color:var(--red-600)">77.0%</div><div style="font-size:11px;color:var(--red-500)">높은 의존도</div></div>
+          <div><div style="font-size:11px;color:var(--text-muted)">판매 상위 3사 비중</div><div style="font-size:17px;font-weight:700;color:var(--amber-600)">65.0%</div><div style="font-size:11px;color:var(--amber-500)">보통 집중도</div></div>
+          <div><div style="font-size:11px;color:var(--text-muted)">해외 구매처 비율</div><div style="font-size:17px;font-weight:700">35.1%</div><div style="font-size:11px;color:var(--text-sub)">도쿄정밀 외</div></div>
+          <div><div style="font-size:11px;color:var(--text-muted)">해외 판매처 비율</div><div style="font-size:17px;font-weight:700">30.0%</div><div style="font-size:11px;color:var(--text-sub)">TSMC, 키옥시아 외</div></div>
         </div>
       </div>
     </div>
@@ -1338,28 +1556,6 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       </div>
     </div>
 
-    <!-- S4: Financial Stacked Bars -->
-    <div class="section paywall-section" style="position:relative">
-      <span class="design-note dn-yellow">Stacked bar: 매출=Green-500 영업이익=Blue-500 순이익=Purple-500. 범례 상단, 바 48px. hover 강조</span>
-      <div class="section-title"><span class="icon">📊</span> 재무</div>
-      <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
-      <div>
-        <div class="chart-toggle" style="margin-bottom:12px"><button class="chart-toggle-btn active">연간</button><button class="chart-toggle-btn">분기</button></div>
-        <canvas id="financialBars" style="width:100%" height="240"></canvas>
-        <div class="expandable-trigger" onclick="toggleExpand(this)">▼ 재무제표 보기</div>
-        <div class="expandable-content">
-          <table class="fin-table" style="margin-top:8px">
-            <thead><tr><th>항목</th><th>2023</th><th>2024</th><th>2025</th></tr></thead>
-            <tbody>
-              <tr><td>매출액</td><td>31,045</td><td>32,812</td><td>34,215</td></tr>
-              <tr><td>영업이익(영업이익률)</td><td>2,200</td><td>2,500</td><td>2,800</td></tr>
-              <tr><td>순이익</td><td>1,500</td><td>1,800</td><td>2,000</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
     <!-- S5: Stability -->
     <div class="section paywall-section" style="position:relative">
       <span class="design-note dn-green">이중 Y축 라인: 부채비율(좌/Red) 유동비율(우/Blue). 점선=추정 실선=확정. 위험 구간 Red-50 배경</span>
@@ -1370,132 +1566,6 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
         <div class="chart-toggle" style="margin-bottom:12px"><button class="chart-toggle-btn active">부채비율</button><button class="chart-toggle-btn">유동비율</button></div>
         <canvas id="stabilityChart" style="width:100%" height="200"></canvas>
         <a href="#" class="compare-link" style="margin-top:12px;display:inline-flex">동종업계와 비교하기 →</a>
-      </div>
-    </div>
-
-    <!-- S6: Income Statement (Full Detail) -->
-    <div class="section paywall-section" style="position:relative" id="income-statement-section">
-      <div class="section-title"><span class="icon">📋</span> 손익계산서</div>
-      <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
-      <div style="overflow-x:auto">
-        <table class="fs-detail-table">
-          <thead><tr><th class="fs-col-label">분류</th><th class="fs-col-val">2022</th><th class="fs-col-val">2023</th><th class="fs-col-val">2024</th></tr></thead>
-          <tbody>
-            <tr class="fs-row-l0"><td>매출액</td><td>29,500</td><td>31,045</td><td>34,215</td></tr>
-            <tr class="fs-row-l0"><td>매출원가</td><td>20,650</td><td>21,432</td><td>23,067</td></tr>
-            <tr class="fs-row-l1"><td>상품매출원가</td><td>8,120</td><td>8,540</td><td>9,280</td></tr>
-            <tr class="fs-row-l1"><td>제품매출원가</td><td>12,530</td><td>12,892</td><td>13,787</td></tr>
-            <tr class="fs-row-l0 fs-row-bold"><td>매출총이익(손실)</td><td>8,850</td><td>9,613</td><td>11,148</td></tr>
-            <tr class="fs-row-l0"><td>▼ 판매비와관리비</td><td>6,850</td><td>7,413</td><td>8,348</td></tr>
-            <tr class="fs-row-l1"><td>급여</td><td>2,450</td><td>2,680</td><td>3,020</td></tr>
-            <tr class="fs-row-l2"><td>임원급여</td><td>480</td><td>520</td><td>580</td></tr>
-            <tr class="fs-row-l2"><td>직원급여</td><td>1,970</td><td>2,160</td><td>2,440</td></tr>
-            <tr class="fs-row-l1"><td>퇴직급여</td><td>310</td><td>340</td><td>380</td></tr>
-            <tr class="fs-row-l1"><td>복리후생비</td><td>420</td><td>460</td><td>510</td></tr>
-            <tr class="fs-row-l1"><td>여비교통비</td><td>180</td><td>195</td><td>215</td></tr>
-            <tr class="fs-row-l1"><td>통신비</td><td>45</td><td>48</td><td>52</td></tr>
-            <tr class="fs-row-l1"><td>세금과공과</td><td>120</td><td>135</td><td>148</td></tr>
-            <tr class="fs-row-l1"><td>임차료</td><td>380</td><td>410</td><td>440</td></tr>
-            <tr class="fs-row-l1"><td>감가상각비</td><td>520</td><td>580</td><td>650</td></tr>
-            <tr class="fs-row-l1"><td>보험료</td><td>85</td><td>92</td><td>98</td></tr>
-            <tr class="fs-row-l1"><td>지급수수료</td><td>680</td><td>740</td><td>820</td></tr>
-            <tr class="fs-row-l1"><td>광고선전비</td><td>210</td><td>230</td><td>260</td></tr>
-            <tr class="fs-row-l1"><td>경상개발비</td><td>890</td><td>920</td><td>1,050</td></tr>
-            <tr class="fs-row-l1"><td>접대비</td><td>60</td><td>65</td><td>72</td></tr>
-            <tr class="fs-row-l1"><td>기타판관비</td><td>500</td><td>518</td><td>633</td></tr>
-            <tr class="fs-row-l0 fs-row-bold"><td>영업이익(손실)</td><td>2,000</td><td>2,200</td><td>2,800</td></tr>
-            <tr class="fs-row-l0"><td>▼ 영업외수익</td><td>280</td><td>320</td><td>410</td></tr>
-            <tr class="fs-row-l1"><td>이자수익</td><td>85</td><td>120</td><td>165</td></tr>
-            <tr class="fs-row-l1"><td>외환차익</td><td>62</td><td>48</td><td>78</td></tr>
-            <tr class="fs-row-l1"><td>외화환산이익</td><td>18</td><td>25</td><td>32</td></tr>
-            <tr class="fs-row-l1"><td>유형자산처분이익</td><td>—</td><td>12</td><td>—</td></tr>
-            <tr class="fs-row-l1"><td>기타영업외수익</td><td>115</td><td>115</td><td>135</td></tr>
-            <tr class="fs-row-l0"><td>▼ 영업외비용</td><td>380</td><td>420</td><td>510</td></tr>
-            <tr class="fs-row-l1"><td>이자비용</td><td>210</td><td>235</td><td>280</td></tr>
-            <tr class="fs-row-l1"><td>외환차손</td><td>45</td><td>58</td><td>72</td></tr>
-            <tr class="fs-row-l1"><td>외화환산손실</td><td>22</td><td>15</td><td>28</td></tr>
-            <tr class="fs-row-l1"><td>기부금</td><td>15</td><td>20</td><td>25</td></tr>
-            <tr class="fs-row-l1"><td>기타영업외비용</td><td>88</td><td>92</td><td>105</td></tr>
-            <tr class="fs-row-l0 fs-row-bold"><td>법인세비용차감전순손익</td><td>1,900</td><td>2,100</td><td>2,700</td></tr>
-            <tr class="fs-row-l0"><td>법인세비용</td><td>500</td><td>600</td><td>700</td></tr>
-            <tr class="fs-row-l0 fs-row-bold" style="color:var(--brand)"><td>당기순이익(순손실)</td><td>1,400</td><td>1,500</td><td>2,000</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- S7: Balance Sheet (Full Detail — matching screenshot) -->
-    <div class="section paywall-section" style="position:relative" id="balance-sheet-section">
-      <div class="section-title"><span class="icon">📋</span> 재무상태표</div>
-      <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
-      <div style="overflow-x:auto">
-        <table class="fs-detail-table">
-          <thead><tr><th class="fs-col-label">분류</th><th class="fs-col-val">2022</th><th class="fs-col-val">2023</th><th class="fs-col-val">2024</th></tr></thead>
-          <tbody>
-            <!-- ── 자산 ── -->
-            <tr class="fs-row-l0 fs-row-bold"><td>▼ 자산</td><td>54,088</td><td>61,000</td><td>72,000</td></tr>
-            <tr class="fs-row-l0"><td>&nbsp;&nbsp;▼ 유동자산</td><td>25,568</td><td>28,500</td><td>34,000</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 재고자산</td><td>4,120</td><td>5,280</td><td>6,150</td></tr>
-            <tr class="fs-row-l2"><td>제품</td><td>1,850</td><td>2,380</td><td>2,920</td></tr>
-            <tr class="fs-row-l2"><td>상품</td><td>—</td><td>960</td><td>1,330</td></tr>
-            <tr class="fs-row-l2"><td>원재료</td><td>1,580</td><td>1,740</td><td>—</td></tr>
-            <tr class="fs-row-l2"><td>미착품</td><td>690</td><td>—</td><td>—</td></tr>
-            <tr class="fs-row-l2"><td>기타재고자산</td><td>—</td><td>200</td><td>1,900</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 당좌자산</td><td>21,448</td><td>23,220</td><td>27,850</td></tr>
-            <tr class="fs-row-l2"><td>매출채권</td><td>5,420</td><td>6,180</td><td>7,850</td></tr>
-            <tr class="fs-row-l2"><td>매출채권(대손충당금)</td><td>—</td><td>(120)</td><td>(250)</td></tr>
-            <tr class="fs-row-l2"><td>선급금</td><td>1,480</td><td>1,350</td><td>1,580</td></tr>
-            <tr class="fs-row-l2"><td>현금 및 현금성자산</td><td>12,680</td><td>13,540</td><td>16,200</td></tr>
-            <tr class="fs-row-l2"><td>기타당좌자산</td><td>—</td><td>—</td><td>470</td></tr>
-            <tr class="fs-row-l2"><td>선급비용</td><td>420</td><td>380</td><td>450</td></tr>
-            <tr class="fs-row-l2"><td>미수금</td><td>860</td><td>1,250</td><td>980</td></tr>
-            <tr class="fs-row-l2"><td>미수금(대손충당금)</td><td>(12)</td><td>(60)</td><td>(30)</td></tr>
-            <tr class="fs-row-l2"><td>단기대여금</td><td>600</td><td>700</td><td>600</td></tr>
-            <tr class="fs-row-l0"><td>&nbsp;&nbsp;▼ 비유동자산</td><td>28,520</td><td>32,500</td><td>38,000</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 무형자산</td><td>12,480</td><td>14,200</td><td>16,500</td></tr>
-            <tr class="fs-row-l2"><td>개발비</td><td>8,920</td><td>10,350</td><td>12,180</td></tr>
-            <tr class="fs-row-l2"><td>산업재산권</td><td>1,280</td><td>1,420</td><td>1,650</td></tr>
-            <tr class="fs-row-l2"><td>기타무형자산</td><td>980</td><td>1,530</td><td>1,670</td></tr>
-            <tr class="fs-row-l2"><td>소프트웨어 등</td><td>1,300</td><td>900</td><td>1,000</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 기타비유동자산</td><td>2,240</td><td>2,500</td><td>2,800</td></tr>
-            <tr class="fs-row-l2"><td>보증금 등</td><td>2,240</td><td>2,500</td><td>2,800</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 유형자산</td><td>13,800</td><td>15,800</td><td>18,700</td></tr>
-            <tr class="fs-row-l2"><td>기타유형자산</td><td>5,820</td><td>6,450</td><td>7,200</td></tr>
-            <tr class="fs-row-l2"><td>기타유형자산(감가상각누계액)</td><td>(1,240)</td><td>(1,680)</td><td>(2,150)</td></tr>
-            <tr class="fs-row-l2"><td>공구 가구 및 비품</td><td>4,580</td><td>5,200</td><td>6,100</td></tr>
-            <tr class="fs-row-l2"><td>공구 가구 및 비품(감가상각누계액)</td><td>(1,120)</td><td>(1,450)</td><td>(1,820)</td></tr>
-            <tr class="fs-row-l2"><td>차량운반구</td><td>—</td><td>680</td><td>820</td></tr>
-            <tr class="fs-row-l2"><td>차량운반구(감가상각누계액)</td><td>—</td><td>(200)</td><td>(350)</td></tr>
-            <tr class="fs-row-l2"><td>건설중인자산</td><td>5,760</td><td>6,800</td><td>8,900</td></tr>
-
-            <!-- ── 자본 ── -->
-            <tr class="fs-row-l0 fs-row-bold"><td>▼ 자본</td><td>28,468</td><td>35,380</td><td>46,000</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 자본금</td><td>5,000</td><td>5,000</td><td>5,000</td></tr>
-            <tr class="fs-row-l2"><td>보통주자본금</td><td>4,580</td><td>4,580</td><td>4,580</td></tr>
-            <tr class="fs-row-l2"><td>우선주자본금</td><td>420</td><td>420</td><td>420</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 자본잉여금</td><td>12,000</td><td>12,000</td><td>12,000</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 자본준비금</td><td>12,000</td><td>12,000</td><td>12,000</td></tr>
-            <tr class="fs-row-l2"><td>주식발행초과금</td><td>12,000</td><td>12,000</td><td>12,000</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 이익잉여금</td><td>11,468</td><td>18,380</td><td>29,000</td></tr>
-            <tr class="fs-row-l2"><td>당기순이익</td><td>1,400</td><td>1,500</td><td>2,000</td></tr>
-            <tr class="fs-row-l2"><td>미처분이익잉여금</td><td>10,068</td><td>16,880</td><td>27,000</td></tr>
-
-            <!-- ── 부채 ── -->
-            <tr class="fs-row-l0 fs-row-bold"><td>▼ 부채</td><td>25,620</td><td>25,620</td><td>26,000</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 유동부채</td><td>14,200</td><td>14,200</td><td>14,500</td></tr>
-            <tr class="fs-row-l2"><td>미지급비용</td><td>320</td><td>410</td><td>450</td></tr>
-            <tr class="fs-row-l2"><td>선수금</td><td>1,850</td><td>2,100</td><td>2,380</td></tr>
-            <tr class="fs-row-l2"><td>유동성장기부채</td><td>—</td><td>500</td><td>—</td></tr>
-            <tr class="fs-row-l2"><td>미지급금</td><td>2,830</td><td>3,190</td><td>3,670</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;&nbsp;&nbsp;▼ 단기차입금</td><td>8,000</td><td>7,000</td><td>7,000</td></tr>
-            <tr class="fs-row-l2"><td>기타단기차입금</td><td>8,000</td><td>7,000</td><td>7,000</td></tr>
-            <tr class="fs-row-l2"><td>예수금</td><td>1,200</td><td>1,000</td><td>1,000</td></tr>
-            <tr class="fs-row-l1"><td>&nbsp;&nbsp;▼ 비유동부채</td><td>11,420</td><td>11,420</td><td>11,500</td></tr>
-            <tr class="fs-row-l2"><td>장기차입금</td><td>6,000</td><td>5,500</td><td>5,000</td></tr>
-            <tr class="fs-row-l2"><td>장기미지급금</td><td>2,420</td><td>2,820</td><td>3,200</td></tr>
-            <tr class="fs-row-l2"><td>퇴직급여충당부채</td><td>3,000</td><td>3,100</td><td>3,300</td></tr>
-          </tbody>
-        </table>
       </div>
     </div>
 
@@ -1517,61 +1587,6 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       </div>
     </div>
 
-    <!-- S9: 공급망 상세 (KoDATA ENPcust0001 + ENPsupp0001) -->
-    <div class="section paywall-section" style="position:relative" id="supply-chain-section">
-      <div class="section-title"><span class="icon">🔗</span> 공급망 상세 (구매처 · 판매처)</div>
-      <span class="paywall-inline-badge">🔒 열람 시 456🍪 필요</span>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
-        <!-- 구매처 -->
-        <div>
-          <div style="font-size:13px;font-weight:700;color:var(--text-sub);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="width:3px;height:14px;border-radius:2px;background:var(--emerald-500);display:inline-block"></span> 주요 구매처 (10개)</div>
-          <table class="fs-detail-table">
-            <thead><tr><th class="fs-col-label">구매처명</th><th class="fs-col-val">거래비중</th></tr></thead>
-            <tbody>
-              <tr><td style="font-weight:600">도쿄정밀</td><td>32.0%</td></tr>
-              <tr><td style="font-weight:600">한국소재</td><td>25.0%</td></tr>
-              <tr><td style="font-weight:600">글로벌테크</td><td>20.0%</td></tr>
-              <tr><td>삼성전기</td><td>5.2%</td></tr>
-              <tr><td>코리아프리시전</td><td>4.8%</td></tr>
-              <tr><td>디에스테크노</td><td>3.5%</td></tr>
-              <tr><td>미쓰비시머티리얼</td><td>3.1%</td></tr>
-              <tr><td>에이엠티테크</td><td>2.4%</td></tr>
-              <tr><td>하나마이크론</td><td>2.0%</td></tr>
-              <tr><td>기타</td><td>2.0%</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- 판매처 -->
-        <div>
-          <div style="font-size:13px;font-weight:700;color:var(--text-sub);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="width:3px;height:14px;border-radius:2px;background:var(--orange-500);display:inline-block"></span> 주요 판매처 (10개)</div>
-          <table class="fs-detail-table">
-            <thead><tr><th class="fs-col-label">판매처명</th><th class="fs-col-val">거래비중</th></tr></thead>
-            <tbody>
-              <tr><td style="font-weight:600">삼성전자</td><td>28.0%</td></tr>
-              <tr><td style="font-weight:600">SK하이닉스</td><td>22.0%</td></tr>
-              <tr><td style="font-weight:600">TSMC</td><td>15.0%</td></tr>
-              <tr><td>DB하이텍</td><td>8.5%</td></tr>
-              <tr><td>키옥시아</td><td>6.2%</td></tr>
-              <tr><td>르네사스일렉트로닉스</td><td>5.0%</td></tr>
-              <tr><td>매그나칩반도체</td><td>4.3%</td></tr>
-              <tr><td>앰코테크놀로지</td><td>3.8%</td></tr>
-              <tr><td>SFA반도체</td><td>3.2%</td></tr>
-              <tr><td>기타</td><td>4.0%</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!-- 구매처 집중도 분석 -->
-      <div style="margin-top:20px;padding:16px;background:var(--slate-50);border-radius:var(--radius)">
-        <div style="font-size:12.5px;font-weight:600;margin-bottom:8px">공급망 집중도 분석</div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-          <div><div style="font-size:11px;color:var(--text-muted)">구매 상위 3사 비중</div><div style="font-size:17px;font-weight:700;color:var(--red-600)">77.0%</div><div style="font-size:11px;color:var(--red-500)">높은 의존도</div></div>
-          <div><div style="font-size:11px;color:var(--text-muted)">판매 상위 3사 비중</div><div style="font-size:17px;font-weight:700;color:var(--amber-600)">65.0%</div><div style="font-size:11px;color:var(--amber-500)">보통 집중도</div></div>
-          <div><div style="font-size:11px;color:var(--text-muted)">해외 구매처 비율</div><div style="font-size:17px;font-weight:700">35.1%</div><div style="font-size:11px;color:var(--text-sub)">도쿄정밀 외</div></div>
-          <div><div style="font-size:11px;color:var(--text-muted)">해외 판매처 비율</div><div style="font-size:17px;font-weight:700">30.0%</div><div style="font-size:11px;color:var(--text-sub)">TSMC, 키옥시아 외</div></div>
-        </div>
-      </div>
-    </div>
 
   </div>
 
@@ -1849,70 +1864,85 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
   <div class="tab-panel" id="panel-news">
     <div class="section" style="position:relative">
       <div class="section-title"><span class="icon">📰</span> 최신 뉴스</div>
+      <span class="design-note dn-yellow">썸네일: Naver Search API → og:image 크롤링. 120×80 radius-8. 이미지 없을 시 placeholder</span>
       <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-            <div style="flex:1">
-              <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, AI 반도체 검사 솔루션으로 글로벌 시장 진출</div>
-              <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">에이치비테크놀로지가 자체 개발한 AI 기반 반도체 검사 솔루션 'HB-Vision'을 앞세워 대만·일본 시장 공략에 나선다. 이번 솔루션은 기존 대비 검사 속도 30% 향상과 불량률 0.01% 미만의 정확도를 자랑한다.</div>
-              <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:12px;color:var(--text-muted)">전자신문</span>
-                <span style="font-size:11px;color:var(--border)">|</span>
-                <span style="font-size:12px;color:var(--text-muted)">2025.02.28</span>
-                <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--blue-50);color:var(--brand)">AI/기술</span>
-              </div>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer;display:flex;gap:16px;align-items:flex-start" onmouseover="this.style.borderColor='var(--blue-200)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, AI 반도체 검사 솔루션으로 글로벌 시장 진출</div>
+            <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">에이치비테크놀로지가 자체 개발한 AI 기반 반도체 검사 솔루션 'HB-Vision'을 앞세워 대만·일본 시장 공략에 나선다. 이번 솔루션은 기존 대비 검사 속도 30% 향상과 불량률 0.01% 미만의 정확도를 자랑한다.</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;color:var(--text-muted)">전자신문</span>
+              <span style="font-size:11px;color:var(--border)">|</span>
+              <span style="font-size:12px;color:var(--text-muted)">2025.02.28</span>
+              <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--blue-50);color:var(--brand)">AI/기술</span>
             </div>
           </div>
+          <div class="news-thumb news-thumb-lg"><span class="news-thumb-placeholder">🖼</span></div>
         </div>
-        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">"반도체 후공정 핵심 장비 국산화" 에이치비테크, 정부 과제 선정</div>
-          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">산업통상자원부의 '소재·부품·장비 기술개발사업'에 에이치비테크놀로지가 주관기업으로 선정됐다. 3년간 총 120억원 규모의 정부 지원을 받아 차세대 반도체 테스트 장비를 개발할 예정이다.</div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:12px;color:var(--text-muted)">매일경제</span>
-            <span style="font-size:11px;color:var(--border)">|</span>
-            <span style="font-size:12px;color:var(--text-muted)">2025.01.15</span>
-            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--emerald-50);color:var(--emerald-600)">정부과제</span>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer;display:flex;gap:16px;align-items:flex-start" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">"반도체 후공정 핵심 장비 국산화" 에이치비테크, 정부 과제 선정</div>
+            <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">산업통상자원부의 '소재·부품·장비 기술개발사업'에 에이치비테크놀로지가 주관기업으로 선정됐다. 3년간 총 120억원 규모의 정부 지원을 받아 차세대 반도체 테스트 장비를 개발할 예정이다.</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;color:var(--text-muted)">매일경제</span>
+              <span style="font-size:11px;color:var(--border)">|</span>
+              <span style="font-size:12px;color:var(--text-muted)">2025.01.15</span>
+              <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--emerald-50);color:var(--emerald-600)">정부과제</span>
+            </div>
           </div>
+          <div class="news-thumb news-thumb-lg"><span class="news-thumb-placeholder">🖼</span></div>
         </div>
-        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, 2024년 매출 342억 달성 "역대 최고"</div>
-          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">반도체 검사장비 전문기업 에이치비테크놀로지가 2024년 연간 매출 342억원을 기록하며 역대 최고 실적을 달성했다. 전년 대비 10.3% 성장이며, 영업이익률도 8.2%로 전년 대비 개선됐다.</div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:12px;color:var(--text-muted)">한국경제</span>
-            <span style="font-size:11px;color:var(--border)">|</span>
-            <span style="font-size:12px;color:var(--text-muted)">2025.01.08</span>
-            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--amber-50);color:var(--amber-600)">실적</span>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer;display:flex;gap:16px;align-items:flex-start" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, 2024년 매출 342억 달성 "역대 최고"</div>
+            <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">반도체 검사장비 전문기업 에이치비테크놀로지가 2024년 연간 매출 342억원을 기록하며 역대 최고 실적을 달성했다. 전년 대비 10.3% 성장이며, 영업이익률도 8.2%로 전년 대비 개선됐다.</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;color:var(--text-muted)">한국경제</span>
+              <span style="font-size:11px;color:var(--border)">|</span>
+              <span style="font-size:12px;color:var(--text-muted)">2025.01.08</span>
+              <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--amber-50);color:var(--amber-600)">실적</span>
+            </div>
           </div>
+          <div class="news-thumb news-thumb-lg"><span class="news-thumb-placeholder">🖼</span></div>
         </div>
-        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, 삼성전자 2차 벤더 등록 완료</div>
-          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">에이치비테크놀로지가 삼성전자 반도체 사업부의 2차 벤더 등록 절차를 완료하고 본격적인 납품을 시작한다. 이로써 삼성전자와의 거래 규모가 전년 대비 2배 이상 확대될 전망이다.</div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:12px;color:var(--text-muted)">디지털데일리</span>
-            <span style="font-size:11px;color:var(--border)">|</span>
-            <span style="font-size:12px;color:var(--text-muted)">2024.11.20</span>
-            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--purple-50);color:var(--purple-500)">사업확장</span>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer;display:flex;gap:16px;align-items:flex-start" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, 삼성전자 2차 벤더 등록 완료</div>
+            <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">에이치비테크놀로지가 삼성전자 반도체 사업부의 2차 벤더 등록 절차를 완료하고 본격적인 납품을 시작한다. 이로써 삼성전자와의 거래 규모가 전년 대비 2배 이상 확대될 전망이다.</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;color:var(--text-muted)">디지털데일리</span>
+              <span style="font-size:11px;color:var(--border)">|</span>
+              <span style="font-size:12px;color:var(--text-muted)">2024.11.20</span>
+              <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--purple-50);color:var(--purple-500)">사업확장</span>
+            </div>
           </div>
+          <div class="news-thumb news-thumb-lg"><span class="news-thumb-placeholder">🖼</span></div>
         </div>
-        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">[인터뷰] 김현우 에이치비테크 대표 "HBM 검사 장비 시장, 국산화가 답"</div>
-          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">김현우 대표는 "HBM 시대에 반도체 검사 장비의 중요성이 더욱 커지고 있다"며 "일본·미국 장비에 의존하던 시장에서 국산 장비의 경쟁력을 입증하겠다"고 밝혔다.</div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:12px;color:var(--text-muted)">조선비즈</span>
-            <span style="font-size:11px;color:var(--border)">|</span>
-            <span style="font-size:12px;color:var(--text-muted)">2024.09.05</span>
-            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--slate-100);color:var(--text-sub)">인터뷰</span>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer;display:flex;gap:16px;align-items:flex-start" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">[인터뷰] 김현우 에이치비테크 대표 "HBM 검사 장비 시장, 국산화가 답"</div>
+            <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">김현우 대표는 "HBM 시대에 반도체 검사 장비의 중요성이 더욱 커지고 있다"며 "일본·미국 장비에 의존하던 시장에서 국산 장비의 경쟁력을 입증하겠다"고 밝혔다.</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;color:var(--text-muted)">조선비즈</span>
+              <span style="font-size:11px;color:var(--border)">|</span>
+              <span style="font-size:12px;color:var(--text-muted)">2024.09.05</span>
+              <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--slate-100);color:var(--text-sub)">인터뷰</span>
+            </div>
           </div>
+          <div class="news-thumb news-thumb-lg"><span class="news-thumb-placeholder">🖼</span></div>
         </div>
-        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, 판교 R&D 센터 확장 이전</div>
-          <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px">연구개발 인력 확충에 따라 판교 테크노밸리 내 더 넓은 공간으로 R&D 센터를 이전했다. 새 센터는 기존 대비 3배 규모이며, 클린룸과 실험 시설을 갖추고 있다.</div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:12px;color:var(--text-muted)">뉴스1</span>
-            <span style="font-size:11px;color:var(--border)">|</span>
-            <span style="font-size:12px;color:var(--text-muted)">2024.07.12</span>
-            <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--slate-100);color:var(--text-sub)">조직</span>
+        <div style="padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition);cursor:pointer;display:flex;gap:16px;align-items:flex-start" onmouseover="this.style.borderColor='var(--blue-200)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4">에이치비테크놀로지, 판교 R&D 센터 확장 이전</div>
+            <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">연구개발 인력 확충에 따라 판교 테크노밸리 내 더 넓은 공간으로 R&D 센터를 이전했다. 새 센터는 기존 대비 3배 규모이며, 클린룸과 실험 시설을 갖추고 있다.</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;color:var(--text-muted)">뉴스1</span>
+              <span style="font-size:11px;color:var(--border)">|</span>
+              <span style="font-size:12px;color:var(--text-muted)">2024.07.12</span>
+              <span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;background:var(--slate-100);color:var(--text-sub)">조직</span>
+            </div>
           </div>
+          <div class="news-thumb news-thumb-lg"><span class="news-thumb-placeholder">🖼</span></div>
         </div>
       </div>
     </div>
@@ -2832,9 +2862,11 @@ function drawRevenueEarningsChart(mode, btn) {
     btn.classList.add('active');
   }
   mode = mode || 'net';
-  var label2 = mode === 'net' ? '순이익' : '영업이익(영업이익률)';
+  var label2 = mode === 'net' ? '순이익' : '영업이익';
   var el = document.getElementById('revLegendLabel');
   if (el) el.textContent = label2;
+  var rateLegend = document.getElementById('revLegendRate');
+  if (rateLegend) rateLegend.style.display = mode === 'op' ? '' : 'none';
 
   var canvas = document.getElementById('revenueEarningsChart');
   if (!canvas) return;
@@ -2846,7 +2878,7 @@ function drawRevenueEarningsChart(mode, btn) {
   var revenue = [295, 310, 328, 342];
   var earnings = mode === 'net' ? [14, 15, 18, 20] : [20, 22, 25, 28];
 
-  var padL = 50, padR = 20, padT = 20, padB = 40;
+  var padL = 50, padR = mode === 'op' ? 50 : 20, padT = 20, padB = 40;
   var chartW = W - padL - padR, chartH = H - padT - padB;
   var maxV = 400;
   var groupW = chartW / years.length;
@@ -2865,7 +2897,19 @@ function drawRevenueEarningsChart(mode, btn) {
     ctx.textAlign = 'right'; ctx.fillText(gv + '억', padL - 8, gy + 4);
   }
 
+  // Right Y-axis for 영업이익률 (when op mode)
+  var maxRate = 12;
+  if (mode === 'op') {
+    ctx.fillStyle = '#9AA3B4'; ctx.font = '11px Pretendard Variable'; ctx.textAlign = 'left';
+    for (var r = 0; r <= 4; r++) {
+      var rv = maxRate * r / 4;
+      var ry = padT + chartH * (1 - rv / maxRate);
+      ctx.fillText(rv.toFixed(0) + '%', W - padR + 8, ry + 4);
+    }
+  }
+
   var baseY = yPos(0);
+  var linePoints = [];
   for (var i = 0; i < years.length; i++) {
     var cx = padL + groupW * i + groupW / 2;
 
@@ -2896,6 +2940,33 @@ function drawRevenueEarningsChart(mode, btn) {
     // Year label
     ctx.fillStyle = '#6B7689'; ctx.font = '12px Pretendard Variable';
     ctx.fillText(years[i], cx, H - 10);
+
+    // Collect line points for 영업이익률
+    if (mode === 'op') {
+      var rate = (earnings[i] / revenue[i]) * 100;
+      var ly = padT + chartH * (1 - rate / maxRate);
+      linePoints.push({x: cx, y: ly, rate: rate});
+    }
+  }
+
+  // Draw 영업이익률 line
+  if (mode === 'op' && linePoints.length > 0) {
+    ctx.strokeStyle = '#10B981'; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(linePoints[0].x, linePoints[0].y);
+    for (var j = 1; j < linePoints.length; j++) {
+      ctx.lineTo(linePoints[j].x, linePoints[j].y);
+    }
+    ctx.stroke();
+
+    // Dots + labels
+    for (var k = 0; k < linePoints.length; k++) {
+      ctx.beginPath(); ctx.arc(linePoints[k].x, linePoints[k].y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#10B981'; ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(linePoints[k].x, linePoints[k].y, 2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#059669'; ctx.font = 'bold 10px Pretendard Variable'; ctx.textAlign = 'center';
+      ctx.fillText(linePoints[k].rate.toFixed(1) + '%', linePoints[k].x, linePoints[k].y - 10);
+    }
   }
 }
 
