@@ -203,14 +203,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .similar-cards::-webkit-scrollbar{height:6px}
 .similar-cards::-webkit-scrollbar-thumb{background:var(--slate-300);border-radius:3px}
 .similar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.sim-section{margin-bottom:20px}
-.sim-section-title{font-size:13px;font-weight:700;color:var(--text-sub);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.sim-section-title::before{content:'';width:3px;height:14px;border-radius:2px}
-.sim-section[data-type="industry"] .sim-section-title::before{background:var(--brand)}
-.sim-section[data-type="scale"] .sim-section-title::before{background:var(--emerald-500)}
-.sim-section[data-type="region"] .sim-section-title::before{background:var(--purple-500)}
-.sim-section[data-type="revenue"] .sim-section-title::before{background:var(--amber-500)}
-.sim-section-count{font-size:11px;font-weight:500;padding:1px 7px;border-radius:10px;background:var(--slate-100);color:var(--text-muted)}
+.sim-section{margin-bottom:28px}
+.sim-section-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:var(--radius);border-left:4px solid}
+.sim-section[data-type="industry"] .sim-section-title{background:var(--blue-50);border-color:var(--brand);color:var(--brand)}
+.sim-section[data-type="scale"] .sim-section-title{background:var(--emerald-50);border-color:var(--emerald-500);color:var(--emerald-600)}
+.sim-section[data-type="region"] .sim-section-title{background:var(--purple-50);border-color:var(--purple-500);color:var(--purple-500)}
+.sim-section[data-type="revenue"] .sim-section-title{background:var(--amber-50);border-color:var(--amber-500);color:var(--amber-600)}
+.sim-section-count{font-size:12px;font-weight:600;padding:2px 10px;border-radius:10px;background:rgba(255,255,255,.7);color:inherit}
 .sim-card{flex:0 0 280px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;scroll-snap-align:start;transition:var(--transition);position:relative}
 .sim-card:hover{box-shadow:var(--shadow-md);border-color:var(--blue-200)}
 .sim-card.best-match{border-color:var(--brand);border-width:2px}
@@ -957,12 +956,12 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <!-- 11. Similar companies preview -->
     <div class="section" style="position:relative">
       <span class="design-note dn-yellow">유사기업 미리보기 3카드. 일치율 badge Green(80%+)/Yellow(60%+)/Gray. 클릭→유사기업 탭 이동</span>
-      <div class="similar-header">
-        <div class="section-title" style="margin-bottom:0"><span class="icon">🏢</span> 유사 기업 추천</div>
-        <a href="#" style="font-size:13px;color:var(--brand);text-decoration:none;font-weight:500" onclick="switchTab('similar',document.querySelectorAll('.tab')[3]);return false">전체 보기 →</a>
-      </div>
+      <div class="section-title"><span class="icon">🏢</span> 유사 기업 추천 <a href="#" class="section-detail-link" onclick="switchTab('similar',document.querySelectorAll('.tab')[3]);return false">전체 18개 보기 →</a></div>
       <div class="similar-context"><strong>에이치비테크놀로지</strong> 기준 · 매출 342억 · 영업이익 28억 · 반도체 장비 · 비상장</div>
       <div id="similarCardsPreview"></div>
+      <div style="text-align:center;margin-top:16px">
+        <a href="#" onclick="switchTab('similar',document.querySelectorAll('.tab')[3]);return false" style="display:inline-flex;align-items:center;gap:6px;padding:10px 28px;background:var(--brand);color:#fff;border-radius:var(--radius-lg);font-size:13px;font-weight:600;text-decoration:none;transition:var(--transition)" onmouseover="this.style.background='#0440A8'" onmouseout="this.style.background='var(--brand)'">업종·규모·지역별 유사기업 전체 보기 →</a>
+      </div>
     </div>
   </div>
 
@@ -2338,10 +2337,10 @@ function buildCard(s) {
 }
 
 var SECTION_MAP = {
-  '동일 업종': {label:'동일 업종', type:'industry'},
-  '유사 규모': {label:'유사 규모 (매출 200~500억)', type:'scale'},
-  '같은 지역': {label:'같은 지역 (서울·경기)', type:'region'},
-  '유사 매출': {label:'유사 매출 구조', type:'revenue'}
+  '동일 업종': {label:'🏭 동일 업종', type:'industry'},
+  '유사 규모': {label:'📏 유사 규모 (매출 200~500억)', type:'scale'},
+  '같은 지역': {label:'📍 같은 지역 (서울·경기)', type:'region'},
+  '유사 매출': {label:'💰 유사 매출 구조', type:'revenue'}
 };
 
 function renderSimilarCards(containerId, count, mode) {
@@ -3312,7 +3311,7 @@ drawWaterfallChart();
 drawShareholderDonut();
 drawEmployeeChart();
 drawRadarChart();
-renderSimilarCards('similarCardsPreview', 5, 'card');
+renderSimilarCards('similarCardsPreview', 3, 'compare');
 renderSimilarCards('similarCardsMain', SIMILAR.length, 'grid');
 
 // Close forum thread on Escape
