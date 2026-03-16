@@ -71,6 +71,20 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .quick-bar-divider{width:1px;height:20px;background:var(--border);flex-shrink:0}
 .quick-bar-more{font-size:11.5px;color:var(--text-muted);white-space:nowrap;cursor:pointer;flex-shrink:0}
 .quick-bar-more:hover{color:var(--brand)}
+/* QUICK-BAR DROP PANEL */
+.qb-drop{position:absolute;top:100%;left:0;right:0;background:#fff;border-bottom:1px solid var(--border);box-shadow:var(--shadow-md);z-index:210;max-height:0;overflow:hidden;transition:max-height .25s ease,opacity .2s;opacity:0}
+.qb-drop.open{max-height:400px;opacity:1}
+.qb-drop-header{display:flex;align-items:center;justify-content:space-between;padding:14px 32px 10px}
+.qb-drop-title{font-size:14px;font-weight:700;color:var(--text)}
+.qb-drop-close{width:24px;height:24px;border-radius:var(--radius-sm);border:none;background:var(--slate-50);cursor:pointer;font-size:14px;color:var(--text-sub);display:flex;align-items:center;justify-content:center}
+.qb-drop-close:hover{background:var(--slate-200)}
+.qb-drop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2px;padding:0 32px 16px}
+.qb-drop-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius);cursor:pointer;transition:var(--transition);text-decoration:none;color:var(--text)}
+.qb-drop-item:hover{background:var(--slate-50)}
+.qb-drop-item-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.qb-drop-item-info{flex:1;min-width:0}
+.qb-drop-item-name{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qb-drop-item-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
 
 /* ══ PAGE LAYOUT ══ */
 .page{max-width:1440px;margin:0 auto;padding:0 24px}
@@ -491,9 +505,9 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
 </div>
 
 <!-- ══ QUICK-ACCESS BAR ══ -->
-<div class="quick-bar">
+<div class="quick-bar" style="position:relative">
   <div class="quick-bar-section">
-    <span class="quick-bar-label">🔓 열람 가능</span>
+    <span class="quick-bar-label" style="cursor:pointer" onclick="toggleQbDrop('qbUnlocked')">🔓 열람 가능</span>
     <div class="quick-bar-chips">
       <a href="prototype-detail.html" class="quick-bar-chip"><span class="quick-bar-chip-dot" style="background:var(--brand)"></span>삼성전자</a>
       <a href="prototype-detail.html" class="quick-bar-chip"><span class="quick-bar-chip-dot" style="background:var(--emerald-500)"></span>에이치비테크놀로지</a>
@@ -502,7 +516,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
   </div>
   <div class="quick-bar-divider"></div>
   <div class="quick-bar-section" style="flex:1;min-width:0">
-    <span class="quick-bar-label">🕐 최근 본</span>
+    <span class="quick-bar-label" style="cursor:pointer" onclick="toggleQbDrop('qbRecent')">🕐 최근 본</span>
     <div class="quick-bar-chips">
       <a href="prototype-detail.html" class="quick-bar-chip"><span class="quick-bar-chip-dot" style="background:var(--emerald-500)"></span>에이치비테크놀로지</a>
       <a href="prototype-detail.html" class="quick-bar-chip"><span class="quick-bar-chip-dot" style="background:var(--brand)"></span>넥스트반도체</a>
@@ -510,7 +524,69 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       <a href="prototype-detail.html" class="quick-bar-chip"><span class="quick-bar-chip-dot" style="background:var(--teal-500)"></span>케이앤도체</a>
       <a href="prototype-detail.html" class="quick-bar-chip"><span class="quick-bar-chip-dot" style="background:var(--red-500)"></span>코어셈텍</a>
     </div>
-    <span class="quick-bar-more">전체 →</span>
+    <span class="quick-bar-more" onclick="toggleQbDrop('qbRecent')">전체 →</span>
+  </div>
+  <!-- DROP: 열람 가능 기업 -->
+  <div class="qb-drop" id="qbUnlocked">
+    <div class="qb-drop-header">
+      <div class="qb-drop-title">🔓 열람 가능 기업 (3)</div>
+      <button class="qb-drop-close" onclick="closeQbDrop()">×</button>
+    </div>
+    <div class="qb-drop-grid">
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--blue-50);color:var(--brand)">삼</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">삼성전자</div><div class="qb-drop-item-sub">반도체 · 이동전화기 제조업 · 2025.03.15 열람</div></div>
+      </a>
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--emerald-50);color:var(--emerald-600)">에</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">에이치비테크놀로지</div><div class="qb-drop-item-sub">반도체장비 · 2025.03.14 열람</div></div>
+      </a>
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--purple-50);color:var(--purple-500)">SK</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">SK하이닉스</div><div class="qb-drop-item-sub">메모리 반도체 · 2025.03.10 열람</div></div>
+      </a>
+    </div>
+  </div>
+  <!-- DROP: 최근 본 기업 -->
+  <div class="qb-drop" id="qbRecent">
+    <div class="qb-drop-header">
+      <div class="qb-drop-title">🕐 최근 본 기업 (8)</div>
+      <button class="qb-drop-close" onclick="closeQbDrop()">×</button>
+    </div>
+    <div class="qb-drop-grid">
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--emerald-50);color:var(--emerald-600)">에</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">에이치비테크놀로지</div><div class="qb-drop-item-sub">반도체장비 · 방금 전</div></div>
+      </a>
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--blue-50);color:var(--brand)">넥</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">넥스트반도체</div><div class="qb-drop-item-sub">메모리 · 2시간 전</div></div>
+      </a>
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--amber-50);color:var(--amber-600)">실</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">실리콘마이다스</div><div class="qb-drop-item-sub">반도체설계 · 어제</div></div>
+      </a>
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--teal-50);color:var(--teal-500)">케</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">케이앤도체</div><div class="qb-drop-item-sub">반도체 · 3일 전</div></div>
+      </a>
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--red-50);color:var(--red-500)">코</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">코어셈텍</div><div class="qb-drop-item-sub">반도체패키징 · 1주 전</div></div>
+      </a>
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--blue-50);color:var(--brand)">삼</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">삼성전자</div><div class="qb-drop-item-sub">반도체 · 2주 전</div></div>
+      </a>
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--purple-50);color:var(--purple-500)">테</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">테라바이트시스템</div><div class="qb-drop-item-sub">반도체장비 · 2주 전</div></div>
+      </a>
+      <a href="prototype-detail.html" class="qb-drop-item">
+        <div class="qb-drop-item-icon" style="background:var(--amber-50);color:var(--amber-600)">인</div>
+        <div class="qb-drop-item-info"><div class="qb-drop-item-name">인피니온코리아</div><div class="qb-drop-item-sub">전력반도체 · 3주 전</div></div>
+      </a>
+    </div>
   </div>
 </div>
 
@@ -2153,5 +2229,20 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 })();
 </script>
 
+<script>
+var activeQb=null;
+function toggleQbDrop(id){
+  if(activeQb===id){closeQbDrop();return;}
+  closeQbDrop();
+  document.getElementById(id).classList.add('open');
+  activeQb=id;
+}
+function closeQbDrop(){
+  if(activeQb){document.getElementById(activeQb).classList.remove('open');activeQb=null;}
+}
+document.addEventListener('click',function(e){
+  if(activeQb&&!e.target.closest('.quick-bar')){closeQbDrop();}
+});
+</script>
 </body>
 </html>
