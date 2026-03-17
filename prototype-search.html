@@ -161,7 +161,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .saved-views-item .dot{width:8px;height:8px;border-radius:50%}
 
 /* ══ RESULTS TABLE ══ */
-.results-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:24px}
+.results-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow-x:auto;overflow-y:hidden;margin-bottom:24px;-webkit-overflow-scrolling:touch}
+.results-wrap::-webkit-scrollbar{height:6px}
+.results-wrap::-webkit-scrollbar-thumb{background:var(--slate-300);border-radius:3px}
+.results-wrap::-webkit-scrollbar-track{background:var(--slate-50)}
 .results-table{width:100%;border-collapse:collapse}
 .results-table th{background:var(--slate-50);font-size:12px;font-weight:600;color:var(--text-sub);text-transform:none;padding:10px 14px;text-align:center;border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:5}
 .results-table th:first-child{width:44px;text-align:center}
@@ -392,7 +395,14 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .col-toggle-item label{flex:1;font-size:13px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:8px}
 .col-toggle-item input[type=checkbox]{accent-color:var(--brand);width:16px;height:16px;cursor:pointer}
 .col-toggle-item .col-drag{color:var(--text-muted);cursor:grab;font-size:14px}
+.col-toggle-item .col-filter-badge{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--brand-bg);color:var(--brand);font-weight:500;white-space:nowrap}
+.col-toggle-item .col-cookie{font-size:11px;color:var(--amber-600)}
+.col-toggle-group{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;padding:10px 0 4px;border-bottom:none}
+.col-toggle-group:first-child{padding-top:0}
 .col-modal-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+/* Filter-added column header highlight */
+.th-filter-added{background:var(--brand-bg)!important;color:var(--brand)!important}
+.th-filter-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brand);margin-left:4px;vertical-align:middle}
 
 /* ── Export Menu ── */
 .export-menu{position:absolute;top:calc(100% + 4px);right:0;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:4px;min-width:180px;display:none;z-index:50}
@@ -838,7 +848,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <!-- Footer -->
     <div class="adv-footer">
       <span class="adv-footer-text">🔒 Pro 필터는 <strong style="color:var(--amber-600)">CookieDeal Pro</strong> 구독 시 이용 가능</span>
-      <button class="btn-primary" style="font-size:12px;padding:6px 16px" onclick="document.querySelector('.advanced-panel').classList.remove('show')">필터 적용</button>
+      <button class="btn-primary" style="font-size:12px;padding:6px 16px" onclick="document.querySelector('.advanced-panel').classList.remove('show');syncColumnsWithFilters()">필터 적용</button>
     </div>
   </div>
 
@@ -906,24 +916,8 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
 
   <!-- ══ RESULTS TABLE ══ -->
   <div class="results-wrap" style="position:relative">
-    <div class="design-note blue" style="top:-28px;right:0">테이블 행 높이: 컴팩트 32px / 기본 40px / 디테일 52px. 체크박스 첫 열 44px. 헤더 sticky Gray-50</div>
-    <div class="design-note red" style="top:-28px;left:0">Paywall 컬럼: 잠금 열 헤더 🍪badge, 셀 blur 4px+자물쇠. 클릭→업그레이드 모달. L1/L2 구분</div>
-    <table class="results-table" id="resultsTable">
-      <thead>
-        <tr>
-          <th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th>
-          <th>기업명</th>
-          <th>업종</th>
-          <th>지역</th>
-          <th>조회수</th>
-          <th>생산품</th>
-          <th>매출액 · YoY</th>
-          <th>영업이익 · 이익률 · YoY</th>
-          <th>직원수</th>
-          <th>설립년도</th>
-          <th></th>
-        </tr>
-      </thead>
+    <table class="results-table" id="resultsTable" style="min-width:800px">
+      <thead><tr id="tableHead"></tr></thead>
       <tbody id="tableBody"></tbody>
     </table>
   </div>
@@ -1051,24 +1045,10 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       <span class="col-modal-title">열 설정</span>
       <button class="col-modal-close" onclick="closeColumnModal()">×</button>
     </div>
-    <div class="col-modal-body">
-      <div class="col-toggle-item"><span class="col-drag">⠿</span><label><input type="checkbox" checked disabled> 기업명</label></div>
-      <div class="col-toggle-item"><span class="col-drag">⠿</span><label><input type="checkbox" checked onchange="toggleColumn('업종',this.checked)"> 업종</label></div>
-      <div class="col-toggle-item"><span class="col-drag">⠿</span><label><input type="checkbox" checked onchange="toggleColumn('지역',this.checked)"> 지역</label></div>
-      <div class="col-toggle-item"><span class="col-drag">⠿</span><label><input type="checkbox" checked onchange="toggleColumn('조회수',this.checked)"> 조회수</label></div>
-      <div class="col-toggle-item"><span class="col-drag">⠿</span><label><input type="checkbox" checked onchange="toggleColumn('생산품',this.checked)"> 생산품</label></div>
-      <div class="col-toggle-item"><span class="col-drag">⠿</span><label><input type="checkbox" checked onchange="toggleColumn('매출액',this.checked)"> 매출액 · YoY</label></div>
-      <div class="col-toggle-item"><span class="col-drag">⠿</span><label><input type="checkbox" checked onchange="toggleColumn('영업이익',this.checked)"> 영업이익 · 이익률 · YoY</label></div>
-      <div class="col-toggle-item"><span class="col-drag">⠿</span><label><input type="checkbox" checked onchange="toggleColumn('직원수',this.checked)"> 직원수</label></div>
-      <div class="col-toggle-item"><span class="col-drag">⠿</span><label><input type="checkbox" checked onchange="toggleColumn('설립',this.checked)"> 설립년도</label></div>
-      <div class="col-toggle-item" style="opacity:.6"><span class="col-drag">⠿</span><label><input type="checkbox" onchange="toggleColumn('대표자',this.checked)"> 대표자</label><span style="font-size:11px;color:var(--amber-600)">🍪</span></div>
-      <div class="col-toggle-item" style="opacity:.6"><span class="col-drag">⠿</span><label><input type="checkbox" onchange="toggleColumn('자산총계',this.checked)"> 자산총계</label><span style="font-size:11px;color:var(--amber-600)">🍪</span></div>
-      <div class="col-toggle-item" style="opacity:.6"><span class="col-drag">⠿</span><label><input type="checkbox" onchange="toggleColumn('부채비율',this.checked)"> 부채비율</label><span style="font-size:11px;color:var(--amber-600)">🍪</span></div>
-      <div class="col-toggle-item" style="opacity:.6"><span class="col-drag">⠿</span><label><input type="checkbox" onchange="toggleColumn('특허수',this.checked)"> 특허수</label><span style="font-size:11px;color:var(--amber-600)">🍪</span></div>
-    </div>
+    <div class="col-modal-body" id="colModalBody"></div>
     <div class="col-modal-footer">
       <button class="btn-outline" onclick="closeColumnModal()" style="font-size:12.5px;padding:7px 16px">닫기</button>
-      <button class="btn-primary" onclick="closeColumnModal()" style="font-size:12.5px;padding:7px 16px">적용</button>
+      <button class="btn-primary" onclick="applyColumns()" style="font-size:12.5px;padding:7px 16px">적용</button>
     </div>
   </div>
 </div>
@@ -1126,21 +1106,21 @@ function toggleDesignNotes(btn){
 
 // ══ DATA ══
 const COMPANIES = [
-  {name:'에이치비테크놀로지',type:'(주)',industry:'반도체 장비',cat:'제조업',region:'서울 강남',revenue:342,revenueG:4.3,trend:[280,295,310,328,342],profit:28,profitG:12.5,emp:187,empG:8,year:2011,views:1243,industryAvgRevenue:300,industryAvgProfit:25,industryAvgProfitRate:7.3,products:'반도체 검사장비, 웨이퍼 프로버',ceo:'김현우',addr:'서울 강남구 테헤란로 127',color:'#0549CC'},
-  {name:'넥스트인포시스템즈',type:'(주)',industry:'SW 개발',cat:'정보통신업',region:'성남 분당',revenue:128,revenueG:8.5,trend:[85,95,105,118,128],profit:15,profitG:18.2,emp:95,empG:15,year:2015,views:876,industryAvgRevenue:150,industryAvgProfit:12,industryAvgProfitRate:8.0,products:'ERP 솔루션, 클라우드 플랫폼',ceo:'박성민',addr:'성남시 분당구 판교로 242',color:'#059669'},
-  {name:'그린에너텍',type:'(주)',industry:'신재생에너지',cat:'제조업',region:'부산 해운대',revenue:567,revenueG:7.0,trend:[420,455,490,530,567],profit:42,profitG:8.3,emp:312,empG:5,year:2008,views:2341,industryAvgRevenue:400,industryAvgProfit:30,industryAvgProfitRate:7.5,products:'태양광 모듈, ESS',ceo:'이정호',addr:'부산 해운대구 센텀중앙로 48',color:'#D97706'},
-  {name:'코리아푸드텍',type:'(주)',industry:'식품 제조',cat:'제조업',region:'인천 남동',revenue:89,revenueG:4.7,trend:[72,78,81,85,89],profit:7,profitG:4.1,emp:64,empG:3,year:2018,views:432,industryAvgRevenue:120,industryAvgProfit:8,industryAvgProfitRate:6.7,products:'건강기능식품, HMR',ceo:'최영수',addr:'인천 남동구 남동대로 123',color:'#DC2626'},
-  {name:'스마트로지스',type:'(주)',industry:'물류 IT',cat:'정보통신업',region:'서울 영등포',revenue:213,revenueG:7.6,trend:[145,168,185,198,213],profit:18,profitG:14.7,emp:142,empG:12,year:2013,views:1567,industryAvgRevenue:180,industryAvgProfit:15,industryAvgProfitRate:8.3,products:'물류관리 플랫폼, WMS',ceo:'정현우',addr:'서울 영등포구 여의나루로 76',color:'#8B5CF6'},
-  {name:'바이오싸이언스코리아',type:'(주)',industry:'바이오 연구',cat:'',region:'대전 유성',revenue:76,revenueG:18.8,trend:[35,42,55,64,76],profit:-5,profitG:-999,emp:53,empG:22,year:2019,views:3210,industryAvgRevenue:100,industryAvgProfit:5,industryAvgProfitRate:5.0,products:'항체 치료제, 진단키트',ceo:'한미영',addr:'대전 유성구 과학로 169',color:'#0D9488'},
-  {name:'대한정밀공업',type:'(주)',industry:'기계부품',cat:'제조업',region:'경기 안산',revenue:445,revenueG:1.6,trend:[410,418,425,438,445],profit:31,profitG:3.2,emp:267,empG:1,year:1995,views:654,industryAvgRevenue:380,industryAvgProfit:28,industryAvgProfitRate:7.4,products:'정밀 절삭공구, CNC 부품',ceo:'오태환',addr:'경기 안산시 단원구 산단로 89',color:'#64748B'},
-  {name:'인피닉스AI',type:'(주)',industry:'AI 솔루션',cat:'',region:'서울 서초',revenue:52,revenueG:23.8,trend:[12,22,32,42,52],profit:-12,profitG:-999,emp:38,empG:35,year:2020,views:4521,industryAvgRevenue:80,industryAvgProfit:-3,industryAvgProfitRate:-3.8,products:'AI 영상분석, MLOps 플랫폼',ceo:'김태준',addr:'서울 서초구 반포대로 201',color:'#6366F1'},
-  {name:'한일화학',type:'(주)',industry:'화학 소재',cat:'제조업',region:'울산 울주',revenue:678,revenueG:1.5,trend:[620,638,650,668,678],profit:55,profitG:5.8,emp:423,empG:2,year:1987,views:987,industryAvgRevenue:550,industryAvgProfit:40,industryAvgProfitRate:7.3,products:'특수 코팅제, 접착소재',ceo:'박광일',addr:'울산 울주군 온산읍 화학로 45',color:'#B45309'},
-  {name:'퓨처모빌리티',type:'(주)',industry:'자동차부품',cat:'제조업',region:'경기 화성',revenue:891,revenueG:4.2,trend:[720,765,810,855,891],profit:67,profitG:9.1,emp:534,empG:6,year:2003,views:1876,industryAvgRevenue:700,industryAvgProfit:50,industryAvgProfitRate:7.1,products:'전장부품, 배터리 모듈',ceo:'윤재현',addr:'경기 화성시 동탄대로 512',color:'#0549CC'},
-  {name:'동아엘텍',type:'(주)',industry:'전자부품',cat:'제조업',region:'경기 수원',revenue:234,revenueG:4.0,trend:[195,205,218,225,234],profit:19,profitG:7.4,emp:156,empG:4,year:2009,views:543,industryAvgRevenue:200,industryAvgProfit:16,industryAvgProfitRate:8.0,products:'PCB, 센서 모듈',ceo:'이동훈',addr:'경기 수원시 영통구 신원로 88',color:'#059669'},
-  {name:'미래산업',type:'(주)',industry:'산업용 로봇',cat:'제조업',region:'경남 창원',revenue:321,revenueG:3.5,trend:[255,278,295,310,321],profit:25,profitG:10.6,emp:198,empG:7,year:2001,views:1234,industryAvgRevenue:280,industryAvgProfit:22,industryAvgProfitRate:7.9,products:'협동 로봇, 자동화 라인',ceo:'서진우',addr:'경남 창원시 성산구 공단로 234',color:'#DC2626'},
-  {name:'클라우드브릿지',type:'(주)',industry:'클라우드',cat:'',region:'서울 강남',revenue:167,revenueG:12.8,trend:[78,98,125,148,167],profit:8,profitG:25.3,emp:112,empG:28,year:2017,views:2987,industryAvgRevenue:140,industryAvgProfit:10,industryAvgProfitRate:7.1,products:'MSP, 클라우드 마이그레이션',ceo:'강민서',addr:'서울 강남구 역삼로 165',color:'#8B5CF6'},
-  {name:'성우메디칼',type:'(주)',industry:'의료기기',cat:'제조업',region:'서울 금천',revenue:198,revenueG:5.3,trend:[150,162,175,188,198],profit:22,profitG:11.3,emp:134,empG:9,year:2012,views:1654,industryAvgRevenue:180,industryAvgProfit:18,industryAvgProfitRate:10.0,products:'초음파 진단기, 수술 로봇',ceo:'남기철',addr:'서울 금천구 가산디지털로 100',color:'#0D9488'},
-  {name:'케이솔라에너지',type:'(주)',industry:'태양광',cat:'제조업',region:'충남 아산',revenue:412,revenueG:5.6,trend:[310,340,365,390,412],profit:34,profitG:6.7,emp:245,empG:5,year:2010,views:765,industryAvgRevenue:350,industryAvgProfit:28,industryAvgProfitRate:8.0,products:'태양광 셀, 인버터',ceo:'백승현',addr:'충남 아산시 음봉면 산업로 567',color:'#D97706'}
+  {name:'에이치비테크놀로지',type:'(주)',industry:'반도체 장비',cat:'제조업',region:'서울 강남',revenue:342,revenueG:4.3,trend:[280,295,310,328,342],profit:28,profitG:12.5,netIncome:22,emp:187,empG:8,year:2011,views:1243,industryAvgRevenue:300,industryAvgProfit:25,industryAvgProfitRate:7.3,products:'반도체 검사장비, 웨이퍼 프로버',ceo:'김현우',addr:'서울 강남구 테헤란로 127',color:'#0549CC',assets:520,debtRatio:85,venture:true,listed:'비상장'},
+  {name:'넥스트인포시스템즈',type:'(주)',industry:'SW 개발',cat:'정보통신업',region:'성남 분당',revenue:128,revenueG:8.5,trend:[85,95,105,118,128],profit:15,profitG:18.2,netIncome:11,emp:95,empG:15,year:2015,views:876,industryAvgRevenue:150,industryAvgProfit:12,industryAvgProfitRate:8.0,products:'ERP 솔루션, 클라우드 플랫폼',ceo:'박성민',addr:'성남시 분당구 판교로 242',color:'#059669',assets:180,debtRatio:62,venture:true,listed:'비상장'},
+  {name:'그린에너텍',type:'(주)',industry:'신재생에너지',cat:'제조업',region:'부산 해운대',revenue:567,revenueG:7.0,trend:[420,455,490,530,567],profit:42,profitG:8.3,netIncome:33,emp:312,empG:5,year:2008,views:2341,industryAvgRevenue:400,industryAvgProfit:30,industryAvgProfitRate:7.5,products:'태양광 모듈, ESS',ceo:'이정호',addr:'부산 해운대구 센텀중앙로 48',color:'#D97706',assets:920,debtRatio:110,venture:false,listed:'코스닥'},
+  {name:'코리아푸드텍',type:'(주)',industry:'식품 제조',cat:'제조업',region:'인천 남동',revenue:89,revenueG:4.7,trend:[72,78,81,85,89],profit:7,profitG:4.1,netIncome:5,emp:64,empG:3,year:2018,views:432,industryAvgRevenue:120,industryAvgProfit:8,industryAvgProfitRate:6.7,products:'건강기능식품, HMR',ceo:'최영수',addr:'인천 남동구 남동대로 123',color:'#DC2626',assets:65,debtRatio:48,venture:false,listed:'비상장'},
+  {name:'스마트로지스',type:'(주)',industry:'물류 IT',cat:'정보통신업',region:'서울 영등포',revenue:213,revenueG:7.6,trend:[145,168,185,198,213],profit:18,profitG:14.7,netIncome:13,emp:142,empG:12,year:2013,views:1567,industryAvgRevenue:180,industryAvgProfit:15,industryAvgProfitRate:8.3,products:'물류관리 플랫폼, WMS',ceo:'정현우',addr:'서울 영등포구 여의나루로 76',color:'#8B5CF6',assets:310,debtRatio:78,venture:true,listed:'비상장'},
+  {name:'바이오싸이언스코리아',type:'(주)',industry:'바이오 연구',cat:'',region:'대전 유성',revenue:76,revenueG:18.8,trend:[35,42,55,64,76],profit:-5,profitG:-999,netIncome:-8,emp:53,empG:22,year:2019,views:3210,industryAvgRevenue:100,industryAvgProfit:5,industryAvgProfitRate:5.0,products:'항체 치료제, 진단키트',ceo:'한미영',addr:'대전 유성구 과학로 169',color:'#0D9488',assets:145,debtRatio:195,venture:true,listed:'비상장'},
+  {name:'대한정밀공업',type:'(주)',industry:'기계부품',cat:'제조업',region:'경기 안산',revenue:445,revenueG:1.6,trend:[410,418,425,438,445],profit:31,profitG:3.2,netIncome:24,emp:267,empG:1,year:1995,views:654,industryAvgRevenue:380,industryAvgProfit:28,industryAvgProfitRate:7.4,products:'정밀 절삭공구, CNC 부품',ceo:'오태환',addr:'경기 안산시 단원구 산단로 89',color:'#64748B',assets:680,debtRatio:92,venture:false,listed:'유가증권'},
+  {name:'인피닉스AI',type:'(주)',industry:'AI 솔루션',cat:'',region:'서울 서초',revenue:52,revenueG:23.8,trend:[12,22,32,42,52],profit:-12,profitG:-999,netIncome:-15,emp:38,empG:35,year:2020,views:4521,industryAvgRevenue:80,industryAvgProfit:-3,industryAvgProfitRate:-3.8,products:'AI 영상분석, MLOps 플랫폼',ceo:'김태준',addr:'서울 서초구 반포대로 201',color:'#6366F1',assets:95,debtRatio:220,venture:true,listed:'비상장'},
+  {name:'한일화학',type:'(주)',industry:'화학 소재',cat:'제조업',region:'울산 울주',revenue:678,revenueG:1.5,trend:[620,638,650,668,678],profit:55,profitG:5.8,netIncome:42,emp:423,empG:2,year:1987,views:987,industryAvgRevenue:550,industryAvgProfit:40,industryAvgProfitRate:7.3,products:'특수 코팅제, 접착소재',ceo:'박광일',addr:'울산 울주군 온산읍 화학로 45',color:'#B45309',assets:1050,debtRatio:75,venture:false,listed:'유가증권'},
+  {name:'퓨처모빌리티',type:'(주)',industry:'자동차부품',cat:'제조업',region:'경기 화성',revenue:891,revenueG:4.2,trend:[720,765,810,855,891],profit:67,profitG:9.1,netIncome:52,emp:534,empG:6,year:2003,views:1876,industryAvgRevenue:700,industryAvgProfit:50,industryAvgProfitRate:7.1,products:'전장부품, 배터리 모듈',ceo:'윤재현',addr:'경기 화성시 동탄대로 512',color:'#0549CC',assets:1420,debtRatio:88,venture:false,listed:'코스닥'},
+  {name:'동아엘텍',type:'(주)',industry:'전자부품',cat:'제조업',region:'경기 수원',revenue:234,revenueG:4.0,trend:[195,205,218,225,234],profit:19,profitG:7.4,netIncome:14,emp:156,empG:4,year:2009,views:543,industryAvgRevenue:200,industryAvgProfit:16,industryAvgProfitRate:8.0,products:'PCB, 센서 모듈',ceo:'이동훈',addr:'경기 수원시 영통구 신원로 88',color:'#059669',assets:340,debtRatio:68,venture:false,listed:'코스닥'},
+  {name:'미래산업',type:'(주)',industry:'산업용 로봇',cat:'제조업',region:'경남 창원',revenue:321,revenueG:3.5,trend:[255,278,295,310,321],profit:25,profitG:10.6,netIncome:19,emp:198,empG:7,year:2001,views:1234,industryAvgRevenue:280,industryAvgProfit:22,industryAvgProfitRate:7.9,products:'협동 로봇, 자동화 라인',ceo:'서진우',addr:'경남 창원시 성산구 공단로 234',color:'#DC2626',assets:485,debtRatio:95,venture:false,listed:'코스닥'},
+  {name:'클라우드브릿지',type:'(주)',industry:'클라우드',cat:'',region:'서울 강남',revenue:167,revenueG:12.8,trend:[78,98,125,148,167],profit:8,profitG:25.3,netIncome:5,emp:112,empG:28,year:2017,views:2987,industryAvgRevenue:140,industryAvgProfit:10,industryAvgProfitRate:7.1,products:'MSP, 클라우드 마이그레이션',ceo:'강민서',addr:'서울 강남구 역삼로 165',color:'#8B5CF6',assets:210,debtRatio:105,venture:true,listed:'비상장'},
+  {name:'성우메디칼',type:'(주)',industry:'의료기기',cat:'제조업',region:'서울 금천',revenue:198,revenueG:5.3,trend:[150,162,175,188,198],profit:22,profitG:11.3,netIncome:17,emp:134,empG:9,year:2012,views:1654,industryAvgRevenue:180,industryAvgProfit:18,industryAvgProfitRate:10.0,products:'초음파 진단기, 수술 로봇',ceo:'남기철',addr:'서울 금천구 가산디지털로 100',color:'#0D9488',assets:290,debtRatio:55,venture:false,listed:'코스닥'},
+  {name:'케이솔라에너지',type:'(주)',industry:'태양광',cat:'제조업',region:'충남 아산',revenue:412,revenueG:5.6,trend:[310,340,365,390,412],profit:34,profitG:6.7,netIncome:26,emp:245,empG:5,year:2010,views:765,industryAvgRevenue:350,industryAvgProfit:28,industryAvgProfitRate:8.0,products:'태양광 셀, 인버터',ceo:'백승현',addr:'충남 아산시 음봉면 산업로 567',color:'#D97706',assets:620,debtRatio:82,venture:false,listed:'코스닥'}
 ];
 
 const INDUSTRY_COLORS = {
@@ -1295,20 +1275,89 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// ══ RENDER TABLE ══
+// ══ DYNAMIC COLUMN SYSTEM ══
+var ALL_COLUMNS = [
+  // group: 기본
+  {key:'name',label:'기업명',group:'기본',fixed:true,default:true},
+  {key:'industry',label:'업종',group:'기본',default:true,filterKey:'업종'},
+  {key:'region',label:'지역',group:'기본',default:true,filterKey:'지역'},
+  {key:'views',label:'조회수',group:'기본',default:true,sortable:true},
+  {key:'products',label:'생산품',group:'기본',default:true,filterKey:'생산품'},
+  // group: 재무
+  {key:'revenue',label:'매출액 · YoY',group:'재무',default:true,sortable:true,filterKey:'매출'},
+  {key:'profit',label:'영업이익 · 이익률 · YoY',group:'재무',default:true,sortable:true,filterKey:'영업이익'},
+  {key:'netIncome',label:'순이익 (억)',group:'재무',default:false,filterKey:'순이익'},
+  {key:'revenueG',label:'매출 성장률 (YoY)',group:'재무',default:false,sortable:true,filterKey:'매출 성장률'},
+  {key:'assets',label:'자산총액 (억)',group:'재무',default:false,filterKey:'자산총액',cookie:true},
+  {key:'debtRatio',label:'부채비율 (%)',group:'재무',default:false,filterKey:'부채비율',cookie:true},
+  // group: 기업 속성
+  {key:'emp',label:'직원수',group:'기업 속성',default:true,sortable:true,filterKey:'직원수'},
+  {key:'year',label:'설립년도',group:'기업 속성',default:true,sortable:true,filterKey:'설립연도'},
+  {key:'ceo',label:'대표자',group:'기업 속성',default:false,cookie:true},
+  {key:'listed',label:'상장 여부',group:'기업 속성',default:false,filterKey:'상장 여부'},
+  {key:'venture',label:'벤처기업 인증',group:'기업 속성',default:false,filterKey:'벤처기업 인증'},
+  {key:'actions',label:'',group:'_actions',default:true,fixed:true}
+];
+
+// Active columns: starts with defaults
+var activeColumns = ALL_COLUMNS.filter(function(c){return c.default;}).map(function(c){return c.key;});
+// Track which columns were auto-added by filters
+var filterAddedColumns = {};
+
+function getActiveFilters(){
+  // Read filter state from the advanced panel + basic filter bar
+  var active = {};
+  document.querySelectorAll('.advanced-item:not(.phase2)').forEach(function(item){
+    var name = item.getAttribute('data-filter');
+    if(!name) return;
+    var sel = item.querySelector('select');
+    var inp = item.querySelector('input[type=text],input[type=number]');
+    if(sel && sel.selectedIndex > 0) active[name] = true;
+    if(inp && inp.value.trim() !== '') active[name] = true;
+  });
+  // Basic filter bar: check for .has-value
+  document.querySelectorAll('.filter-select.has-value').forEach(function(btn){
+    var text = btn.textContent.trim().split(':')[0].trim();
+    active[text] = true;
+  });
+  return active;
+}
+
+function syncColumnsWithFilters(){
+  var filters = getActiveFilters();
+  var changed = false;
+  ALL_COLUMNS.forEach(function(col){
+    if(!col.filterKey || col.fixed) return;
+    var isFiltered = !!filters[col.filterKey];
+    var isActive = activeColumns.indexOf(col.key) >= 0;
+    if(isFiltered && !isActive){
+      activeColumns.splice(activeColumns.length - 1, 0, col.key); // before actions
+      filterAddedColumns[col.key] = true;
+      changed = true;
+    }
+    if(isFiltered) filterAddedColumns[col.key] = true;
+    else delete filterAddedColumns[col.key];
+  });
+  if(changed) renderTable();
+}
+
 var currentDensity = 'comfortable';
 
 function renderTable(){
   var mode = currentDensity;
-  // Update thead based on density
-  var thead = document.querySelector('#resultsTable thead tr');
-  if(mode === 'compact'){
-    thead.innerHTML = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th><th>기업명</th><th>업종</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY</th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY</th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th>';
-  } else if(mode === 'spacious'){
-    thead.innerHTML = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th><th>기업명</th><th>업종</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th class="td-actions"></th>';
-  } else {
-    thead.innerHTML = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th><th>기업명</th><th>업종</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">\최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th class="td-actions"></th>';
-  }
+  // Build thead
+  var thead = document.getElementById('tableHead');
+  var thHtml = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th>';
+  activeColumns.forEach(function(key){
+    var col = ALL_COLUMNS.find(function(c){return c.key===key;});
+    if(!col) return;
+    if(key === 'actions'){ thHtml += '<th class="td-actions"></th>'; return; }
+    var cls = (col.sortable ? ' class="th-sortable' + (filterAddedColumns[key] ? ' th-filter-added' : '') + '"' : (filterAddedColumns[key] ? ' class="th-filter-added"' : ''));
+    var onclick = col.sortable ? ' onclick="showColSort(event,\''+key+'\')"' : '';
+    var dot = filterAddedColumns[key] ? '<span class="th-filter-dot"></span>' : '';
+    thHtml += '<th'+cls+onclick+'>'+col.label+dot+'</th>';
+  });
+  thead.innerHTML = thHtml;
 
   var tbody = document.getElementById('tableBody');
   tbody.innerHTML = COMPANIES.map(function(c,i){
@@ -1318,112 +1367,49 @@ function renderTable(){
     var profitGText = c.profitG === -999 ? '적자' : (c.profitG >= 0 ? '+'+c.profitG+'%' : c.profitG+'%');
     var empGClass = c.empG >= 0 ? 'trend-up' : 'trend-down';
     var chipStyle = INDUSTRY_COLORS[c.industry] || 'background:var(--slate-100);color:var(--slate-600)';
-    // Views
     var viewsText = c.views >= 1000 ? (c.views/1000).toFixed(1)+'k' : c.views.toString();
-    // Revenue YoY
     var revenueGClass = c.revenueG >= 0 ? 'trend-up' : 'trend-down';
     var revenueGArrow = c.revenueG >= 0 ? '▲' : '▼';
     var revenueGText = c.revenueG >= 0 ? '+'+c.revenueG+'%' : c.revenueG+'%';
-    // Company type (remove 주, show cat only if present)
     var companyTypeText = c.cat ? c.cat : '';
-    // Products (first item only for compact/comfortable)
     var productFirst = c.products.split(',')[0].trim();
-    // Industry average bar — revenue (dot = company, marker = avg)
-    var revAvgScale = c.industryAvgRevenue * 1.5;
-    var revDotLeft = Math.min(Math.max(Math.round((c.revenue / revAvgScale) * 100), 2), 98);
-    var revMarkerLeft = Math.round((c.industryAvgRevenue / revAvgScale) * 100);
-    var revDotColor = c.revenue >= c.industryAvgRevenue ? 'var(--emerald-500)' : 'var(--red-500)';
-    // Industry average bar — profit
-    var profAvgScale = Math.max(Math.abs(c.industryAvgProfit) * 2.5, 1);
-    var profDotLeftCalc = Math.min(Math.max(Math.round((Math.abs(c.profit) / profAvgScale) * 100), 2), 98);
-    var profMarkerLeft = Math.round((Math.abs(c.industryAvgProfit) / profAvgScale) * 100);
-    var profIndDotColor = c.profit >= c.industryAvgProfit ? 'var(--emerald-500)' : 'var(--red-500)';
-    // Reusable bar-with-dot HTML snippets
-    var revBarDot = '<div class="ind-avg-wrap"><div class="ind-avg-bar"><div class="ind-avg-marker" style="left:'+revMarkerLeft+'%"></div><div class="ind-avg-dot" style="left:'+revDotLeft+'%;background:'+revDotColor+'"></div></div><div class="ind-avg-label"><span>0</span><span>업종 평균 '+c.industryAvgRevenue+'억</span></div></div>';
-    var profBarDot = '<div class="ind-avg-wrap"><div class="ind-avg-bar"><div class="ind-avg-marker" style="left:'+profMarkerLeft+'%"></div><div class="ind-avg-dot" style="left:'+profDotLeftCalc+'%;background:'+profIndDotColor+'"></div></div><div class="ind-avg-label"><span>0</span><span>업종 평균 '+c.industryAvgProfit+'억</span></div></div>';
+    var profitRate = ((c.profit/c.revenue)*100).toFixed(1);
+    var netClass = c.netIncome >= 0 ? 'trend-up' : 'trend-down';
 
-    if(mode === 'compact'){
-      // ── COMPACT: text-only name, no logo, no region/year/actions ──
-      return '<tr onclick="openPanel('+i+')">'
-        +'<td class="td-check"><input type="checkbox" onclick="event.stopPropagation();updateBulk()" data-idx="'+i+'"></td>'
-        +'<td style="font-weight:600;font-size:12px;white-space:nowrap;text-align:left">'+c.name+'</td>'
-        +'<td><span class="industry-chip" style="'+chipStyle+';padding:1px 6px;font-size:10.5px">'+c.industry+'</span></td>'
-        +'<td class="views-cell" style="font-size:11px">'+viewsText+'</td>'
-        +'<td style="font-size:11px;color:var(--text-sub);max-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+productFirst+'</td>'
-        +'<td style="font-weight:600;font-size:12px;white-space:nowrap">'+c.revenue+'억 <span class="revenue-yoy '+revenueGClass+'" style="font-size:10.5px">'+revenueGArrow+' '+revenueGText+'</span></td>'
-        +'<td class="profit-cell"><span class="profit-val '+profitClass+'" style="font-size:12px">'+c.profit+'억</span> <span style="font-size:10.5px;color:var(--text-sub)">('+ ((c.profit/c.revenue)*100).toFixed(1) +'%)</span> <span class="'+profitClass+'" style="font-size:10.5px">'+profitArrow+' '+profitGText+'</span></td>'
-        +'<td style="font-size:12px">'+c.emp+'명 <span class="emp-growth '+empGClass+'" style="font-size:10px"><span class="emp-yoy-label">YoY</span>'+(c.empG>=0?'+':'')+c.empG+'%</span></td>'
-        +'</tr>';
-    } else if(mode === 'spacious'){
-      // ── DETAIL: enriched company + inline visualizations ──
-      var profitRate = ((c.profit/c.revenue)*100).toFixed(1);
-      var profitDotColor = c.profit >= 0 ? 'var(--emerald-500)' : 'var(--red-500)';
-      // Employee mini histogram
-      var empBase = Math.round(c.emp * 0.7);
-      var empSteps = [empBase, Math.round(empBase*1.1), Math.round(empBase*1.25), Math.round(empBase*1.15+c.emp*0.15), c.emp];
-      var empMax = Math.max.apply(null, empSteps);
-      var empBars = empSteps.map(function(v,idx){
-        var h = Math.max(3, Math.round((v/empMax)*18));
-        var bg = idx === empSteps.length-1 ? 'var(--brand)' : 'var(--blue-200)';
-        return '<div class="detail-emp-bar-seg" style="height:'+h+'px;background:'+bg+'"></div>';
-      }).join('');
-
-      return '<tr onclick="openPanel('+i+')">'
-        +'<td class="td-check"><input type="checkbox" onclick="event.stopPropagation();updateBulk()" data-idx="'+i+'"></td>'
-        +'<td><div class="company-cell" style="align-items:flex-start">'
-        +  '<div class="company-logo" style="background:'+c.color+';width:40px;height:40px;font-size:15px;border-radius:8px">'+initials+'</div>'
-        +  '<div class="company-info">'
-        +    '<div class="company-name" style="font-size:13.5px">'+c.name+'</div>'
-        +    (companyTypeText ? '<div class="company-type" style="font-size:11px">'+companyTypeText+'</div>' : '')
-        +    '<div class="detail-meta">'
-        +      '<span><span class="meta-label">대표</span> '+c.ceo+'</span>'
-        +      '<span><span class="meta-label">제품</span> '+productFirst+'</span>'
-        +    '</div>'
-        +  '</div>'
-        +'</div></td>'
-        +'<td><span class="industry-chip" style="'+chipStyle+'">'+c.industry+'</span></td>'
-        +'<td class="region-text">'+c.region+'</td>'
-        +'<td class="views-cell">'+viewsText+'</td>'
-        +'<td style="font-size:12px;color:var(--text-sub);max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+productFirst+'</td>'
-        // Revenue: value + YoY + bar with dot
-        +'<td><div class="detail-rev">'
-        +  '<div class="detail-rev-top"><span class="revenue-val">'+c.revenue+'억</span><span class="revenue-yoy '+revenueGClass+'">'+revenueGArrow+' '+revenueGText+'</span></div>'
-        +  revBarDot
-        +'</div></td>'
-        // Profit: value + YoY on same line, margin below, bar with dot
-        +'<td><div class="detail-profit">'
-        +  '<div class="detail-profit-top"><span class="profit-val '+profitClass+'">'+c.profit+'억</span><span class="revenue-yoy '+profitClass+'">'+profitArrow+' '+profitGText+'</span></div>'
-        +  '<div class="detail-profit-rate"><div class="detail-profit-dot" style="background:'+profitDotColor+'"></div><span>영업이익률 '+profitRate+'%</span></div>'
-        +  profBarDot
-        +'</div></td>'
-        // Employee
-        +'<td><div class="detail-emp">'
-        +  '<div class="detail-emp-top"><span>'+c.emp+'명</span><span class="emp-growth '+empGClass+'" style="font-size:11px"><span class="emp-yoy-label">YoY </span>'+(c.empG>=0?'+':'')+c.empG+'%</span></div>'
-        +  '<div class="detail-emp-bar">'+empBars+'</div>'
-        +'</div></td>'
-        +'<td class="year-cell">'+c.year+'</td>'
-        +'<td class="td-actions"><div class="row-actions"><button class="row-action-btn" onclick="event.stopPropagation()">저장</button><button class="row-action-btn" onclick="event.stopPropagation();openListModal()">리스트 추가</button><button class="row-action-btn" onclick="event.stopPropagation();openPanel('+i+')">빠른 보기</button></div></td>'
-        +'</tr>';
-    } else {
-      // ── COMFORTABLE (default): logo+name, full columns ──
-      return '<tr onclick="openPanel('+i+')">'
-        +'<td class="td-check"><input type="checkbox" onclick="event.stopPropagation();updateBulk()" data-idx="'+i+'"></td>'
-        +'<td><div class="company-cell">'
-        +  '<div class="company-logo" style="background:'+c.color+'">'+initials+'</div>'
-        +  '<div class="company-info"><div class="company-name">'+c.name+'</div>'+(companyTypeText ? '<div class="company-type">'+companyTypeText+'</div>' : '')+'</div>'
-        +'</div></td>'
-        +'<td><span class="industry-chip" style="'+chipStyle+'">'+c.industry+'</span></td>'
-        +'<td class="region-text">'+c.region+'</td>'
-        +'<td class="views-cell">'+viewsText+'</td>'
-        +'<td style="font-size:12px;color:var(--text-sub);max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+productFirst+'</td>'
-        +'<td><div class="revenue-cell"><span class="revenue-val">'+c.revenue+'억</span><span class="revenue-yoy '+revenueGClass+'">'+revenueGArrow+' '+revenueGText+'</span></div></td>'
-        +'<td class="profit-cell"><span class="profit-val '+profitClass+'">'+c.profit+'억</span> <span style="font-size:11px;color:var(--text-sub)">'+((c.profit/c.revenue)*100).toFixed(1)+'%</span> <span class="emp-growth '+profitClass+'" style="font-size:11px">'+profitArrow+' '+profitGText+'</span></td>'
-        +'<td class="emp-cell">'+c.emp+'명 <span class="emp-growth '+empGClass+'"><span class="emp-yoy-label">YoY </span>'+(c.empG>=0?'+':'')+c.empG+'%</span></td>'
-        +'<td class="year-cell">'+c.year+'</td>'
-        +'<td class="td-actions"><div class="row-actions"><button class="row-action-btn" onclick="event.stopPropagation()">저장</button><button class="row-action-btn" onclick="event.stopPropagation();openListModal()">리스트 추가</button><button class="row-action-btn" onclick="event.stopPropagation();openPanel('+i+')">빠른 보기</button></div></td>'
-        +'</tr>';
+    // Cell renderer per column key
+    function cell(key){
+      switch(key){
+        case 'name':
+          if(mode==='compact') return '<td style="font-weight:600;font-size:12px;white-space:nowrap;text-align:left">'+c.name+'</td>';
+          return '<td><div class="company-cell"><div class="company-logo" style="background:'+c.color+'">'+initials+'</div><div class="company-info"><div class="company-name">'+c.name+'</div>'+(companyTypeText?'<div class="company-type">'+companyTypeText+'</div>':'')+'</div></div></td>';
+        case 'industry': return '<td><span class="industry-chip" style="'+chipStyle+'">'+c.industry+'</span></td>';
+        case 'region': return '<td class="region-text">'+c.region+'</td>';
+        case 'views': return '<td class="views-cell">'+viewsText+'</td>';
+        case 'products': return '<td style="font-size:12px;color:var(--text-sub);max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+productFirst+'</td>';
+        case 'revenue': return '<td><div class="revenue-cell"><span class="revenue-val">'+c.revenue+'억</span><span class="revenue-yoy '+revenueGClass+'">'+revenueGArrow+' '+revenueGText+'</span></div></td>';
+        case 'profit': return '<td class="profit-cell"><span class="profit-val '+profitClass+'">'+c.profit+'억</span> <span style="font-size:11px;color:var(--text-sub)">'+profitRate+'%</span> <span class="emp-growth '+profitClass+'" style="font-size:11px">'+profitArrow+' '+profitGText+'</span></td>';
+        case 'netIncome': return '<td style="white-space:nowrap"><span class="'+netClass+'">'+c.netIncome+'억</span></td>';
+        case 'revenueG': return '<td style="white-space:nowrap"><span class="'+revenueGClass+'">'+revenueGArrow+' '+revenueGText+'</span></td>';
+        case 'assets': return '<td style="white-space:nowrap">'+c.assets+'억</td>';
+        case 'debtRatio':
+          var drCls = c.debtRatio > 150 ? 'trend-down' : (c.debtRatio > 100 ? 'style="color:var(--amber-600)"' : 'class="trend-up"');
+          return '<td style="white-space:nowrap"><span '+(c.debtRatio>150?'class="trend-down"':(c.debtRatio>100?'style="color:var(--amber-600)"':''))+'>'+c.debtRatio+'%</span></td>';
+        case 'emp': return '<td class="emp-cell">'+c.emp+'명 <span class="emp-growth '+empGClass+'"><span class="emp-yoy-label">YoY </span>'+(c.empG>=0?'+':'')+c.empG+'%</span></td>';
+        case 'year': return '<td class="year-cell">'+c.year+'</td>';
+        case 'ceo': return '<td style="font-size:12.5px;white-space:nowrap">'+c.ceo+'</td>';
+        case 'listed': return '<td style="font-size:12px;white-space:nowrap">'+c.listed+'</td>';
+        case 'venture': return '<td style="font-size:12px">'+(c.venture?'<span style="color:var(--emerald-600)">인증</span>':'<span style="color:var(--text-muted)">-</span>')+'</td>';
+        case 'actions': return '<td class="td-actions"><div class="row-actions"><button class="row-action-btn" onclick="event.stopPropagation()">저장</button><button class="row-action-btn" onclick="event.stopPropagation();openListModal()">리스트 추가</button><button class="row-action-btn" onclick="event.stopPropagation();openPanel('+i+')">빠른 보기</button></div></td>';
+        default: return '<td>-</td>';
+      }
     }
+    var cells = '<td class="td-check"><input type="checkbox" onclick="event.stopPropagation();updateBulk()" data-idx="'+i+'"></td>';
+    activeColumns.forEach(function(key){ cells += cell(key); });
+    return '<tr onclick="openPanel('+i+')">'+cells+'</tr>';
   }).join('');
+  // Update table min-width based on column count
+  var tbl = document.getElementById('resultsTable');
+  tbl.style.minWidth = Math.max(800, activeColumns.length * 120) + 'px';
 }
 
 function makeSpark(data){
@@ -1666,14 +1652,56 @@ function switchView(name, cols, el){
 }
 
 // ══ COLUMN SETTINGS ══
-function openColumnModal(){document.getElementById('colModalOverlay').classList.add('open')}
+function openColumnModal(){
+  var body = document.getElementById('colModalBody');
+  var groups = {};
+  ALL_COLUMNS.forEach(function(col){
+    if(col.key==='actions') return;
+    var g = col.group || '기타';
+    if(!groups[g]) groups[g] = [];
+    groups[g].push(col);
+  });
+  var html = '';
+  var groupOrder = ['기본','재무','기업 속성'];
+  groupOrder.forEach(function(gName){
+    var cols = groups[gName];
+    if(!cols) return;
+    html += '<div class="col-toggle-group">'+gName+'</div>';
+    cols.forEach(function(col){
+      var isActive = activeColumns.indexOf(col.key) >= 0;
+      var isFilter = !!filterAddedColumns[col.key];
+      html += '<div class="col-toggle-item">'
+        +'<span class="col-drag">⠿</span>'
+        +'<label><input type="checkbox" data-col="'+col.key+'"'+(isActive?' checked':'')+(col.fixed?' disabled':'')+'> '+col.label+'</label>'
+        +(isFilter ? '<span class="col-filter-badge">필터 적용중</span>' : '')
+        +(col.cookie ? '<span class="col-cookie">🍪</span>' : '')
+        +'</div>';
+    });
+  });
+  body.innerHTML = html;
+  document.getElementById('colModalOverlay').classList.add('open');
+}
 function closeColumnModal(){document.getElementById('colModalOverlay').classList.remove('open')}
+function applyColumns(){
+  var checks = document.querySelectorAll('#colModalBody input[type=checkbox]');
+  var newCols = [];
+  checks.forEach(function(chk){
+    if(chk.checked) newCols.push(chk.getAttribute('data-col'));
+  });
+  // Always keep actions at end
+  if(newCols.indexOf('actions')<0) newCols.push('actions');
+  activeColumns = newCols;
+  renderTable();
+  closeColumnModal();
+}
 function toggleColumn(name,show){
-  // Prototype: flash to indicate column toggle
-  const wrap=document.querySelector('.results-wrap');
-  wrap.style.outline=show?'2px solid var(--emerald-400)':'2px solid var(--red-400)';
-  wrap.style.outlineOffset='-2px';wrap.style.borderRadius='var(--radius-lg)';
-  setTimeout(()=>{wrap.style.outline='none'},600);
+  // Legacy compatibility
+  if(show && activeColumns.indexOf(name)<0){
+    activeColumns.splice(activeColumns.length-1,0,name);
+  } else if(!show){
+    activeColumns = activeColumns.filter(function(k){return k!==name;});
+  }
+  renderTable();
 }
 
 // ══ EXPORT ══
@@ -1782,6 +1810,7 @@ document.addEventListener('click',e=>{
 
 // ══ INIT ══
 renderSortPanel();
+syncColumnsWithFilters();
 renderTable();
 </script>
 
