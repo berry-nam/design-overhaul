@@ -115,21 +115,75 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sort-select{padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--text);background:#fff;cursor:pointer;transition:var(--transition)}
 .sort-select:hover{border-color:var(--blue-300)}
 
-/* ADD COMPANY POPUP */
-.add-popup-wrap{position:relative;display:inline-block}
-.add-popup{position:absolute;top:calc(100% + 6px);left:0;width:400px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:100;display:none;overflow:hidden}
-.add-popup.open{display:block}
-.add-popup-search{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border)}
-.add-popup-search svg{width:16px;height:16px;color:var(--text-muted);flex-shrink:0}
-.add-popup-search input{border:none;outline:none;font-size:13px;font-family:inherit;color:var(--text);flex:1;background:transparent}
-.add-popup-search input::placeholder{color:var(--text-muted)}
-.add-popup-list{max-height:260px;overflow-y:auto}
-.add-popup-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:var(--transition)}
-.add-popup-item:hover{background:var(--blue-50)}
-.add-popup-logo{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
-.add-popup-info{flex:1;min-width:0}
-.add-popup-name{font-size:13px;font-weight:500;color:var(--text)}
-.add-popup-type{font-size:11px;color:var(--text-muted)}
+/* ADD COMPANY MODAL (LinkedIn mobile-style) */
+.ap-overlay{position:fixed;inset:0;background:rgba(17,24,39,.5);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.ap-overlay.open{display:flex}
+.ap-modal{width:480px;max-width:100%;max-height:90vh;background:#fff;border-radius:var(--radius-xl);box-shadow:0 20px 60px rgba(17,24,39,.18);display:flex;flex-direction:column;overflow:hidden;animation:apSlideUp .25s ease}
+@keyframes apSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+/* Header / Search */
+.ap-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ap-back{width:32px;height:32px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sub);transition:var(--transition);flex-shrink:0}
+.ap-back:hover{background:var(--slate-100)}
+.ap-search-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--slate-50);border:1px solid var(--border);border-radius:24px;padding:8px 14px;transition:border-color .15s}
+.ap-search-box:focus-within{border-color:var(--brand);background:#fff}
+.ap-search-box svg{width:15px;height:15px;color:var(--text-muted);flex-shrink:0}
+.ap-search-box input{border:none;outline:none;background:transparent;font-size:13.5px;font-family:inherit;color:var(--text);flex:1;min-width:0}
+.ap-search-box input::placeholder{color:var(--text-muted)}
+/* Filter Chips Row */
+.ap-filters{display:flex;align-items:center;gap:7px;padding:10px 16px;border-bottom:1px solid var(--border-light);overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ap-filters::-webkit-scrollbar{display:none}
+.ap-filter-icon{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:var(--transition);color:var(--text-sub)}
+.ap-filter-icon:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-bg)}
+.ap-chip{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:12.5px;font-weight:500;color:var(--text);cursor:pointer;white-space:nowrap;transition:var(--transition);font-family:inherit;flex-shrink:0}
+.ap-chip svg{width:12px;height:12px;opacity:.5}
+.ap-chip:hover{border-color:var(--blue-300)}
+.ap-chip.active{border-color:var(--brand);background:var(--brand-bg);color:var(--brand);font-weight:600}
+.ap-chip.active svg{opacity:1}
+/* Results */
+.ap-body{flex:1;overflow-y:auto;min-height:0}
+.ap-results-info{padding:10px 16px 6px;font-size:12px;color:var(--text-muted);font-weight:500}
+.ap-result-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;transition:var(--transition);border-bottom:1px solid var(--border-light)}
+.ap-result-item:hover{background:var(--blue-50)}
+.ap-result-item.added{opacity:.5;pointer-events:none}
+.ap-result-logo{width:36px;height:36px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.ap-result-info{flex:1;min-width:0}
+.ap-result-name{font-size:13.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-result-meta{font-size:11.5px;color:var(--text-muted);margin-top:2px;display:flex;gap:6px;align-items:center}
+.ap-result-meta span{white-space:nowrap}
+.ap-result-add{padding:5px 14px;border-radius:20px;border:1px solid var(--brand);background:#fff;color:var(--brand);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition);flex-shrink:0}
+.ap-result-add:hover{background:var(--brand);color:#fff}
+.ap-empty{padding:40px 16px;text-align:center;color:var(--text-muted);font-size:13px}
+.ap-empty svg{display:block;margin:0 auto 12px;opacity:.3}
+/* Footer CTA */
+.ap-footer{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:8px;align-items:center}
+.ap-footer-count{font-size:12.5px;color:var(--text-sub);flex:1}
+.ap-footer-count strong{color:var(--brand);font-weight:700}
+.ap-footer-btn{flex:1;padding:10px 0;border-radius:var(--radius);border:none;background:var(--brand);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition);text-align:center}
+.ap-footer-btn:hover{background:var(--brand-hover)}
+.ap-footer-btn:disabled{opacity:.4;cursor:not-allowed}
+/* Bottom Sheet (filter options) */
+.ap-sheet-overlay{position:absolute;inset:0;background:rgba(17,24,39,.3);z-index:10;display:none;align-items:flex-end;border-radius:var(--radius-xl);overflow:hidden}
+.ap-sheet-overlay.open{display:flex}
+.ap-sheet{width:100%;max-height:70%;background:#fff;border-radius:16px 16px 0 0;display:flex;flex-direction:column;animation:apSheetUp .2s ease}
+@keyframes apSheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.ap-sheet-header{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--border-light);flex-shrink:0}
+.ap-sheet-title{font-size:15px;font-weight:700;color:var(--text)}
+.ap-sheet-reset{font-size:12.5px;color:var(--text-muted);cursor:pointer;background:none;border:none;font-family:inherit;transition:var(--transition)}
+.ap-sheet-reset:hover{color:var(--red-500)}
+.ap-sheet-body{flex:1;overflow-y:auto;padding:8px 0}
+.ap-sheet-search{padding:4px 16px 8px}
+.ap-sheet-search input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;outline:none;transition:border-color .15s}
+.ap-sheet-search input:focus{border-color:var(--brand)}
+.ap-sheet-search input::placeholder{color:var(--text-muted)}
+.ap-sheet-option{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:background .1s;user-select:none}
+.ap-sheet-option:hover{background:var(--slate-50)}
+.ap-sheet-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:11px;color:transparent}
+.ap-sheet-option.checked .ap-sheet-check{background:var(--brand);border-color:var(--brand);color:#fff}
+.ap-sheet-option-label{font-size:13.5px;color:var(--text);flex:1}
+.ap-sheet-option-count{font-size:11.5px;color:var(--text-muted)}
+.ap-sheet-footer{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0}
+.ap-sheet-cta{width:100%;padding:11px 0;border-radius:var(--radius);border:none;background:var(--brand);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition)}
+.ap-sheet-cta:hover{background:var(--brand-hover)}
 
 /* TABLE */
 /* DENSITY TOGGLE */
@@ -311,7 +365,8 @@ textarea.form-input{resize:vertical;min-height:72px;line-height:1.5}
   .list-actions{flex-wrap:wrap}
   .list-name{font-size:18px}
   .toolbar{flex-wrap:wrap;gap:6px}
-  .add-popup{width:calc(100vw - 32px);left:0;right:auto}
+  .ap-modal{width:100%;max-width:100%;max-height:100vh;border-radius:0;height:100vh}
+  .ap-sheet{max-height:80%}
   .compare-view{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 /* ── Comment System (cb- prefix) ── */
@@ -555,16 +610,7 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
 
     <!-- TOOLBAR -->
     <div class="toolbar">
-      <div class="add-popup-wrap">
-        <button class="btn-primary" onclick="toggleAddPopup()">+ 기업 추가</button>
-        <div class="add-popup" id="addPopup">
-          <div class="add-popup-search">
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
-            <input type="text" placeholder="기업명으로 검색..." oninput="filterAddPopup(this.value)">
-          </div>
-          <div class="add-popup-list" id="addPopupList"></div>
-        </div>
-      </div>
+      <button class="btn-primary" onclick="openAddModal()">+ 기업 추가</button>
       <div class="sort-panel-wrap">
         <button class="sort-btn" id="sortBtn" onclick="toggleSortPanel(event)">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 2v10M3 12l-2-2M3 12l2-2M8 4h6M8 7h4M8 10h2"/></svg>
@@ -675,6 +721,52 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
   </div>
 </div>
 
+<!-- ADD COMPANY MODAL -->
+<div class="ap-overlay" id="apOverlay" onclick="if(event.target===this)closeAddModal()">
+  <div class="ap-modal">
+    <div class="ap-header">
+      <button class="ap-back" onclick="closeAddModal()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3L5 9.5 12 16"/></svg>
+      </button>
+      <div class="ap-search-box">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+        <input type="text" id="apSearchInput" placeholder="기업명, 업종, 지역으로 검색..." oninput="apSearch()">
+      </div>
+    </div>
+    <div class="ap-filters" id="apFilters">
+      <div class="ap-filter-icon" onclick="openApSheet('all')" title="전체 필터">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3.5h11M4 7.5h7M6 11.5h3"/></svg>
+      </div>
+      <button class="ap-chip" data-filter="industry" onclick="openApSheet('industry')">업종 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+      <button class="ap-chip" data-filter="region" onclick="openApSheet('region')">지역 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+      <button class="ap-chip" data-filter="revenue" onclick="openApSheet('revenue')">매출 규모 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+      <button class="ap-chip" data-filter="type" onclick="openApSheet('type')">기업유형 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+      <button class="ap-chip" data-filter="emp" onclick="openApSheet('emp')">직원수 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+    </div>
+    <div class="ap-body" id="apBody">
+      <div class="ap-results-info" id="apResultsInfo"></div>
+      <div id="apResultsList"></div>
+    </div>
+    <div class="ap-footer">
+      <div class="ap-footer-count" id="apFooterCount"></div>
+      <button class="ap-footer-btn" id="apFooterBtn" onclick="closeAddModal()">완료</button>
+    </div>
+    <!-- Bottom Sheet for filter options -->
+    <div class="ap-sheet-overlay" id="apSheetOverlay" onclick="if(event.target===this)closeApSheet()">
+      <div class="ap-sheet">
+        <div class="ap-sheet-header">
+          <span class="ap-sheet-title" id="apSheetTitle">필터</span>
+          <button class="ap-sheet-reset" onclick="resetApSheet()">초기화</button>
+        </div>
+        <div class="ap-sheet-body" id="apSheetBody"></div>
+        <div class="ap-sheet-footer">
+          <button class="ap-sheet-cta" onclick="applyApSheet()">결과 보기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -744,14 +836,6 @@ var lists = [
       {name:'코어셈텍',type:'비상장/주식회사',cat:'제조업',ceo:'윤재호',products:'패키징, 기판',industry:'반도체패키징',region:'경기 안산',revenue:412,trend:[330,350,372,392,412],profit:47,profitG:9.8,emp:278,empG:5,year:2010,score:83,memo:'',patents:8,age:16,growth:6.8,views:1567,revenueG:6.8,industryAvgRevenue:350,industryAvgProfit:35,industryAvgProfitRate:10.0,color:'#0D9488'}
     ]
   }
-];
-
-var addSuggestions = [
-  {name:'한솔네오텍',type:'비상장/주식회사',industry:'반도체장비',color:'#0D9488'},
-  {name:'유니셈',type:'상장/주식회사',industry:'반도체장비',color:'#EA580C'},
-  {name:'원익IPS',type:'상장/주식회사',industry:'반도체장비',color:'#6366F1'},
-  {name:'비에이치아이',type:'비상장/주식회사',industry:'전자부품',color:'#B45309'},
-  {name:'나인디비',type:'비상장/주식회사',industry:'반도체설계',color:'#14B8A6'}
 ];
 
 var currentList = 0;
@@ -1127,57 +1211,279 @@ function updateSidebarCount() {
   });
 }
 
-// ── ADD COMPANY POPUP ──
-function toggleAddPopup() {
-  var popup = document.getElementById('addPopup');
-  popup.classList.toggle('open');
-  if (popup.classList.contains('open')) {
-    renderAddSuggestions(addSuggestions);
-    popup.querySelector('input').focus();
+// ── ADD COMPANY MODAL (LinkedIn mobile-style) ──
+var apFilterState = {industry:[],region:[],revenue:[],type:[],emp:[]};
+var apAddedNames = [];
+var AP_FILTERS = {
+  industry:{title:'업종',search:true,options:[
+    {label:'반도체장비',count:12},{label:'반도체설계',count:8},{label:'전자부품',count:15},
+    {label:'디스플레이',count:6},{label:'2차전지',count:9},{label:'자동차부품',count:11},
+    {label:'기계/장비',count:7},{label:'화학/소재',count:10},{label:'바이오/의료',count:5},
+    {label:'소프트웨어',count:14},{label:'AI/빅데이터',count:8},{label:'식품/음료',count:4}
+  ]},
+  region:{title:'지역',search:true,options:[
+    {label:'서울',count:42},{label:'경기',count:35},{label:'인천',count:8},
+    {label:'대전',count:6},{label:'부산',count:7},{label:'대구',count:5},
+    {label:'광주',count:4},{label:'충남',count:6},{label:'경북',count:5},{label:'전북',count:3}
+  ]},
+  revenue:{title:'매출 규모',search:false,options:[
+    {label:'10억 미만',count:18},{label:'10억~50억',count:24},{label:'50억~100억',count:19},
+    {label:'100억~500억',count:31},{label:'500억~1,000억',count:15},{label:'1,000억 이상',count:8}
+  ]},
+  type:{title:'기업유형',search:false,options:[
+    {label:'상장/주식회사',count:28},{label:'비상장/주식회사',count:45},{label:'유한회사',count:12},
+    {label:'외감법인',count:18},{label:'벤처기업',count:22},{label:'이노비즈',count:9}
+  ]},
+  emp:{title:'직원수',search:false,options:[
+    {label:'10명 미만',count:15},{label:'10~50명',count:28},{label:'50~100명',count:19},
+    {label:'100~300명',count:14},{label:'300~1,000명',count:8},{label:'1,000명 이상',count:5}
+  ]}
+};
+var AP_ALL_COMPANIES = [
+  {name:'한솔네오텍',type:'비상장',industry:'반도체장비',region:'경기',revenue:180,emp:85,color:'#0D9488'},
+  {name:'유니셈',type:'상장',industry:'반도체장비',region:'경기',revenue:320,emp:210,color:'#EA580C'},
+  {name:'원익IPS',type:'상장',industry:'반도체장비',region:'경기',revenue:890,emp:450,color:'#6366F1'},
+  {name:'비에이치아이',type:'비상장',industry:'전자부품',region:'서울',revenue:95,emp:62,color:'#B45309'},
+  {name:'나인디비',type:'비상장',industry:'반도체설계',region:'서울',revenue:45,emp:38,color:'#14B8A6'},
+  {name:'실리콘마이터스',type:'상장',industry:'반도체설계',region:'서울',revenue:210,emp:120,color:'#7C3AED'},
+  {name:'넥스트반도체',type:'비상장',industry:'반도체장비',region:'경기',revenue:67,emp:42,color:'#0891B2'},
+  {name:'케이앤도체',type:'비상장',industry:'반도체설계',region:'대전',revenue:28,emp:22,color:'#DC2626'},
+  {name:'코어셈텍',type:'상장',industry:'반도체장비',region:'경기',revenue:520,emp:280,color:'#059669'},
+  {name:'솔브레인',type:'상장',industry:'화학/소재',region:'경기',revenue:750,emp:380,color:'#D97706'},
+  {name:'리노공업',type:'상장',industry:'전자부품',region:'대구',revenue:410,emp:195,color:'#4F46E5'},
+  {name:'이오테크닉스',type:'상장',industry:'반도체장비',region:'경기',revenue:380,emp:220,color:'#0284C7'},
+  {name:'피에스케이',type:'상장',industry:'반도체장비',region:'경기',revenue:290,emp:170,color:'#9333EA'},
+  {name:'테스',type:'상장',industry:'반도체장비',region:'경기',revenue:350,emp:200,color:'#E11D48'},
+  {name:'디아이티',type:'비상장',industry:'소프트웨어',region:'서울',revenue:55,emp:48,color:'#2563EB'}
+];
+var currentApSheet = null;
+var tempSheetState = [];
+
+function openAddModal() {
+  apFilterState = {industry:[],region:[],revenue:[],type:[],emp:[]};
+  apAddedNames = [];
+  document.getElementById('apSearchInput').value = '';
+  document.getElementById('apOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  updateApChips();
+  apSearch();
+  setTimeout(function(){document.getElementById('apSearchInput').focus();},100);
+}
+
+function closeAddModal() {
+  document.getElementById('apOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function updateApChips() {
+  document.querySelectorAll('.ap-chip').forEach(function(chip) {
+    var key = chip.getAttribute('data-filter');
+    var vals = apFilterState[key];
+    if (vals && vals.length > 0) {
+      chip.classList.add('active');
+      chip.childNodes[0].textContent = AP_FILTERS[key].title + ': ' + (vals.length === 1 ? vals[0] : vals.length + '개') + ' ';
+    } else {
+      chip.classList.remove('active');
+      chip.childNodes[0].textContent = AP_FILTERS[key].title + ' ';
+    }
+  });
+}
+
+function apSearch() {
+  var q = document.getElementById('apSearchInput').value.trim().toLowerCase();
+  var results = AP_ALL_COMPANIES.filter(function(c) {
+    if (q && c.name.toLowerCase().indexOf(q) < 0 && c.industry.toLowerCase().indexOf(q) < 0 && c.region.toLowerCase().indexOf(q) < 0) return false;
+    if (apFilterState.industry.length && apFilterState.industry.indexOf(c.industry) < 0) return false;
+    if (apFilterState.region.length && apFilterState.region.indexOf(c.region) < 0) return false;
+    if (apFilterState.type.length) {
+      var match = false;
+      apFilterState.type.forEach(function(t) { if (c.type.indexOf(t.replace('/주식회사','').replace('/유한회사','')) >= 0) match = true; });
+      if (!match) return false;
+    }
+    if (apFilterState.revenue.length) {
+      var match = false;
+      apFilterState.revenue.forEach(function(r) {
+        if (r === '10억 미만' && c.revenue < 10) match = true;
+        else if (r === '10억~50억' && c.revenue >= 10 && c.revenue < 50) match = true;
+        else if (r === '50억~100억' && c.revenue >= 50 && c.revenue < 100) match = true;
+        else if (r === '100억~500억' && c.revenue >= 100 && c.revenue < 500) match = true;
+        else if (r === '500억~1,000억' && c.revenue >= 500 && c.revenue < 1000) match = true;
+        else if (r === '1,000억 이상' && c.revenue >= 1000) match = true;
+      });
+      if (!match) return false;
+    }
+    if (apFilterState.emp.length) {
+      var match = false;
+      apFilterState.emp.forEach(function(e) {
+        if (e === '10명 미만' && c.emp < 10) match = true;
+        else if (e === '10~50명' && c.emp >= 10 && c.emp < 50) match = true;
+        else if (e === '50~100명' && c.emp >= 50 && c.emp < 100) match = true;
+        else if (e === '100~300명' && c.emp >= 100 && c.emp < 300) match = true;
+        else if (e === '300~1,000명' && c.emp >= 300 && c.emp < 1000) match = true;
+        else if (e === '1,000명 이상' && c.emp >= 1000) match = true;
+      });
+      if (!match) return false;
+    }
+    return true;
+  });
+  renderApResults(results);
+}
+
+function renderApResults(results) {
+  var existingNames = lists[currentList].companies.map(function(c){return c.name;});
+  var info = document.getElementById('apResultsInfo');
+  var activeCount = 0;
+  Object.keys(apFilterState).forEach(function(k){activeCount += apFilterState[k].length;});
+  info.textContent = results.length + '개 기업' + (activeCount ? ' · 필터 ' + activeCount + '개 적용' : '');
+  var list = document.getElementById('apResultsList');
+  if (results.length === 0) {
+    list.innerHTML = '<div class="ap-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>검색 결과가 없습니다.<br>다른 조건으로 검색해 보세요.</div>';
+    return;
   }
-}
-
-function renderAddSuggestions(items) {
-  var list = document.getElementById('addPopupList');
-  list.innerHTML = items.map(function(c, i) {
-    return '<div class="add-popup-item" onclick="addCompanyFromPopup(' + i + ')">' +
-      '<div class="add-popup-logo" style="background:' + c.color + '">' + c.name.substring(0, 2) + '</div>' +
-      '<div class="add-popup-info"><div class="add-popup-name">' + c.name + '</div><div class="add-popup-type">' + c.type + ' · ' + c.industry + '</div></div>' +
-      '</div>';
+  list.innerHTML = results.map(function(c) {
+    var isAdded = existingNames.indexOf(c.name) >= 0 || apAddedNames.indexOf(c.name) >= 0;
+    var safeName = c.name.replace(/'/g,"\\'");
+    return '<div class="ap-result-item' + (isAdded ? ' added' : '') + '">' +
+      '<div class="ap-result-logo" style="background:' + c.color + '">' + c.name.substring(0,2) + '</div>' +
+      '<div class="ap-result-info">' +
+        '<div class="ap-result-name">' + c.name + '</div>' +
+        '<div class="ap-result-meta"><span>' + c.type + '</span><span>·</span><span>' + c.industry + '</span><span>·</span><span>' + c.region + '</span><span>·</span><span>매출 ' + c.revenue + '억</span></div>' +
+      '</div>' +
+      (isAdded ? '<span style="font-size:12px;color:var(--text-muted)">추가됨</span>' :
+        '<button class="ap-result-add" onclick="apAddCompany(\'' + safeName + '\',this,event)">+ 추가</button>') +
+    '</div>';
   }).join('');
+  updateApFooter();
 }
 
-function filterAddPopup(q) {
-  var filtered = addSuggestions.filter(function(c) { return c.name.indexOf(q) >= 0 || c.industry.indexOf(q) >= 0; });
-  renderAddSuggestions(filtered);
-}
-
-function addCompanyFromPopup(idx) {
-  var c = addSuggestions[idx];
-  var rev = Math.floor(Math.random() * 400 + 100);
+function apAddCompany(name, btn, e) {
+  e.stopPropagation();
+  var c = null;
+  for (var i = 0; i < AP_ALL_COMPANIES.length; i++) {
+    if (AP_ALL_COMPANIES[i].name === name) { c = AP_ALL_COMPANIES[i]; break; }
+  }
+  if (!c) return;
+  var rev = c.revenue;
   var marginPct = +(Math.random() * 15 + 2).toFixed(1);
   var absProfit = Math.round(rev * marginPct / 100);
   var age = Math.floor(Math.random() * 15 + 3);
   lists[currentList].companies.push({
-    name: c.name, type: c.type, industry: c.industry,
-    region: '서울', revenue: rev,
+    name: c.name, type: c.type + '/주식회사', industry: c.industry,
+    region: c.region, revenue: rev,
     trend: [Math.round(rev*0.82), Math.round(rev*0.87), Math.round(rev*0.92), Math.round(rev*0.96), rev],
     profit: absProfit, profitG: +(Math.random() * 20 + 2).toFixed(1),
-    emp: Math.floor(Math.random() * 300 + 50), empG: Math.floor(Math.random() * 15 + 1),
+    emp: c.emp, empG: Math.floor(Math.random() * 15 + 1),
     year: 2026 - age, score: Math.floor(Math.random() * 30 + 65),
     memo: '', patents: Math.floor(Math.random() * 10), age: age,
     growth: +(Math.random() * 20 - 2).toFixed(1), color: c.color
   });
-  document.getElementById('addPopup').classList.remove('open');
+  apAddedNames.push(c.name);
   renderTable();
   updateSidebarCount();
+  // Update button to "추가됨"
+  var item = btn.closest('.ap-result-item');
+  item.classList.add('added');
+  btn.outerHTML = '<span style="font-size:12px;color:var(--text-muted)">추가됨</span>';
+  updateApFooter();
   showToast(c.name + '이(가) 리스트에 추가되었습니다');
 }
 
-// Close popup on outside click
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.add-popup-wrap')) {
-    document.getElementById('addPopup').classList.remove('open');
+function updateApFooter() {
+  var count = apAddedNames.length;
+  var fc = document.getElementById('apFooterCount');
+  fc.innerHTML = count > 0 ? '<strong>' + count + '개</strong> 기업 추가됨' : '';
+}
+
+// ── Bottom Sheet Logic ──
+function openApSheet(key) {
+  currentApSheet = key;
+  var overlay = document.getElementById('apSheetOverlay');
+  var title = document.getElementById('apSheetTitle');
+  var body = document.getElementById('apSheetBody');
+  if (key === 'all') {
+    title.textContent = '전체 필터';
+    var html = '';
+    Object.keys(AP_FILTERS).forEach(function(k) {
+      var f = AP_FILTERS[k];
+      var count = apFilterState[k].length;
+      html += '<div class="ap-sheet-option" onclick="openApSheet(\'' + k + '\')" style="justify-content:space-between">' +
+        '<span class="ap-sheet-option-label" style="font-weight:600">' + f.title + '</span>' +
+        (count ? '<span style="font-size:12px;color:var(--brand);font-weight:600">' + count + '개 선택</span>' : '<span style="font-size:12px;color:var(--text-muted)">전체</span>') +
+        '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-left:4px"><path d="M5 3l5 5-5 5"/></svg>' +
+      '</div>';
+    });
+    body.innerHTML = html;
+    overlay.classList.add('open');
+    return;
+  }
+  var filter = AP_FILTERS[key];
+  if (!filter) return;
+  title.textContent = filter.title;
+  tempSheetState = apFilterState[key].slice();
+  var html = '';
+  if (filter.search) {
+    html += '<div class="ap-sheet-search"><input placeholder="' + filter.title + ' 검색..." oninput="filterApSheetOptions(this.value)"></div>';
+  }
+  html += filter.options.map(function(opt) {
+    var checked = tempSheetState.indexOf(opt.label) >= 0;
+    return '<div class="ap-sheet-option' + (checked ? ' checked' : '') + '" onclick="toggleApSheetOption(this,\'' + opt.label + '\')">' +
+      '<div class="ap-sheet-check">✓</div>' +
+      '<span class="ap-sheet-option-label">' + opt.label + '</span>' +
+      '<span class="ap-sheet-option-count">' + opt.count + '</span>' +
+    '</div>';
+  }).join('');
+  body.innerHTML = html;
+  overlay.classList.add('open');
+}
+
+function toggleApSheetOption(el, label) {
+  var idx = tempSheetState.indexOf(label);
+  if (idx >= 0) { tempSheetState.splice(idx, 1); el.classList.remove('checked'); }
+  else { tempSheetState.push(label); el.classList.add('checked'); }
+}
+
+function filterApSheetOptions(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('#apSheetBody .ap-sheet-option').forEach(function(el) {
+    var label = el.querySelector('.ap-sheet-option-label');
+    if (!label) return;
+    el.style.display = label.textContent.toLowerCase().indexOf(q) >= 0 ? '' : 'none';
+  });
+}
+
+function resetApSheet() {
+  if (currentApSheet === 'all') {
+    Object.keys(apFilterState).forEach(function(k){apFilterState[k]=[];});
+    updateApChips();
+    apSearch();
+    closeApSheet();
+    return;
+  }
+  tempSheetState = [];
+  document.querySelectorAll('#apSheetBody .ap-sheet-option').forEach(function(el) {
+    el.classList.remove('checked');
+  });
+}
+
+function applyApSheet() {
+  if (currentApSheet && currentApSheet !== 'all') {
+    apFilterState[currentApSheet] = tempSheetState.slice();
+  }
+  closeApSheet();
+  updateApChips();
+  apSearch();
+}
+
+function closeApSheet() {
+  document.getElementById('apSheetOverlay').classList.remove('open');
+  currentApSheet = null;
+}
+
+// Close modal on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('apSheetOverlay').classList.contains('open')) { closeApSheet(); }
+    else if (document.getElementById('apOverlay').classList.contains('open')) { closeAddModal(); }
   }
 });
 
@@ -1583,7 +1889,7 @@ function assignAnchorIds(){
 function initCommentClick(){
   document.addEventListener('click',function(e){
     if(!commentMode)return;
-    if(e.target.closest('.cb-pin')||e.target.closest('.cb-thread')||e.target.closest('#cb-new-input')||e.target.closest('#cb-toolbar')||e.target.closest('#cb-sidebar')||e.target.closest('.cb-name-prompt')||e.target.closest('.cb-name-overlay')||e.target.closest('.modal-overlay')||e.target.closest('.add-popup'))return;
+    if(e.target.closest('.cb-pin')||e.target.closest('.cb-thread')||e.target.closest('#cb-new-input')||e.target.closest('#cb-toolbar')||e.target.closest('#cb-sidebar')||e.target.closest('.cb-name-prompt')||e.target.closest('.cb-name-overlay')||e.target.closest('.modal-overlay')||e.target.closest('.ap-overlay'))return;
     e.preventDefault();e.stopPropagation();
     var anchor=e.target.closest('[data-cb-id]');
     if(!anchor)return;
