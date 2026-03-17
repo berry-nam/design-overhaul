@@ -244,29 +244,29 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .feedback-btn:hover{border-color:var(--brand);background:var(--brand-bg)}
 
 /* Radar — Modern */
-.radar-card{background:linear-gradient(135deg,#f8faff 0%,#f0f4ff 50%,#faf8ff 100%);border:1px solid rgba(99,102,241,.1);border-radius:16px;padding:28px;position:relative;overflow:hidden}
-.radar-card::before{content:'';position:absolute;top:-60%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(99,102,241,.06) 0%,transparent 70%);pointer-events:none}
-.radar-card::after{content:'';position:absolute;bottom:-40%;left:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(16,185,129,.05) 0%,transparent 70%);pointer-events:none}
-.radar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;position:relative;z-index:1}
+.radar-card{background:#0a0f1e;border:1px solid rgba(99,102,241,.15);border-radius:16px;padding:28px;position:relative;overflow:hidden}
+.radar-bg-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.6}
+.radar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;position:relative;z-index:2}
 .radar-header-left{display:flex;align-items:center;gap:10px}
-.radar-header-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#6366F1);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
-.radar-header-title{font-size:16px;font-weight:700;color:var(--text)}
-.radar-header-sub{font-size:12px;color:var(--text-muted);margin-top:1px}
+.radar-header-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;box-shadow:0 4px 12px rgba(99,102,241,.3)}
+.radar-header-title{font-size:16px;font-weight:700;color:#fff}
+.radar-header-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:1px}
 .radar-pills{display:flex;gap:6px;flex-wrap:wrap}
-.radar-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid;cursor:default;transition:all .15s}
-.radar-body{display:flex;gap:24px;align-items:stretch;position:relative;z-index:1;flex-wrap:wrap}
+.radar-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid;cursor:default;transition:all .15s;backdrop-filter:blur(8px)}
+.radar-body{display:flex;gap:24px;align-items:stretch;position:relative;z-index:2;flex-wrap:wrap}
 .radar-canvas-wrap{flex-shrink:0;position:relative}
 .radar-scores{flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px}
-.radar-score-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,.04);border-radius:10px;transition:all .15s}
-.radar-score-item:hover{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.radar-score-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.05);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);border-radius:10px;transition:all .2s}
+.radar-score-item:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15);transform:translateX(2px)}
 .radar-score-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .radar-score-info{flex:1;min-width:0}
-.radar-score-label{font-size:11.5px;color:var(--text-muted);font-weight:500}
+.radar-score-label{font-size:11.5px;color:rgba(255,255,255,.45);font-weight:500}
 .radar-score-row{display:flex;align-items:baseline;gap:6px;margin-top:2px}
-.radar-score-val{font-size:16px;font-weight:700;color:var(--text)}
-.radar-score-sub{font-size:11px;color:var(--text-muted)}
-.radar-score-bar{width:100%;height:4px;background:var(--slate-100);border-radius:2px;margin-top:4px;overflow:hidden}
-.radar-score-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.radar-score-val{font-size:16px;font-weight:700;color:#fff}
+.radar-score-sub{font-size:11px;color:rgba(255,255,255,.35)}
+.radar-score-bar{width:100%;height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px;overflow:hidden}
+.radar-score-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+@keyframes radarPulse{0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,.3)}50%{box-shadow:0 0 0 6px rgba(99,102,241,0)}}
 .competitor-banner{background:var(--amber-50);border:1px solid var(--amber-400);border-radius:var(--radius);padding:10px 16px;font-size:13px;color:var(--amber-600);display:flex;align-items:center;gap:8px;margin-bottom:16px}
 
 /* Comp table */
@@ -1822,6 +1822,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       <span class="design-note dn-yellow">레이더 400×400: 6축. Stripe-inspired gradient card. 우측 점수 카드. pill 범례</span>
       <div class="competitor-banner">⚠ 경쟁사 분석 로직 개발 중 — 아래 시각화는 데모 데이터로 구성된 목표 UX입니다.</div>
       <div class="radar-card">
+        <canvas class="radar-bg-canvas" id="radarBgCanvas"></canvas>
         <div class="radar-header">
           <div class="radar-header-left">
             <div class="radar-header-icon">🕸</div>
@@ -1831,9 +1832,9 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
             </div>
           </div>
           <div class="radar-pills">
-            <div class="radar-pill" style="background:rgba(5,73,204,.08);border-color:rgba(5,73,204,.2);color:var(--brand)"><span style="width:8px;height:8px;border-radius:50%;background:var(--brand);display:block"></span> 에이치비테크놀로지</div>
-            <div class="radar-pill" style="background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);color:var(--emerald-600)"><span style="width:8px;height:8px;border-radius:50%;background:var(--emerald-500);display:block"></span> 세미텍인스트루먼트</div>
-            <div class="radar-pill" style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:var(--amber-600)"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber-500);display:block"></span> 프로브앤텍</div>
+            <div class="radar-pill" style="background:rgba(99,149,255,.12);border-color:rgba(99,149,255,.25);color:#93b4ff"><span style="width:8px;height:8px;border-radius:50%;background:#6395ff;display:block"></span> 에이치비테크놀로지</div>
+            <div class="radar-pill" style="background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.2);color:#6ee7b7"><span style="width:8px;height:8px;border-radius:50%;background:#34d399;display:block"></span> 세미텍인스트루먼트</div>
+            <div class="radar-pill" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2);color:#fcd34d"><span style="width:8px;height:8px;border-radius:50%;background:#fbbf24;display:block"></span> 프로브앤텍</div>
           </div>
         </div>
         <div class="radar-body">
@@ -2725,7 +2726,75 @@ function drawEmployeeChart() {
   });
 }
 
-// ══ RADAR CHART (Modern — Stripe-inspired) ══
+// ══ RADAR CHART (Modern — Stripe-inspired dark + animated) ══
+var radarBgAnim = null;
+function initRadarBg(){
+  var c = document.getElementById('radarBgCanvas');
+  if(!c) return;
+  var parent = c.parentElement;
+  var W = parent.offsetWidth, H = parent.offsetHeight;
+  var dpr = window.devicePixelRatio||1;
+  c.width = W*dpr; c.height = H*dpr;
+  c.style.width = W+'px'; c.style.height = H+'px';
+  var ctx = c.getContext('2d');
+  ctx.scale(dpr,dpr);
+
+  // Particles
+  var particles = [];
+  for(var i=0;i<60;i++){
+    particles.push({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
+      r:Math.random()*1.5+.5,
+      color: ['rgba(99,149,255,','rgba(139,92,246,','rgba(52,211,153,'][Math.floor(Math.random()*3)]
+    });
+  }
+  // Gradient orbs
+  var orbs = [
+    {x:W*.2, y:H*.3, r:120, color:'rgba(99,102,241,.08)', vx:.15, vy:.1},
+    {x:W*.7, y:H*.6, r:100, color:'rgba(139,92,246,.06)', vx:-.12, vy:.08},
+    {x:W*.5, y:H*.8, r:90, color:'rgba(16,185,129,.05)', vx:.1, vy:-.15}
+  ];
+
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    // Orbs
+    orbs.forEach(function(o){
+      o.x+=o.vx; o.y+=o.vy;
+      if(o.x<-o.r||o.x>W+o.r) o.vx*=-1;
+      if(o.y<-o.r||o.y>H+o.r) o.vy*=-1;
+      var g=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);
+      g.addColorStop(0,o.color); g.addColorStop(1,'transparent');
+      ctx.fillStyle=g; ctx.fillRect(o.x-o.r,o.y-o.r,o.r*2,o.r*2);
+    });
+    // Particles + connections
+    particles.forEach(function(p){
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.color+(.3+Math.sin(Date.now()*.001+p.x)*.15)+')';
+      ctx.fill();
+    });
+    // Draw connections between close particles
+    for(var i=0;i<particles.length;i++){
+      for(var j=i+1;j<particles.length;j++){
+        var dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<80){
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x,particles[i].y);
+          ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle='rgba(99,149,255,'+(1-dist/80)*.08+')';
+          ctx.lineWidth=.5; ctx.stroke();
+        }
+      }
+    }
+    radarBgAnim=requestAnimationFrame(frame);
+  }
+  frame();
+}
+
 function drawRadarChart() {
   var canvas = document.getElementById('radarChart');
   var SIZE = 400;
@@ -2742,113 +2811,161 @@ function drawRadarChart() {
     ['5건','3건','2건'],
     ['+4.3%','+2.1%','+8.7%']
   ];
-  var scoreBgs = [
-    'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
-    'linear-gradient(135deg,#F0FDF4,#DCFCE7)',
-    'linear-gradient(135deg,#F5F3FF,#EDE9FE)',
-    'linear-gradient(135deg,#FFF7ED,#FFEDD5)',
-    'linear-gradient(135deg,#FDF2F8,#FCE7F3)',
-    'linear-gradient(135deg,#ECFDF5,#D1FAE5)'
-  ];
-  var scoreColors = ['#2563EB','#059669','#7C3AED','#EA580C','#DB2777','#10B981'];
+  var scoreColors = ['#6395ff','#34d399','#a78bfa','#fb923c','#f472b6','#2dd4bf'];
   var companies = [
-    {data:[68,56,62,48,80,72],color:'#0549CC',name:'에이치비테크놀로지'},
-    {data:[58,44,48,58,60,42],color:'#10B981',name:'세미텍인스트루먼트'},
-    {data:[40,30,30,35,45,85],color:'#F59E0B',name:'프로브앤텍'}
+    {data:[68,56,62,48,80,72],color:'#6395ff',name:'에이치비테크놀로지'},
+    {data:[58,44,48,58,60,42],color:'#34d399',name:'세미텍인스트루먼트'},
+    {data:[40,30,30,35,45,85],color:'#fbbf24',name:'프로브앤텍'}
   ];
 
   function angleFor(i){ return (i/N)*Math.PI*2 - Math.PI/2; }
-  function ptAt(i,r){ var a=angleFor(i); return {x:cx+Math.cos(a)*r, y:cy+Math.sin(a)*r}; }
 
-  // Circular grid rings (subtle)
+  // Circular grid rings
   for(var ring=5;ring>=1;ring--){
     var r=(ring/5)*R;
     ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
-    if(ring===5){
-      ctx.fillStyle='rgba(255,255,255,.5)'; ctx.fill();
-    }
-    ctx.strokeStyle = ring===5 ? 'rgba(148,163,184,.3)' : 'rgba(148,163,184,.15)';
+    ctx.strokeStyle = ring===5 ? 'rgba(148,163,184,.2)' : 'rgba(148,163,184,.08)';
     ctx.lineWidth = ring===5 ? 1 : 0.5;
-    ctx.setLineDash(ring<5?[3,3]:[]);
+    ctx.setLineDash(ring<5?[2,4]:[]);
     ctx.stroke(); ctx.setLineDash([]);
+    // Ring value
+    if(ring<5 && ring>0){
+      ctx.fillStyle='rgba(148,163,184,.25)'; ctx.font='9px Pretendard Variable';
+      ctx.textAlign='left'; ctx.textBaseline='middle';
+      ctx.fillText((ring*20), cx+3, cy-r+1);
+    }
   }
 
-  // Axis lines (subtle)
+  // Axis lines
   for(var i=0;i<N;i++){
-    var p=ptAt(i,R);
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p.x,p.y);
-    ctx.strokeStyle='rgba(148,163,184,.2)'; ctx.lineWidth=0.5; ctx.stroke();
+    var a=angleFor(i), x=cx+Math.cos(a)*R, y=cy+Math.sin(a)*R;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x,y);
+    ctx.strokeStyle='rgba(148,163,184,.1)'; ctx.lineWidth=0.5; ctx.stroke();
   }
 
-  // Data polygons — draw competitors first (behind), then target on top
-  [2,1,0].forEach(function(ci){
-    var c=companies[ci];
-    ctx.beginPath();
+  // Animated draw — progressive reveal
+  var animProgress = {v:0};
+  function animDraw(progress){
+    // Clear data area only
+    ctx.save();
+    ctx.globalCompositeOperation='destination-out';
+    ctx.beginPath(); ctx.arc(cx,cy,R-1,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,0,0,1)'; ctx.fill();
+    ctx.restore();
+    // Redraw grid inside
+    for(var ring=4;ring>=1;ring--){
+      var r=(ring/5)*R;
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+      ctx.strokeStyle='rgba(148,163,184,.08)'; ctx.lineWidth=0.5;
+      ctx.setLineDash([2,4]); ctx.stroke(); ctx.setLineDash([]);
+    }
     for(var i=0;i<N;i++){
-      var a=angleFor(i), r2=(c.data[i]/100)*R;
-      var x=cx+Math.cos(a)*r2, y=cy+Math.sin(a)*r2;
-      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      var a=angleFor(i), x=cx+Math.cos(a)*(R-1), y=cy+Math.sin(a)*(R-1);
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x,y);
+      ctx.strokeStyle='rgba(148,163,184,.1)'; ctx.lineWidth=0.5; ctx.stroke();
     }
-    ctx.closePath();
-    var grd=ctx.createRadialGradient(cx,cy,0,cx,cy,R);
-    if(ci===0){
-      grd.addColorStop(0,c.color+'30'); grd.addColorStop(1,c.color+'10');
-      ctx.fillStyle=grd; ctx.fill();
-      ctx.strokeStyle=c.color; ctx.lineWidth=2.5;
-      ctx.shadowColor=c.color+'40'; ctx.shadowBlur=12; ctx.stroke();
-      ctx.shadowBlur=0;
-    } else {
-      grd.addColorStop(0,c.color+'18'); grd.addColorStop(1,c.color+'08');
-      ctx.fillStyle=grd; ctx.fill();
-      ctx.strokeStyle=c.color+'80'; ctx.lineWidth=1.5;
-      ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
-    }
-    // Points
-    c.data.forEach(function(v,i){
-      var a=angleFor(i), r2=(v/100)*R;
-      var px=cx+Math.cos(a)*r2, py=cy+Math.sin(a)*r2;
+
+    // Draw companies (competitors behind, target on top)
+    [2,1,0].forEach(function(ci){
+      var c=companies[ci];
+      ctx.beginPath();
+      for(var i=0;i<N;i++){
+        var a=angleFor(i), r2=(c.data[i]/100)*R*progress;
+        var x2=cx+Math.cos(a)*r2, y2=cy+Math.sin(a)*r2;
+        i===0?ctx.moveTo(x2,y2):ctx.lineTo(x2,y2);
+      }
+      ctx.closePath();
+      var grd=ctx.createRadialGradient(cx,cy,0,cx,cy,R);
       if(ci===0){
-        ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2);
-        ctx.fillStyle='#fff'; ctx.fill();
-        ctx.strokeStyle=c.color; ctx.lineWidth=2.5; ctx.stroke();
-        ctx.beginPath(); ctx.arc(px,py,2,0,Math.PI*2);
-        ctx.fillStyle=c.color; ctx.fill();
+        grd.addColorStop(0,c.color+'25'); grd.addColorStop(1,c.color+'08');
+        ctx.fillStyle=grd; ctx.fill();
+        ctx.strokeStyle=c.color; ctx.lineWidth=2;
+        ctx.shadowColor=c.color; ctx.shadowBlur=16*progress; ctx.stroke();
+        ctx.shadowBlur=0;
       } else {
-        ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2);
-        ctx.fillStyle=c.color+'90'; ctx.fill();
+        grd.addColorStop(0,c.color+'15'); grd.addColorStop(1,c.color+'05');
+        ctx.fillStyle=grd; ctx.fill();
+        ctx.strokeStyle=c.color+'60'; ctx.lineWidth=1.2;
+        ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+      }
+      // Points
+      if(progress>0.5){
+        var ptAlpha = Math.min(1,(progress-.5)*2);
+        c.data.forEach(function(v,i){
+          var a=angleFor(i), r2=(v/100)*R*progress;
+          var px=cx+Math.cos(a)*r2, py=cy+Math.sin(a)*r2;
+          ctx.globalAlpha=ptAlpha;
+          if(ci===0){
+            // Glow
+            ctx.beginPath(); ctx.arc(px,py,8,0,Math.PI*2);
+            ctx.fillStyle=c.color+'20'; ctx.fill();
+            // Outer ring
+            ctx.beginPath(); ctx.arc(px,py,4.5,0,Math.PI*2);
+            ctx.fillStyle='#0a0f1e'; ctx.fill();
+            ctx.strokeStyle=c.color; ctx.lineWidth=2; ctx.stroke();
+            // Inner dot
+            ctx.beginPath(); ctx.arc(px,py,1.8,0,Math.PI*2);
+            ctx.fillStyle=c.color; ctx.fill();
+          } else {
+            ctx.beginPath(); ctx.arc(px,py,2.5,0,Math.PI*2);
+            ctx.fillStyle=c.color+'80'; ctx.fill();
+          }
+          ctx.globalAlpha=1;
+        });
       }
     });
-  });
+  }
 
-  // Axis labels (outside the chart, clean)
+  // Run animation
+  var startTime = null;
+  function animate(ts){
+    if(!startTime) startTime=ts;
+    var elapsed=(ts-startTime)/800; // 800ms duration
+    var progress=Math.min(1, elapsed);
+    // Ease out cubic
+    var eased = 1 - Math.pow(1-progress,3);
+    animDraw(eased);
+    if(progress<1) requestAnimationFrame(animate);
+  }
+
+  // Axis labels (outside)
   labels.forEach(function(l,i){
     var a=angleFor(i);
-    var lx=cx+Math.cos(a)*(R+28), ly=cy+Math.sin(a)*(R+28);
+    var lx=cx+Math.cos(a)*(R+26), ly=cy+Math.sin(a)*(R+26);
     ctx.textAlign='center'; ctx.textBaseline='middle';
-    // Label
-    ctx.fillStyle='#475569'; ctx.font='600 11px Pretendard Variable';
+    ctx.fillStyle='rgba(203,213,225,.7)'; ctx.font='600 11px Pretendard Variable';
     ctx.fillText(l, lx, ly);
-    // Target value
-    ctx.fillStyle='#0549CC'; ctx.font='bold 11px Pretendard Variable';
+    ctx.fillStyle=companies[0].color; ctx.font='bold 11px Pretendard Variable';
     ctx.fillText(actualValues[i][0], lx, ly+13);
   });
 
-  // ── Build score cards ──
+  requestAnimationFrame(animate);
+
+  // ── Score cards ──
   var scoresEl = document.getElementById('radarScores');
   scoresEl.innerHTML = labels.map(function(l,i){
     var val = companies[0].data[i];
     return '<div class="radar-score-item">' +
-      '<div class="radar-score-icon" style="background:'+scoreBgs[i]+'">'+icons[i]+'</div>' +
+      '<div class="radar-score-icon" style="background:rgba(255,255,255,.05)">'+icons[i]+'</div>' +
       '<div class="radar-score-info">' +
         '<div class="radar-score-label">'+l+'</div>' +
         '<div class="radar-score-row">' +
           '<span class="radar-score-val" style="color:'+scoreColors[i]+'">'+actualValues[i][0]+'</span>' +
           '<span class="radar-score-sub">vs 경쟁사 평균 '+actualValues[i][1]+'</span>' +
         '</div>' +
-        '<div class="radar-score-bar"><div class="radar-score-fill" style="width:'+val+'%;background:'+scoreColors[i]+'"></div></div>' +
+        '<div class="radar-score-bar"><div class="radar-score-fill" style="width:0%;background:'+scoreColors[i]+'" data-target="'+val+'"></div></div>' +
       '</div>' +
     '</div>';
   }).join('');
+  // Animate score bars
+  setTimeout(function(){
+    document.querySelectorAll('.radar-score-fill[data-target]').forEach(function(el){
+      el.style.width = el.getAttribute('data-target')+'%';
+    });
+  }, 200);
+
+  // Init background animation
+  initRadarBg();
 }
 
 // ══ BUBBLE CHART & ANIMATED BARS — removed, replaced by HTML horizontal bars and metric cards ══
