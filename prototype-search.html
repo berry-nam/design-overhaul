@@ -1407,9 +1407,151 @@ function initColDrag(){
 }
 
 var currentDensity = 'comfortable';
+var filteredCompanies = null; // null = show all
+
+function filterCompanies(){
+  var result = COMPANIES.slice();
+
+  // ── Basic filter bar ──
+  document.querySelectorAll('.filter-select.has-value').forEach(function(btn){
+    var text = btn.textContent.trim();
+    // "업종: 반도체 장비" format
+    if(text.indexOf('업종:')===0){
+      var val = text.split(':')[1].trim();
+      result = result.filter(function(c){ return c.industry === val; });
+    }
+    if(text.indexOf('지역:')===0){
+      var val = text.split(':')[1].trim();
+      result = result.filter(function(c){ return c.region.indexOf(val)>=0; });
+    }
+  });
+  // Industry dropdown checked items
+  var indChecked = document.querySelectorAll('#industryDropdown .filter-dropdown-item.checked');
+  if(indChecked.length > 0){
+    var industries = [];
+    indChecked.forEach(function(el){
+      var label = el.querySelector('.fd-label');
+      if(label) industries.push(label.textContent.trim());
+    });
+    result = result.filter(function(c){ return industries.indexOf(c.industry)>=0; });
+  }
+
+  // ── Advanced filters ──
+  // 직원수
+  var empSel = document.querySelector('[data-filter="직원수"] select');
+  if(empSel && empSel.selectedIndex > 0){
+    var v = empSel.value;
+    result = result.filter(function(c){
+      if(v==='~50명') return c.emp <= 50;
+      if(v==='50~200명') return c.emp > 50 && c.emp <= 200;
+      if(v==='200~1,000명') return c.emp > 200 && c.emp <= 1000;
+      if(v==='1,000명+') return c.emp > 1000;
+      return true;
+    });
+  }
+  // 설립연도
+  var yearInp = document.querySelector('[data-filter="설립연도"] input');
+  if(yearInp && yearInp.value.trim()){
+    var parts = yearInp.value.split('~').map(function(s){return parseInt(s.trim());});
+    if(parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])){
+      result = result.filter(function(c){ return c.year >= parts[0] && c.year <= parts[1]; });
+    } else if(parts.length === 1 && !isNaN(parts[0])){
+      result = result.filter(function(c){ return c.year >= parts[0]; });
+    }
+  }
+  // 외감 여부 (mock — skip, no data field)
+  // 상장 여부
+  var listedSel = document.querySelector('[data-filter="상장 여부"] select');
+  if(listedSel && listedSel.selectedIndex > 0){
+    var v = listedSel.value;
+    result = result.filter(function(c){
+      if(v==='유가증권') return c.listed==='유가증권';
+      if(v==='코스닥') return c.listed==='코스닥';
+      if(v==='비상장') return c.listed==='비상장';
+      return true;
+    });
+  }
+  // 벤처기업 인증
+  var ventSel = document.querySelector('[data-filter="벤처기업 인증"] select');
+  if(ventSel && ventSel.selectedIndex > 0){
+    var v = ventSel.value;
+    result = result.filter(function(c){
+      if(v==='인증 기업만') return c.venture === true;
+      if(v==='비인증 기업만') return c.venture === false;
+      return true;
+    });
+  }
+  // 매출 (min ~ max, 억)
+  var revInputs = document.querySelectorAll('[data-filter="매출"] .adv-range input');
+  if(revInputs.length === 2){
+    var rMin = parseFloat(revInputs[0].value), rMax = parseFloat(revInputs[1].value);
+    if(!isNaN(rMin)) result = result.filter(function(c){ return c.revenue >= rMin; });
+    if(!isNaN(rMax)) result = result.filter(function(c){ return c.revenue <= rMax; });
+  }
+  // 영업이익 (min ~ max, 억) + 적자 체크
+  var profMin = parseFloat(document.getElementById('advProfitMin').value);
+  var profMax = parseFloat(document.getElementById('advProfitMax').value);
+  var deficitChk = document.getElementById('advDeficitChk').checked;
+  if(!isNaN(profMin)){
+    result = result.filter(function(c){ return c.profit >= profMin; });
+  }
+  if(!isNaN(profMax)){
+    result = result.filter(function(c){ return c.profit <= profMax; });
+  }
+  if(!deficitChk){
+    result = result.filter(function(c){ return c.profit >= 0; });
+  }
+  // 순이익 (min ~ max)
+  var niInputs = document.querySelectorAll('[data-filter="순이익"] .adv-range input');
+  if(niInputs.length === 2){
+    var nMin = parseFloat(niInputs[0].value), nMax = parseFloat(niInputs[1].value);
+    if(!isNaN(nMin)) result = result.filter(function(c){ return c.netIncome >= nMin; });
+    if(!isNaN(nMax)) result = result.filter(function(c){ return c.netIncome <= nMax; });
+  }
+  // 자산총액
+  var assetSel = document.querySelector('[data-filter="자산총액"] select');
+  if(assetSel && assetSel.selectedIndex > 0){
+    var v = assetSel.value;
+    result = result.filter(function(c){
+      if(v==='~100억') return c.assets <= 100;
+      if(v==='100~500억') return c.assets > 100 && c.assets <= 500;
+      if(v==='500억+') return c.assets > 500;
+      return true;
+    });
+  }
+  // 부채비율
+  var debtSel = document.querySelector('[data-filter="부채비율"] select');
+  if(debtSel && debtSel.selectedIndex > 0){
+    var v = debtSel.value;
+    result = result.filter(function(c){
+      if(v==='~100%') return c.debtRatio <= 100;
+      if(v==='100~200%') return c.debtRatio > 100 && c.debtRatio <= 200;
+      if(v==='200%+') return c.debtRatio > 200;
+      return true;
+    });
+  }
+  // 매출 성장률 (YoY)
+  var growSel = document.querySelector('[data-filter="매출 성장률"] select');
+  if(growSel && growSel.selectedIndex > 0){
+    var v = growSel.value;
+    result = result.filter(function(c){
+      if(v==='10%+ 성장') return c.revenueG >= 10;
+      if(v==='20%+ 성장') return c.revenueG >= 20;
+      if(v==='감소 기업') return c.revenueG < 0;
+      return true;
+    });
+  }
+
+  filteredCompanies = result;
+  // Update result count
+  document.getElementById('result-count').textContent = result.length.toLocaleString();
+  return result;
+}
 
 function renderTable(){
   var mode = currentDensity;
+  // Apply filters
+  var data = filterCompanies();
   // Build thead
   var thead = document.getElementById('tableHead');
   var thHtml = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th>';
@@ -1425,7 +1567,9 @@ function renderTable(){
   thead.innerHTML = thHtml;
 
   var tbody = document.getElementById('tableBody');
-  tbody.innerHTML = COMPANIES.map(function(c,i){
+  tbody.innerHTML = data.map(function(c,fi){
+    // Map back to original COMPANIES index for openPanel
+    var origIdx = COMPANIES.indexOf(c);
     var initials = c.name.substring(0,2);
     var profitClass = c.profit >= 0 ? 'trend-up' : 'trend-down';
     var profitArrow = c.profit >= 0 ? '▲' : '▼';
@@ -1464,13 +1608,13 @@ function renderTable(){
         case 'ceo': return '<td style="font-size:12.5px;white-space:nowrap">'+c.ceo+'</td>';
         case 'listed': return '<td style="font-size:12px;white-space:nowrap">'+c.listed+'</td>';
         case 'venture': return '<td style="font-size:12px">'+(c.venture?'<span style="color:var(--emerald-600)">인증</span>':'<span style="color:var(--text-muted)">-</span>')+'</td>';
-        case 'actions': return '<td class="td-actions"><div class="row-actions"><button class="row-action-btn" onclick="event.stopPropagation()">저장</button><button class="row-action-btn" onclick="event.stopPropagation();openListModal()">리스트 추가</button><button class="row-action-btn" onclick="event.stopPropagation();openPanel('+i+')">빠른 보기</button></div></td>';
+        case 'actions': return '<td class="td-actions"><div class="row-actions"><button class="row-action-btn" onclick="event.stopPropagation()">저장</button><button class="row-action-btn" onclick="event.stopPropagation();openListModal()">리스트 추가</button><button class="row-action-btn" onclick="event.stopPropagation();openPanel('+origIdx+')">빠른 보기</button></div></td>';
         default: return '<td>-</td>';
       }
     }
-    var cells = '<td class="td-check"><input type="checkbox" onclick="event.stopPropagation();updateBulk()" data-idx="'+i+'"></td>';
+    var cells = '<td class="td-check"><input type="checkbox" onclick="event.stopPropagation();updateBulk()" data-idx="'+origIdx+'"></td>';
     activeColumns.forEach(function(key){ cells += cell(key); });
-    return '<tr onclick="openPanel('+i+')">'+cells+'</tr>';
+    return '<tr onclick="openPanel('+origIdx+')">'+cells+'</tr>';
   }).join('');
   // Update table min-width based on column count
   var tbl = document.getElementById('resultsTable');
@@ -1691,15 +1835,12 @@ function toggleFilter(btn,label){
     btn.classList.add('has-value');
     btn.textContent=label;
   }
+  renderTable();
 }
 function clearChips(){
   document.querySelectorAll('.chip').forEach(c=>c.remove());
   document.querySelectorAll('.filter-select').forEach(f=>f.classList.remove('has-value'));
-  updateCount();
-}
-function updateCount(){
-  const chips=document.querySelectorAll('.chip').length;
-  document.getElementById('result-count').textContent=chips===0?'1,043,287':'2,345';
+  renderTable();
 }
 
 // ══ VIEW SELECTOR ══
@@ -1848,6 +1989,8 @@ function resetAdvanced(){
   var minInput=document.getElementById('advProfitMin');
   if(minInput){minInput.min='0';minInput.placeholder='최소';}
   document.querySelector('.adv-active-count').textContent='0개 필터 활성';
+  highlightActiveAdvFilters();
+  syncColumnsWithFilters();
 }
 
 // ── 영업이익 적자 포함 토글 ──
