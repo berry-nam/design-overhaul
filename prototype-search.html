@@ -332,6 +332,24 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .adv-tag{font-size:10px;padding:1px 6px;border-radius:8px;font-weight:500}
 .adv-tag.new{background:var(--emerald-50);color:var(--emerald-600)}
 .adv-tag.ai{background:var(--purple-50);color:var(--purple-500)}
+.adv-tag.phase2{background:var(--slate-100);color:var(--slate-500)}
+/* Phase 2 item styling */
+.advanced-item.phase2{opacity:.5;pointer-events:none}
+.advanced-item.phase2 label{color:var(--text-muted)}
+/* Info tooltip */
+.adv-info{position:relative;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--slate-100);color:var(--text-muted);font-size:9px;font-weight:700;cursor:help;flex-shrink:0;line-height:1}
+.adv-info:hover{background:var(--blue-100);color:var(--brand)}
+.adv-info .adv-tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);width:200px;padding:8px 10px;background:var(--slate-800);color:#fff;font-size:11px;font-weight:400;line-height:1.45;border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);z-index:10;pointer-events:none;text-align:left}
+.adv-info .adv-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--slate-800)}
+.adv-info:hover .adv-tip{display:block}
+/* Range input pair */
+.adv-range{display:flex;align-items:center;gap:4px}
+.adv-range input{width:72px!important;text-align:right;font-variant-numeric:tabular-nums}
+.adv-range-sep{font-size:11px;color:var(--text-muted)}
+.adv-range-unit{font-size:11px;color:var(--text-muted);white-space:nowrap;flex-shrink:0}
+/* Deficit checkbox */
+.adv-deficit{display:flex;align-items:center;gap:5px;margin-top:4px;font-size:11.5px;color:var(--text-sub);cursor:pointer}
+.adv-deficit input{accent-color:var(--brand);cursor:pointer}
 .adv-footer{padding:10px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--slate-50)}
 .adv-footer-text{font-size:12px;color:var(--text-muted);flex:1}
 
@@ -757,31 +775,64 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     </div>
     <!-- Filter Groups -->
     <div class="advanced-grid">
+      <!-- ① 기업 속성 -->
       <div class="advanced-group">
         <div class="advanced-group-title">기업 속성 <span class="adv-count">2</span></div>
         <div class="advanced-item" data-filter="직원수"><label>👥 직원수</label><select><option>전체</option><option>~50명</option><option selected>50~200명</option><option>200~1,000명</option><option>1,000명+</option></select></div>
         <div class="advanced-item" data-filter="설립연도"><label>📅 설립연도</label><input type="text" placeholder="2010 ~ 2024"></div>
         <div class="advanced-item" data-filter="외감 여부"><label>📋 외감 여부</label><select><option>전체</option><option>외감 기업</option><option>비외감 기업</option></select></div>
         <div class="advanced-item" data-filter="상장 여부"><label>🏛 상장 여부</label><select><option>전체</option><option>유가증권</option><option>코스닥</option><option selected>비상장</option></select></div>
-        <div class="advanced-item" data-filter="기업 유사도" style="opacity:.7"><label>🔍 기업 유사도 <span class="adv-tag ai">AI</span></label><span class="adv-lock">🔒 Pro</span></div>
+        <div class="advanced-item" data-filter="벤처기업 인증">
+          <label>🏅 벤처기업 인증 <span class="adv-info">?<span class="adv-tip">중소벤처기업부 벤처확인 기업 여부로 필터링합니다.</span></span></label>
+          <select><option>전체</option><option>인증 기업만</option><option>비인증 기업만</option></select>
+        </div>
+        <div class="advanced-item phase2" data-filter="기업 유사도">
+          <label>🔍 기업 유사도 <span class="adv-tag ai">AI</span> <span class="adv-tag phase2">Phase 2</span></label>
+        </div>
       </div>
+      <!-- ② 재무 필터 -->
       <div class="advanced-group">
         <div class="advanced-group-title">재무 필터 <span class="adv-count">1</span></div>
-        <div class="advanced-item" data-filter="영업이익"><label>💰 영업이익</label><input type="text" placeholder="최소 ~ 최대 (억)" value="10 ~ 100"></div>
+        <div class="advanced-item" data-filter="매출">
+          <label>💰 매출 <span class="adv-info">?<span class="adv-tip">최근 사업연도 기준 연간 매출액입니다.</span></span></label>
+          <div class="adv-range"><input type="text" placeholder="최소" value="100"> <span class="adv-range-sep">~</span> <input type="text" placeholder="최대" value="500"> <span class="adv-range-unit">(억)</span></div>
+        </div>
+        <div class="advanced-item" data-filter="영업이익" id="advProfitItem">
+          <label>📊 영업이익 <span class="adv-info">?<span class="adv-tip">적자 포함 시 음수(적자) 기업도 결과에 포함됩니다. 미체크 시 최소값은 0 이상만 입력 가능합니다.</span></span></label>
+          <div>
+            <div class="adv-range"><input type="number" id="advProfitMin" placeholder="최소" min="0" value="10" oninput="validateProfitMin()"> <span class="adv-range-sep">~</span> <input type="number" id="advProfitMax" placeholder="최대" value="100"> <span class="adv-range-unit">(억)</span></div>
+            <label class="adv-deficit"><input type="checkbox" id="advDeficitChk" onchange="toggleDeficit()"> 적자 기업 포함</label>
+          </div>
+        </div>
+        <div class="advanced-item" data-filter="순이익">
+          <label>💵 순이익 <span class="adv-info">?<span class="adv-tip">당기순이익 기준입니다. 세후 최종 이익을 나타냅니다.</span></span></label>
+          <div class="adv-range"><input type="text" placeholder="최소"> <span class="adv-range-sep">~</span> <input type="text" placeholder="최대"> <span class="adv-range-unit">(억)</span></div>
+        </div>
         <div class="advanced-item" data-filter="자산총액"><label>🏦 자산총액</label><select><option>전체</option><option>~100억</option><option>100~500억</option><option>500억+</option></select></div>
-        <div class="advanced-item" data-filter="부채비율"><label>📊 부채비율</label><select><option>전체</option><option>~100%</option><option>100~200%</option><option>200%+</option></select></div>
-        <div class="advanced-item" data-filter="매출 성장률"><label>📈 매출 성장률</label><select><option>전체</option><option>10%+ 성장</option><option>20%+ 성장</option><option>감소 기업</option></select></div>
-        <div class="advanced-item" data-filter="ROE"><label>🎯 ROE <span class="adv-tag new">New</span></label><select><option>전체</option><option>10%+</option><option>15%+</option><option>20%+</option></select></div>
-        <div class="advanced-item" data-filter="Buying Intent" style="opacity:.7"><label>🎪 투자 시그널 <span class="adv-tag ai">AI</span></label><span class="adv-lock">🔒 Pro</span></div>
+        <div class="advanced-item" data-filter="부채비율">
+          <label>📉 부채비율 <span class="adv-info">?<span class="adv-tip">부채총액 / 자본총액 × 100. 높을수록 재무 레버리지가 큽니다.</span></span></label>
+          <select><option>전체</option><option>~100%</option><option>100~200%</option><option>200%+</option></select>
+        </div>
+        <div class="advanced-item" data-filter="매출 성장률">
+          <label>📈 매출 성장률 (YoY) <span class="adv-info">?<span class="adv-tip">전년 대비 매출액 증감률입니다.</span></span></label>
+          <select><option>전체</option><option>10%+ 성장</option><option>20%+ 성장</option><option>감소 기업</option></select>
+        </div>
+        <div class="advanced-item phase2" data-filter="ROE">
+          <label>🎯 ROE <span class="adv-info">?<span class="adv-tip">자기자본이익률. 당기순이익 / 자기자본 × 100.</span></span> <span class="adv-tag phase2">Phase 2</span></label>
+        </div>
+        <div class="advanced-item phase2" data-filter="투자 시그널">
+          <label>🎪 투자 시그널 <span class="adv-tag ai">AI</span> <span class="adv-tag phase2">Phase 2</span></label>
+        </div>
       </div>
+      <!-- ③ 시그널 · 인텔리전스 (모두 Phase 2) -->
       <div class="advanced-group">
-        <div class="advanced-group-title">시그널 · 인텔리전스</div>
-        <div class="advanced-item" data-filter="최근 채용"><label>🧑‍💼 최근 채용</label><select><option>전체</option><option>30일 이내</option><option>90일 이내</option></select></div>
-        <div class="advanced-item" data-filter="뉴스 멘션"><label>📰 뉴스 멘션</label><select><option>전체</option><option>최근 30일</option><option>최근 90일</option></select></div>
-        <div class="advanced-item" data-filter="특허 등록"><label>💡 특허 등록</label><select><option>전체</option><option>최근 1년</option><option>최근 3년</option></select></div>
-        <div class="advanced-item" data-filter="자금조달"><label>💵 자금조달/투자유치 <span class="adv-tag new">New</span></label><select><option>전체</option><option>최근 6개월</option><option>최근 1년</option></select></div>
-        <div class="advanced-item" data-filter="대표자 변경" style="opacity:.7"><label>👤 대표자 변경 <span class="adv-tag ai">AI</span></label><span class="adv-lock">🔒 Pro</span></div>
-        <div class="advanced-item" data-filter="성장 예측" style="opacity:.7"><label>🚀 성장 예측 스코어 <span class="adv-tag ai">AI</span></label><span class="adv-lock">🔒 Pro</span></div>
+        <div class="advanced-group-title">시그널 · 인텔리전스 <span class="adv-tag phase2" style="font-size:10px">Phase 2</span></div>
+        <div class="advanced-item phase2" data-filter="최근 채용"><label>🧑‍💼 최근 채용</label></div>
+        <div class="advanced-item phase2" data-filter="뉴스 멘션"><label>📰 뉴스 멘션</label></div>
+        <div class="advanced-item phase2" data-filter="특허 등록"><label>💡 특허 등록</label></div>
+        <div class="advanced-item phase2" data-filter="자금조달"><label>💵 자금조달/투자유치</label></div>
+        <div class="advanced-item phase2" data-filter="대표자 변경"><label>👤 대표자 변경</label></div>
+        <div class="advanced-item phase2" data-filter="성장 예측"><label>🚀 성장 예측 스코어 <span class="adv-tag ai">AI</span></label></div>
       </div>
     </div>
     <!-- Footer -->
@@ -1697,8 +1748,30 @@ function filterAdvanced(q){
 }
 function resetAdvanced(){
   document.querySelectorAll('.advanced-panel select').forEach(s=>s.selectedIndex=0);
-  document.querySelectorAll('.advanced-panel input[type=text]').forEach(i=>i.value='');
+  document.querySelectorAll('.advanced-panel input[type=text],.advanced-panel input[type=number]').forEach(i=>i.value='');
+  document.querySelectorAll('.advanced-panel input[type=checkbox]').forEach(c=>c.checked=false);
+  var minInput=document.getElementById('advProfitMin');
+  if(minInput){minInput.min='0';minInput.placeholder='최소';}
   document.querySelector('.adv-active-count').textContent='0개 필터 활성';
+}
+
+// ── 영업이익 적자 포함 토글 ──
+function toggleDeficit(){
+  var chk=document.getElementById('advDeficitChk');
+  var minInput=document.getElementById('advProfitMin');
+  if(chk.checked){
+    minInput.removeAttribute('min');
+    minInput.placeholder='최소 (음수 가능)';
+  }else{
+    minInput.min='0';
+    minInput.placeholder='최소';
+    if(parseFloat(minInput.value)<0)minInput.value='0';
+  }
+}
+function validateProfitMin(){
+  var chk=document.getElementById('advDeficitChk');
+  var minInput=document.getElementById('advProfitMin');
+  if(!chk.checked&&parseFloat(minInput.value)<0){minInput.value='0';}
 }
 
 // ══ CLOSE DROPDOWNS ON OUTSIDE CLICK ══
