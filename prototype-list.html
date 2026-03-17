@@ -159,26 +159,36 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .ap-footer-count strong{color:var(--brand);font-weight:700}
 .ap-footer-btn{padding:7px 20px;border-radius:var(--radius);border:none;background:var(--brand);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition)}
 .ap-footer-btn:hover{background:var(--brand-hover)}
-/* Inline filter dropdown (replaces full-screen bottom sheet) */
-.ap-filter-drop{display:none;position:absolute;top:auto;left:14px;right:14px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:20;max-height:260px;overflow:hidden;flex-direction:column}
-.ap-filter-drop.open{display:flex}
-.ap-filter-drop-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;border-bottom:1px solid var(--border-light);flex-shrink:0}
-.ap-filter-drop-title{font-size:13px;font-weight:700;color:var(--text)}
-.ap-filter-drop-reset{font-size:11.5px;color:var(--text-muted);cursor:pointer;background:none;border:none;font-family:inherit}
-.ap-filter-drop-reset:hover{color:var(--red-500)}
-.ap-filter-drop-body{flex:1;overflow-y:auto;padding:4px 0}
-.ap-filter-drop-search{padding:4px 14px 6px}
-.ap-filter-drop-search input{width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12.5px;font-family:inherit;outline:none}
-.ap-filter-drop-search input:focus{border-color:var(--brand)}
-.ap-filter-drop-opt{display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;transition:background .1s;user-select:none;font-size:12.5px}
-.ap-filter-drop-opt:hover{background:var(--slate-50)}
-.ap-filter-drop-chk{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:10px;color:transparent}
-.ap-filter-drop-opt.checked .ap-filter-drop-chk{background:var(--brand);border-color:var(--brand);color:#fff}
-.ap-filter-drop-label{flex:1;color:var(--text)}
-.ap-filter-drop-count{font-size:10.5px;color:var(--text-muted)}
-.ap-filter-drop-footer{padding:8px 14px;border-top:1px solid var(--border);flex-shrink:0}
-.ap-filter-drop-cta{width:100%;padding:8px 0;border-radius:var(--radius-sm);border:none;background:var(--brand);color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
-.ap-filter-drop-cta:hover{background:var(--brand-hover)}
+/* Inline filter expansion (between chips and results) */
+.ap-expand{display:none;border-bottom:1px solid var(--border-light);background:var(--slate-50)}
+.ap-expand.open{display:block}
+.ap-expand-head{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;position:sticky;top:0;background:var(--slate-50);z-index:1;border-bottom:1px solid var(--border-light)}
+.ap-expand-title{font-size:12px;font-weight:700;color:var(--text-sub)}
+.ap-expand-actions{display:flex;gap:6px;align-items:center}
+.ap-expand-btn{border:none;background:none;font-size:11px;font-family:inherit;cursor:pointer;padding:4px 10px;border-radius:var(--radius-sm);transition:var(--transition)}
+.ap-expand-btn.reset{color:var(--text-muted)}.ap-expand-btn.reset:hover{color:var(--red-500);background:var(--red-50)}
+.ap-expand-btn.apply{background:var(--brand);color:#fff;font-weight:600}.ap-expand-btn.apply:hover{background:var(--brand-hover)}
+.ap-expand-search{padding:6px 14px}
+.ap-expand-search input{width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;outline:none;background:#fff;box-sizing:border-box}
+.ap-expand-search input:focus{border-color:var(--brand)}
+.ap-expand-opts{max-height:180px;overflow-y:auto;padding:2px 0}
+.ap-expand-opt{display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;user-select:none;font-size:12px;transition:background .1s}
+.ap-expand-opt:hover{background:rgba(0,0,0,.03)}
+.ap-expand-chk{width:15px;height:15px;border-radius:3px;border:1.5px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;color:transparent;transition:all .15s}
+.ap-expand-opt.checked .ap-expand-chk{background:var(--brand);border-color:var(--brand);color:#fff}
+.ap-expand-label{flex:1;color:var(--text)}
+.ap-expand-count{font-size:10.5px;color:var(--text-muted)}
+/* Category list for "all" view */
+.ap-expand-cat{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;cursor:pointer;font-size:12.5px;transition:background .1s}
+.ap-expand-cat:hover{background:rgba(0,0,0,.03)}
+.ap-expand-cat-name{font-weight:600;color:var(--text)}
+.ap-expand-cat-info{display:flex;align-items:center;gap:6px}
+.ap-expand-cat-badge{font-size:10.5px;font-weight:600}
+.ap-expand-cat svg{width:12px;height:12px;color:var(--text-muted)}
+/* Search tip link */
+.ap-search-tip{padding:8px 14px;border-top:1px solid var(--border-light);display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);background:var(--slate-50)}
+.ap-search-tip a{color:var(--brand);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:3px}
+.ap-search-tip a:hover{text-decoration:underline}
 
 /* TABLE */
 /* DENSITY TOGGLE */
@@ -361,7 +371,6 @@ textarea.form-input{resize:vertical;min-height:72px;line-height:1.5}
   .list-name{font-size:18px}
   .toolbar{flex-wrap:wrap;gap:6px}
   .ap-panel{margin-left:0;margin-right:0;border-radius:var(--radius)}
-  .ap-filter-drop{left:8px;right:8px}
   .compare-view{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 /* ── Comment System (cb- prefix) ── */
@@ -639,33 +648,37 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
         <button class="ap-close" onclick="closeAddPanel()">×</button>
       </div>
       <div class="ap-filters" id="apFilters">
-        <div class="ap-filter-icon" onclick="openApSheet('all')" title="전체 필터">
+        <div class="ap-filter-icon" onclick="openApFilter('all')" title="전체 필터">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3.5h10M4 7h6M5.5 10.5h3"/></svg>
         </div>
-        <button class="ap-chip" data-filter="industry" onclick="openApSheet('industry')">업종 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-        <button class="ap-chip" data-filter="region" onclick="openApSheet('region')">지역 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-        <button class="ap-chip" data-filter="revenue" onclick="openApSheet('revenue')">매출 규모 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-        <button class="ap-chip" data-filter="type" onclick="openApSheet('type')">기업유형 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-        <button class="ap-chip" data-filter="emp" onclick="openApSheet('emp')">직원수 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="industry" onclick="openApFilter('industry')">업종 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="region" onclick="openApFilter('region')">지역 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="revenue" onclick="openApFilter('revenue')">매출 규모 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="type" onclick="openApFilter('type')">기업유형 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="emp" onclick="openApFilter('emp')">직원수 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+      </div>
+      <!-- Inline filter expansion (between chips and results) -->
+      <div class="ap-expand" id="apExpand">
+        <div class="ap-expand-head">
+          <span class="ap-expand-title" id="apExpandTitle">필터</span>
+          <div class="ap-expand-actions">
+            <button class="ap-expand-btn reset" onclick="resetApFilter()">초기화</button>
+            <button class="ap-expand-btn apply" onclick="applyApFilter()">적용</button>
+          </div>
+        </div>
+        <div id="apExpandContent"></div>
       </div>
       <div class="ap-body" id="apBody">
         <div class="ap-results-info" id="apResultsInfo"></div>
         <div id="apResultsList"></div>
       </div>
+      <div class="ap-search-tip">
+        <span>더 정밀한 검색이 필요하세요?</span>
+        <a href="prototype-search.html">기업 탐색으로 이동 <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1.5l4 3.5-4 3.5"/></svg></a>
+      </div>
       <div class="ap-footer">
         <div class="ap-footer-count" id="apFooterCount"></div>
         <button class="ap-footer-btn" onclick="closeAddPanel()">완료</button>
-      </div>
-      <!-- Inline filter dropdown (within panel) -->
-      <div class="ap-filter-drop" id="apFilterDrop">
-        <div class="ap-filter-drop-header">
-          <span class="ap-filter-drop-title" id="apFilterDropTitle">필터</span>
-          <button class="ap-filter-drop-reset" onclick="resetApSheet()">초기화</button>
-        </div>
-        <div class="ap-filter-drop-body" id="apFilterDropBody"></div>
-        <div class="ap-filter-drop-footer">
-          <button class="ap-filter-drop-cta" onclick="applyApSheet()">결과 보기</button>
-        </div>
       </div>
     </div>
 
@@ -1246,8 +1259,8 @@ var AP_ALL_COMPANIES = [
   {name:'테스',type:'상장',industry:'반도체장비',region:'경기',revenue:350,emp:200,color:'#E11D48'},
   {name:'디아이티',type:'비상장',industry:'소프트웨어',region:'서울',revenue:55,emp:48,color:'#2563EB'}
 ];
-var currentApSheet = null;
-var tempSheetState = [];
+var currentApFilter = null;
+var tempFilterState = [];
 
 function toggleAddPanel() {
   var panel = document.getElementById('apPanel');
@@ -1256,6 +1269,8 @@ function toggleAddPanel() {
   apFilterState = {industry:[],region:[],revenue:[],type:[],emp:[]};
   apAddedNames = [];
   document.getElementById('apSearchInput').value = '';
+  document.getElementById('apExpand').classList.remove('open');
+  currentApFilter = null;
   panel.classList.add('open');
   document.getElementById('addToggleBtn').textContent = '× 닫기';
   updateApChips();
@@ -1265,7 +1280,8 @@ function toggleAddPanel() {
 
 function closeAddPanel() {
   document.getElementById('apPanel').classList.remove('open');
-  document.getElementById('apFilterDrop').classList.remove('open');
+  document.getElementById('apExpand').classList.remove('open');
+  currentApFilter = null;
   document.getElementById('addToggleBtn').textContent = '+ 기업 추가';
 }
 
@@ -1388,95 +1404,116 @@ function updateApFooter() {
   fc.innerHTML = count > 0 ? '<strong>' + count + '개</strong> 기업 추가됨' : '';
 }
 
-// ── Inline Filter Dropdown Logic ──
-function openApSheet(key) {
-  currentApSheet = key;
-  var drop = document.getElementById('apFilterDrop');
-  var title = document.getElementById('apFilterDropTitle');
-  var body = document.getElementById('apFilterDropBody');
+// ── Inline Filter Expansion Logic ──
+function openApFilter(key) {
+  var expand = document.getElementById('apExpand');
+  var title = document.getElementById('apExpandTitle');
+  var content = document.getElementById('apExpandContent');
+
+  // Toggle: clicking same chip again closes
+  if (currentApFilter === key && expand.classList.contains('open')) {
+    closeApFilter();
+    return;
+  }
+  currentApFilter = key;
+
   if (key === 'all') {
     title.textContent = '전체 필터';
     var html = '';
     Object.keys(AP_FILTERS).forEach(function(k) {
       var f = AP_FILTERS[k];
       var count = apFilterState[k].length;
-      html += '<div class="ap-filter-drop-opt" onclick="openApSheet(\'' + k + '\')" style="justify-content:space-between">' +
-        '<span class="ap-filter-drop-label" style="font-weight:600">' + f.title + '</span>' +
-        (count ? '<span style="font-size:11px;color:var(--brand);font-weight:600">' + count + '개</span>' : '<span style="font-size:11px;color:var(--text-muted)">전체</span>') +
-        '<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M4.5 2l4 4-4 4"/></svg>' +
+      html += '<div class="ap-expand-cat" onclick="openApFilter(\'' + k + '\')">' +
+        '<span class="ap-expand-cat-name">' + f.title + '</span>' +
+        '<div class="ap-expand-cat-info">' +
+          (count ? '<span class="ap-expand-cat-badge" style="color:var(--brand)">' + count + '개 선택</span>' : '<span class="ap-expand-cat-badge" style="color:var(--text-muted)">전체</span>') +
+          '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 2l4 4-4 4"/></svg>' +
+        '</div>' +
       '</div>';
     });
-    body.innerHTML = html;
-    drop.classList.add('open');
+    content.innerHTML = html;
+    expand.classList.add('open');
+    highlightActiveChip(null);
     return;
   }
+
   var filter = AP_FILTERS[key];
   if (!filter) return;
   title.textContent = filter.title;
-  tempSheetState = apFilterState[key].slice();
+  tempFilterState = apFilterState[key].slice();
   var html = '';
   if (filter.search) {
-    html += '<div class="ap-filter-drop-search"><input placeholder="' + filter.title + ' 검색..." oninput="filterApSheetOptions(this.value)"></div>';
+    html += '<div class="ap-expand-search"><input placeholder="' + filter.title + ' 검색..." oninput="filterApExpandOptions(this.value)"></div>';
   }
-  html += filter.options.map(function(opt) {
-    var checked = tempSheetState.indexOf(opt.label) >= 0;
-    return '<div class="ap-filter-drop-opt' + (checked ? ' checked' : '') + '" onclick="toggleApSheetOption(this,\'' + opt.label + '\')">' +
-      '<div class="ap-filter-drop-chk">✓</div>' +
-      '<span class="ap-filter-drop-label">' + opt.label + '</span>' +
-      '<span class="ap-filter-drop-count">' + opt.count + '</span>' +
+  html += '<div class="ap-expand-opts">' + filter.options.map(function(opt) {
+    var checked = tempFilterState.indexOf(opt.label) >= 0;
+    return '<div class="ap-expand-opt' + (checked ? ' checked' : '') + '" onclick="toggleApExpandOption(this,\'' + opt.label + '\')">' +
+      '<div class="ap-expand-chk">✓</div>' +
+      '<span class="ap-expand-label">' + opt.label + '</span>' +
+      '<span class="ap-expand-count">' + opt.count + '</span>' +
     '</div>';
-  }).join('');
-  body.innerHTML = html;
-  drop.classList.add('open');
+  }).join('') + '</div>';
+  content.innerHTML = html;
+  expand.classList.add('open');
+  highlightActiveChip(key);
 }
 
-function toggleApSheetOption(el, label) {
-  var idx = tempSheetState.indexOf(label);
-  if (idx >= 0) { tempSheetState.splice(idx, 1); el.classList.remove('checked'); }
-  else { tempSheetState.push(label); el.classList.add('checked'); }
+function highlightActiveChip(key) {
+  document.querySelectorAll('.ap-chip').forEach(function(chip) {
+    var k = chip.getAttribute('data-filter');
+    if (k === key) chip.style.boxShadow = '0 0 0 2px var(--brand)';
+    else chip.style.boxShadow = '';
+  });
 }
 
-function filterApSheetOptions(q) {
+function toggleApExpandOption(el, label) {
+  var idx = tempFilterState.indexOf(label);
+  if (idx >= 0) { tempFilterState.splice(idx, 1); el.classList.remove('checked'); }
+  else { tempFilterState.push(label); el.classList.add('checked'); }
+}
+
+function filterApExpandOptions(q) {
   q = q.toLowerCase();
-  document.querySelectorAll('#apFilterDropBody .ap-filter-drop-opt').forEach(function(el) {
-    var label = el.querySelector('.ap-filter-drop-label');
+  document.querySelectorAll('#apExpandContent .ap-expand-opt').forEach(function(el) {
+    var label = el.querySelector('.ap-expand-label');
     if (!label) return;
     el.style.display = label.textContent.toLowerCase().indexOf(q) >= 0 ? '' : 'none';
   });
 }
 
-function resetApSheet() {
-  if (currentApSheet === 'all') {
+function resetApFilter() {
+  if (currentApFilter === 'all') {
     Object.keys(apFilterState).forEach(function(k){apFilterState[k]=[];});
     updateApChips();
     apSearch();
-    closeApSheet();
+    closeApFilter();
     return;
   }
-  tempSheetState = [];
-  document.querySelectorAll('#apFilterDropBody .ap-filter-drop-opt').forEach(function(el) {
+  tempFilterState = [];
+  document.querySelectorAll('#apExpandContent .ap-expand-opt').forEach(function(el) {
     el.classList.remove('checked');
   });
 }
 
-function applyApSheet() {
-  if (currentApSheet && currentApSheet !== 'all') {
-    apFilterState[currentApSheet] = tempSheetState.slice();
+function applyApFilter() {
+  if (currentApFilter && currentApFilter !== 'all') {
+    apFilterState[currentApFilter] = tempFilterState.slice();
   }
-  closeApSheet();
+  closeApFilter();
   updateApChips();
   apSearch();
 }
 
-function closeApSheet() {
-  document.getElementById('apFilterDrop').classList.remove('open');
-  currentApSheet = null;
+function closeApFilter() {
+  document.getElementById('apExpand').classList.remove('open');
+  highlightActiveChip(null);
+  currentApFilter = null;
 }
 
 // Close panel on Escape
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    if (document.getElementById('apFilterDrop').classList.contains('open')) { closeApSheet(); }
+    if (document.getElementById('apExpand').classList.contains('open')) { closeApFilter(); }
     else if (document.getElementById('apPanel').classList.contains('open')) { closeAddPanel(); }
   }
 });
