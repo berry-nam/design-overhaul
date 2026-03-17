@@ -199,7 +199,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .density-btn.active{background:var(--brand);color:#fff;font-weight:500}
 .density-btn:hover:not(.active){background:var(--slate-50)}
 
-.list-table-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.list-table-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow-x:auto;overflow-y:hidden}
 /* Compact density */
 .list-table.compact td{padding:4px 10px;font-size:12px;line-height:1.3}
 .list-table.compact th{padding:5px 10px;font-size:10.5px}
@@ -255,18 +255,18 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .detail-meta{display:flex;gap:10px;margin-top:3px;font-size:11px;color:var(--text-muted)}
 .detail-meta span{display:flex;align-items:center;gap:3px}
 .detail-meta .meta-label{color:var(--text-sub);font-weight:500}
-.detail-rev{display:inline-flex;flex-direction:column;gap:4px;min-width:140px;text-align:left}
+.detail-rev{display:flex;flex-direction:column;gap:4px;min-width:140px;text-align:left}
 .detail-rev-top{display:flex;align-items:center;gap:8px}
 .detail-rev-bar{height:6px;border-radius:3px;background:var(--slate-100);width:100%;overflow:hidden}
 .detail-rev-bar-fill{height:100%;border-radius:3px;transition:width .3s}
 .detail-rev-yoy{font-size:10.5px;margin-top:1px}
-.detail-profit{display:inline-flex;flex-direction:column;gap:4px;min-width:120px;text-align:left}
+.detail-profit{display:flex;flex-direction:column;gap:4px;min-width:120px;text-align:left}
 .detail-profit-top{display:flex;align-items:center;gap:6px}
 .detail-profit-rate{display:flex;align-items:center;gap:4px;font-size:10.5px}
 .detail-profit-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .detail-profit-bar{height:4px;border-radius:2px;background:var(--slate-100);width:80px;overflow:hidden}
 .detail-profit-bar-fill{height:100%;border-radius:2px}
-.detail-emp{display:inline-flex;flex-direction:column;gap:4px;min-width:110px;text-align:left}
+.detail-emp{display:flex;flex-direction:column;gap:4px;min-width:110px;text-align:left}
 .detail-emp-top{display:flex;align-items:center;gap:6px}
 .detail-emp-bar{display:flex;gap:1px;align-items:flex-end;height:18px}
 .detail-emp-bar-seg{width:6px;border-radius:1px 1px 0 0;background:var(--blue-200);transition:height .3s}
