@@ -243,11 +243,30 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .feedback-btn{width:28px;height:28px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .feedback-btn:hover{border-color:var(--brand);background:var(--brand-bg)}
 
-/* Radar */
-.radar-wrap{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
-.radar-legend{flex:1;min-width:200px}
-.radar-legend-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
-.radar-legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+/* Radar — Modern */
+.radar-card{background:linear-gradient(135deg,#f8faff 0%,#f0f4ff 50%,#faf8ff 100%);border:1px solid rgba(99,102,241,.1);border-radius:16px;padding:28px;position:relative;overflow:hidden}
+.radar-card::before{content:'';position:absolute;top:-60%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(99,102,241,.06) 0%,transparent 70%);pointer-events:none}
+.radar-card::after{content:'';position:absolute;bottom:-40%;left:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(16,185,129,.05) 0%,transparent 70%);pointer-events:none}
+.radar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;position:relative;z-index:1}
+.radar-header-left{display:flex;align-items:center;gap:10px}
+.radar-header-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#6366F1);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
+.radar-header-title{font-size:16px;font-weight:700;color:var(--text)}
+.radar-header-sub{font-size:12px;color:var(--text-muted);margin-top:1px}
+.radar-pills{display:flex;gap:6px;flex-wrap:wrap}
+.radar-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid;cursor:default;transition:all .15s}
+.radar-body{display:flex;gap:24px;align-items:stretch;position:relative;z-index:1;flex-wrap:wrap}
+.radar-canvas-wrap{flex-shrink:0;position:relative}
+.radar-scores{flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px}
+.radar-score-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,.04);border-radius:10px;transition:all .15s}
+.radar-score-item:hover{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.radar-score-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.radar-score-info{flex:1;min-width:0}
+.radar-score-label{font-size:11.5px;color:var(--text-muted);font-weight:500}
+.radar-score-row{display:flex;align-items:baseline;gap:6px;margin-top:2px}
+.radar-score-val{font-size:16px;font-weight:700;color:var(--text)}
+.radar-score-sub{font-size:11px;color:var(--text-muted)}
+.radar-score-bar{width:100%;height:4px;background:var(--slate-100);border-radius:2px;margin-top:4px;overflow:hidden}
+.radar-score-fill{height:100%;border-radius:2px;transition:width .6s ease}
 .competitor-banner{background:var(--amber-50);border:1px solid var(--amber-400);border-radius:var(--radius);padding:10px 16px;font-size:13px;color:var(--amber-600);display:flex;align-items:center;gap:8px;margin-bottom:16px}
 
 /* Comp table */
@@ -565,7 +584,8 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
   .section{padding:16px}
   .similar-cards{gap:8px}
   .sim-card{flex:0 0 260px}
-  .radar-wrap{flex-direction:column}
+  .radar-body{flex-direction:column}
+  .radar-canvas-wrap{align-self:center}
   .comp-table{font-size:12px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
   .tabs{padding:0 12px}
   .tab{padding:12px 14px;font-size:12.5px}
@@ -1797,22 +1817,30 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
   <!-- ═══ COMPETITORS TAB (B8) ═══ -->
   <div class="tab-panel" id="panel-competitors">
 
-    <!-- A. Radar Chart (improved) -->
+    <!-- A. Radar Chart (Modern) -->
     <div class="section" style="position:relative">
-      <span class="design-note dn-yellow">레이더 400×400: 5축(매출/이익률/성장률/직원/기술). 대상=Blue fill 0.2, 경쟁사=Gray 점선. 축 라벨 12px</span>
+      <span class="design-note dn-yellow">레이더 400×400: 6축. Stripe-inspired gradient card. 우측 점수 카드. pill 범례</span>
       <div class="competitor-banner">⚠ 경쟁사 분석 로직 개발 중 — 아래 시각화는 데모 데이터로 구성된 목표 UX입니다.</div>
-      <div class="section-title"><span class="icon">🕸</span> 경쟁력 레이더 차트</div>
-      <div class="radar-wrap">
-        <div>
-          <canvas id="radarChart" width="440" height="440"></canvas>
+      <div class="radar-card">
+        <div class="radar-header">
+          <div class="radar-header-left">
+            <div class="radar-header-icon">🕸</div>
+            <div>
+              <div class="radar-header-title">경쟁력 레이더</div>
+              <div class="radar-header-sub">6개 지표 기반 종합 비교 분석</div>
+            </div>
+          </div>
+          <div class="radar-pills">
+            <div class="radar-pill" style="background:rgba(5,73,204,.08);border-color:rgba(5,73,204,.2);color:var(--brand)"><span style="width:8px;height:8px;border-radius:50%;background:var(--brand);display:block"></span> 에이치비테크놀로지</div>
+            <div class="radar-pill" style="background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);color:var(--emerald-600)"><span style="width:8px;height:8px;border-radius:50%;background:var(--emerald-500);display:block"></span> 세미텍인스트루먼트</div>
+            <div class="radar-pill" style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:var(--amber-600)"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber-500);display:block"></span> 프로브앤텍</div>
+          </div>
         </div>
-        <div class="radar-legend">
-          <div style="font-size:13px;font-weight:600;margin-bottom:10px">범례</div>
-          <div class="radar-legend-item"><div class="radar-legend-dot" style="background:var(--brand)"></div> 에이치비테크놀로지</div>
-          <div class="radar-legend-item"><div class="radar-legend-dot" style="background:var(--emerald-500)"></div> 세미텍인스트루먼트</div>
-          <div class="radar-legend-item"><div class="radar-legend-dot" style="background:var(--amber-500)"></div> 프로브앤텍</div>
-          <div style="margin-top:16px;font-size:12px;color:var(--text-muted);margin-bottom:8px">축 설명</div>
-          <div style="font-size:12.5px;color:var(--text-sub);line-height:1.8">매출액 · 영업이익(영업이익률) · 직원수 · 업력 · 특허수 · 매출성장률<br>(모든 축은 0-100으로 정규화)</div>
+        <div class="radar-body">
+          <div class="radar-canvas-wrap">
+            <canvas id="radarChart" width="400" height="400"></canvas>
+          </div>
+          <div class="radar-scores" id="radarScores"></div>
         </div>
       </div>
     </div>
@@ -2697,89 +2725,130 @@ function drawEmployeeChart() {
   });
 }
 
-// ══ RADAR CHART (Improved, larger 440x440 with value labels) ══
+// ══ RADAR CHART (Modern — Stripe-inspired) ══
 function drawRadarChart() {
   var canvas = document.getElementById('radarChart');
-  var SIZE = 440;
+  var SIZE = 400;
   var ctx = hiDPI(canvas, SIZE, SIZE);
-  var cx = SIZE / 2, cy = SIZE / 2, R = 170;
-  var labels = ['매출액', '영업이익(영업이익률)', '직원수', '업력', '특허수', '매출성장률'];
+  var cx = SIZE / 2, cy = SIZE / 2, R = 150;
+  var N = 6;
+  var labels = ['매출액', '영업이익률', '직원수', '업력', '특허수', '매출성장률'];
+  var icons = ['💰','📊','👥','📅','💡','📈'];
   var actualValues = [
     ['342억','287억','198억'],
-    ['28억','22억','15억'],
+    ['8.2%','7.7%','7.6%'],
     ['187명','145명','92명'],
     ['14년','17년','10년'],
     ['5건','3건','2건'],
     ['+4.3%','+2.1%','+8.7%']
   ];
+  var scoreBgs = [
+    'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
+    'linear-gradient(135deg,#F0FDF4,#DCFCE7)',
+    'linear-gradient(135deg,#F5F3FF,#EDE9FE)',
+    'linear-gradient(135deg,#FFF7ED,#FFEDD5)',
+    'linear-gradient(135deg,#FDF2F8,#FCE7F3)',
+    'linear-gradient(135deg,#ECFDF5,#D1FAE5)'
+  ];
+  var scoreColors = ['#2563EB','#059669','#7C3AED','#EA580C','#DB2777','#10B981'];
   var companies = [
-    {data:[68,56,62,48,80,72],color:'#0549CC',alpha:0.25,name:'에이치비테크놀로지'},
-    {data:[58,44,48,58,60,42],color:'#10B981',alpha:0.15,name:'세미텍인스트루먼트'},
-    {data:[40,30,30,35,45,85],color:'#F59E0B',alpha:0.15,name:'프로브앤텍'}
+    {data:[68,56,62,48,80,72],color:'#0549CC',name:'에이치비테크놀로지'},
+    {data:[58,44,48,58,60,42],color:'#10B981',name:'세미텍인스트루먼트'},
+    {data:[40,30,30,35,45,85],color:'#F59E0B',name:'프로브앤텍'}
   ];
 
-  // Grid rings with gradient fill
-  for (var ring = 5; ring >= 1; ring--) {
-    var r = (ring / 5) * R;
-    ctx.beginPath();
-    for (var j = 0; j <= 6; j++) {
-      var a = (j / 6) * Math.PI * 2 - Math.PI / 2;
-      var x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
-      j === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  function angleFor(i){ return (i/N)*Math.PI*2 - Math.PI/2; }
+  function ptAt(i,r){ var a=angleFor(i); return {x:cx+Math.cos(a)*r, y:cy+Math.sin(a)*r}; }
+
+  // Circular grid rings (subtle)
+  for(var ring=5;ring>=1;ring--){
+    var r=(ring/5)*R;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    if(ring===5){
+      ctx.fillStyle='rgba(255,255,255,.5)'; ctx.fill();
     }
-    ctx.closePath();
-    if (ring === 5) {
-      var grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
-      grd.addColorStop(0, '#F7F8FA'); grd.addColorStop(1, '#E0E4EB');
-      ctx.fillStyle = grd; ctx.fill();
-    }
-    ctx.strokeStyle = '#CCD2DB'; ctx.lineWidth = 0.8; ctx.stroke();
-    // Ring value
-    if (ring < 5) {
-      ctx.fillStyle = '#9AA3B4'; ctx.font = '10px Pretendard Variable'; ctx.textAlign = 'center';
-      ctx.fillText((ring * 20) + '', cx + 4, cy - r + 12);
-    }
+    ctx.strokeStyle = ring===5 ? 'rgba(148,163,184,.3)' : 'rgba(148,163,184,.15)';
+    ctx.lineWidth = ring===5 ? 1 : 0.5;
+    ctx.setLineDash(ring<5?[3,3]:[]);
+    ctx.stroke(); ctx.setLineDash([]);
   }
 
-  // Axis lines & labels with actual values
-  labels.forEach(function(l, i) {
-    var a = (i / 6) * Math.PI * 2 - Math.PI / 2;
-    var x = cx + Math.cos(a) * R, y = cy + Math.sin(a) * R;
-    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y);
-    ctx.strokeStyle = '#CCD2DB'; ctx.lineWidth = 0.5; ctx.stroke();
-    var lx = cx + Math.cos(a) * (R + 30), ly = cy + Math.sin(a) * (R + 30);
-    ctx.fillStyle = '#374151'; ctx.font = 'bold 12px Pretendard Variable'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(l, lx, ly);
-    // Show target company value below label
-    ctx.fillStyle = '#0549CC'; ctx.font = '11px Pretendard Variable';
-    ctx.fillText(actualValues[i][0], lx, ly + 14);
+  // Axis lines (subtle)
+  for(var i=0;i<N;i++){
+    var p=ptAt(i,R);
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p.x,p.y);
+    ctx.strokeStyle='rgba(148,163,184,.2)'; ctx.lineWidth=0.5; ctx.stroke();
+  }
+
+  // Data polygons — draw competitors first (behind), then target on top
+  [2,1,0].forEach(function(ci){
+    var c=companies[ci];
+    ctx.beginPath();
+    for(var i=0;i<N;i++){
+      var a=angleFor(i), r2=(c.data[i]/100)*R;
+      var x=cx+Math.cos(a)*r2, y=cy+Math.sin(a)*r2;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    var grd=ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+    if(ci===0){
+      grd.addColorStop(0,c.color+'30'); grd.addColorStop(1,c.color+'10');
+      ctx.fillStyle=grd; ctx.fill();
+      ctx.strokeStyle=c.color; ctx.lineWidth=2.5;
+      ctx.shadowColor=c.color+'40'; ctx.shadowBlur=12; ctx.stroke();
+      ctx.shadowBlur=0;
+    } else {
+      grd.addColorStop(0,c.color+'18'); grd.addColorStop(1,c.color+'08');
+      ctx.fillStyle=grd; ctx.fill();
+      ctx.strokeStyle=c.color+'80'; ctx.lineWidth=1.5;
+      ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+    }
+    // Points
+    c.data.forEach(function(v,i){
+      var a=angleFor(i), r2=(v/100)*R;
+      var px=cx+Math.cos(a)*r2, py=cy+Math.sin(a)*r2;
+      if(ci===0){
+        ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2);
+        ctx.fillStyle='#fff'; ctx.fill();
+        ctx.strokeStyle=c.color; ctx.lineWidth=2.5; ctx.stroke();
+        ctx.beginPath(); ctx.arc(px,py,2,0,Math.PI*2);
+        ctx.fillStyle=c.color; ctx.fill();
+      } else {
+        ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2);
+        ctx.fillStyle=c.color+'90'; ctx.fill();
+      }
+    });
   });
 
-  // Data polygons with gradient fills
-  companies.forEach(function(c) {
-    ctx.beginPath();
-    c.data.forEach(function(v, i) {
-      var a = (i / 6) * Math.PI * 2 - Math.PI / 2;
-      var r2 = (v / 100) * R;
-      var x = cx + Math.cos(a) * r2, y = cy + Math.sin(a) * r2;
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.closePath();
-    // Gradient fill
-    var grdF = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
-    grdF.addColorStop(0, c.color + '40');
-    grdF.addColorStop(1, c.color + '18');
-    ctx.fillStyle = grdF; ctx.fill();
-    ctx.strokeStyle = c.color; ctx.lineWidth = 2.5; ctx.stroke();
-    // Points
-    c.data.forEach(function(v, i) {
-      var a = (i / 6) * Math.PI * 2 - Math.PI / 2;
-      var r2 = (v / 100) * R;
-      ctx.beginPath(); ctx.arc(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2, 5, 0, Math.PI * 2);
-      ctx.fillStyle = c.color; ctx.fill();
-      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
-    });
+  // Axis labels (outside the chart, clean)
+  labels.forEach(function(l,i){
+    var a=angleFor(i);
+    var lx=cx+Math.cos(a)*(R+28), ly=cy+Math.sin(a)*(R+28);
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    // Label
+    ctx.fillStyle='#475569'; ctx.font='600 11px Pretendard Variable';
+    ctx.fillText(l, lx, ly);
+    // Target value
+    ctx.fillStyle='#0549CC'; ctx.font='bold 11px Pretendard Variable';
+    ctx.fillText(actualValues[i][0], lx, ly+13);
   });
+
+  // ── Build score cards ──
+  var scoresEl = document.getElementById('radarScores');
+  scoresEl.innerHTML = labels.map(function(l,i){
+    var val = companies[0].data[i];
+    return '<div class="radar-score-item">' +
+      '<div class="radar-score-icon" style="background:'+scoreBgs[i]+'">'+icons[i]+'</div>' +
+      '<div class="radar-score-info">' +
+        '<div class="radar-score-label">'+l+'</div>' +
+        '<div class="radar-score-row">' +
+          '<span class="radar-score-val" style="color:'+scoreColors[i]+'">'+actualValues[i][0]+'</span>' +
+          '<span class="radar-score-sub">vs 경쟁사 평균 '+actualValues[i][1]+'</span>' +
+        '</div>' +
+        '<div class="radar-score-bar"><div class="radar-score-fill" style="width:'+val+'%;background:'+scoreColors[i]+'"></div></div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
 }
 
 // ══ BUBBLE CHART & ANIMATED BARS — removed, replaced by HTML horizontal bars and metric cards ══
