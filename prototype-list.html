@@ -115,75 +115,70 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sort-select{padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:12.5px;font-family:inherit;color:var(--text);background:#fff;cursor:pointer;transition:var(--transition)}
 .sort-select:hover{border-color:var(--blue-300)}
 
-/* ADD COMPANY MODAL (LinkedIn mobile-style) */
-.ap-overlay{position:fixed;inset:0;background:rgba(17,24,39,.5);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
-.ap-overlay.open{display:flex}
-.ap-modal{width:480px;max-width:100%;max-height:90vh;background:#fff;border-radius:var(--radius-xl);box-shadow:0 20px 60px rgba(17,24,39,.18);display:flex;flex-direction:column;overflow:hidden;animation:apSlideUp .25s ease}
-@keyframes apSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+/* ADD COMPANY INLINE PANEL */
+.ap-panel{display:none;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);margin-bottom:12px;overflow:hidden;animation:apSlideDown .2s ease;position:relative}
+.ap-panel.open{display:block}
+@keyframes apSlideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:600px}}
 /* Header / Search */
-.ap-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
-.ap-back{width:32px;height:32px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sub);transition:var(--transition);flex-shrink:0}
-.ap-back:hover{background:var(--slate-100)}
-.ap-search-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--slate-50);border:1px solid var(--border);border-radius:24px;padding:8px 14px;transition:border-color .15s}
+.ap-header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ap-close{width:28px;height:28px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sub);transition:var(--transition);flex-shrink:0;font-size:16px}
+.ap-close:hover{background:var(--slate-100)}
+.ap-search-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--slate-50);border:1px solid var(--border);border-radius:24px;padding:7px 12px;transition:border-color .15s}
 .ap-search-box:focus-within{border-color:var(--brand);background:#fff}
-.ap-search-box svg{width:15px;height:15px;color:var(--text-muted);flex-shrink:0}
-.ap-search-box input{border:none;outline:none;background:transparent;font-size:13.5px;font-family:inherit;color:var(--text);flex:1;min-width:0}
+.ap-search-box svg{width:14px;height:14px;color:var(--text-muted);flex-shrink:0}
+.ap-search-box input{border:none;outline:none;background:transparent;font-size:13px;font-family:inherit;color:var(--text);flex:1;min-width:0}
 .ap-search-box input::placeholder{color:var(--text-muted)}
 /* Filter Chips Row */
-.ap-filters{display:flex;align-items:center;gap:7px;padding:10px 16px;border-bottom:1px solid var(--border-light);overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ap-filters{display:flex;align-items:center;gap:6px;padding:8px 14px;border-bottom:1px solid var(--border-light);overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .ap-filters::-webkit-scrollbar{display:none}
-.ap-filter-icon{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:var(--transition);color:var(--text-sub)}
+.ap-filter-icon{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:var(--transition);color:var(--text-sub)}
 .ap-filter-icon:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-bg)}
-.ap-chip{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:12.5px;font-weight:500;color:var(--text);cursor:pointer;white-space:nowrap;transition:var(--transition);font-family:inherit;flex-shrink:0}
-.ap-chip svg{width:12px;height:12px;opacity:.5}
+.ap-chip{display:flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--text);cursor:pointer;white-space:nowrap;transition:var(--transition);font-family:inherit;flex-shrink:0}
+.ap-chip svg{width:11px;height:11px;opacity:.5}
 .ap-chip:hover{border-color:var(--blue-300)}
 .ap-chip.active{border-color:var(--brand);background:var(--brand-bg);color:var(--brand);font-weight:600}
 .ap-chip.active svg{opacity:1}
 /* Results */
-.ap-body{flex:1;overflow-y:auto;min-height:0}
-.ap-results-info{padding:10px 16px 6px;font-size:12px;color:var(--text-muted);font-weight:500}
-.ap-result-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;transition:var(--transition);border-bottom:1px solid var(--border-light)}
+.ap-body{max-height:280px;overflow-y:auto}
+.ap-results-info{padding:8px 14px 4px;font-size:11.5px;color:var(--text-muted);font-weight:500}
+.ap-result-item{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:var(--transition);border-bottom:1px solid var(--border-light)}
 .ap-result-item:hover{background:var(--blue-50)}
 .ap-result-item.added{opacity:.5;pointer-events:none}
-.ap-result-logo{width:36px;height:36px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.ap-result-logo{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
 .ap-result-info{flex:1;min-width:0}
-.ap-result-name{font-size:13.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ap-result-meta{font-size:11.5px;color:var(--text-muted);margin-top:2px;display:flex;gap:6px;align-items:center}
+.ap-result-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-result-meta{font-size:11px;color:var(--text-muted);margin-top:1px;display:flex;gap:5px;align-items:center}
 .ap-result-meta span{white-space:nowrap}
-.ap-result-add{padding:5px 14px;border-radius:20px;border:1px solid var(--brand);background:#fff;color:var(--brand);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition);flex-shrink:0}
+.ap-result-add{padding:4px 12px;border-radius:20px;border:1px solid var(--brand);background:#fff;color:var(--brand);font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition);flex-shrink:0}
 .ap-result-add:hover{background:var(--brand);color:#fff}
-.ap-empty{padding:40px 16px;text-align:center;color:var(--text-muted);font-size:13px}
-.ap-empty svg{display:block;margin:0 auto 12px;opacity:.3}
-/* Footer CTA */
-.ap-footer{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:8px;align-items:center}
-.ap-footer-count{font-size:12.5px;color:var(--text-sub);flex:1}
+.ap-empty{padding:30px 14px;text-align:center;color:var(--text-muted);font-size:12.5px}
+.ap-empty svg{display:block;margin:0 auto 10px;opacity:.3}
+/* Footer */
+.ap-footer{padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center}
+.ap-footer-count{font-size:12px;color:var(--text-sub);flex:1}
 .ap-footer-count strong{color:var(--brand);font-weight:700}
-.ap-footer-btn{flex:1;padding:10px 0;border-radius:var(--radius);border:none;background:var(--brand);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition);text-align:center}
+.ap-footer-btn{padding:7px 20px;border-radius:var(--radius);border:none;background:var(--brand);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition)}
 .ap-footer-btn:hover{background:var(--brand-hover)}
-.ap-footer-btn:disabled{opacity:.4;cursor:not-allowed}
-/* Bottom Sheet (filter options) */
-.ap-sheet-overlay{position:absolute;inset:0;background:rgba(17,24,39,.3);z-index:10;display:none;align-items:flex-end;border-radius:var(--radius-xl);overflow:hidden}
-.ap-sheet-overlay.open{display:flex}
-.ap-sheet{width:100%;max-height:70%;background:#fff;border-radius:16px 16px 0 0;display:flex;flex-direction:column;animation:apSheetUp .2s ease}
-@keyframes apSheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.ap-sheet-header{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--border-light);flex-shrink:0}
-.ap-sheet-title{font-size:15px;font-weight:700;color:var(--text)}
-.ap-sheet-reset{font-size:12.5px;color:var(--text-muted);cursor:pointer;background:none;border:none;font-family:inherit;transition:var(--transition)}
-.ap-sheet-reset:hover{color:var(--red-500)}
-.ap-sheet-body{flex:1;overflow-y:auto;padding:8px 0}
-.ap-sheet-search{padding:4px 16px 8px}
-.ap-sheet-search input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;outline:none;transition:border-color .15s}
-.ap-sheet-search input:focus{border-color:var(--brand)}
-.ap-sheet-search input::placeholder{color:var(--text-muted)}
-.ap-sheet-option{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:background .1s;user-select:none}
-.ap-sheet-option:hover{background:var(--slate-50)}
-.ap-sheet-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:11px;color:transparent}
-.ap-sheet-option.checked .ap-sheet-check{background:var(--brand);border-color:var(--brand);color:#fff}
-.ap-sheet-option-label{font-size:13.5px;color:var(--text);flex:1}
-.ap-sheet-option-count{font-size:11.5px;color:var(--text-muted)}
-.ap-sheet-footer{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0}
-.ap-sheet-cta{width:100%;padding:11px 0;border-radius:var(--radius);border:none;background:var(--brand);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition)}
-.ap-sheet-cta:hover{background:var(--brand-hover)}
+/* Inline filter dropdown (replaces full-screen bottom sheet) */
+.ap-filter-drop{display:none;position:absolute;top:auto;left:14px;right:14px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:20;max-height:260px;overflow:hidden;flex-direction:column}
+.ap-filter-drop.open{display:flex}
+.ap-filter-drop-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;border-bottom:1px solid var(--border-light);flex-shrink:0}
+.ap-filter-drop-title{font-size:13px;font-weight:700;color:var(--text)}
+.ap-filter-drop-reset{font-size:11.5px;color:var(--text-muted);cursor:pointer;background:none;border:none;font-family:inherit}
+.ap-filter-drop-reset:hover{color:var(--red-500)}
+.ap-filter-drop-body{flex:1;overflow-y:auto;padding:4px 0}
+.ap-filter-drop-search{padding:4px 14px 6px}
+.ap-filter-drop-search input{width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12.5px;font-family:inherit;outline:none}
+.ap-filter-drop-search input:focus{border-color:var(--brand)}
+.ap-filter-drop-opt{display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;transition:background .1s;user-select:none;font-size:12.5px}
+.ap-filter-drop-opt:hover{background:var(--slate-50)}
+.ap-filter-drop-chk{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:10px;color:transparent}
+.ap-filter-drop-opt.checked .ap-filter-drop-chk{background:var(--brand);border-color:var(--brand);color:#fff}
+.ap-filter-drop-label{flex:1;color:var(--text)}
+.ap-filter-drop-count{font-size:10.5px;color:var(--text-muted)}
+.ap-filter-drop-footer{padding:8px 14px;border-top:1px solid var(--border);flex-shrink:0}
+.ap-filter-drop-cta{width:100%;padding:8px 0;border-radius:var(--radius-sm);border:none;background:var(--brand);color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.ap-filter-drop-cta:hover{background:var(--brand-hover)}
 
 /* TABLE */
 /* DENSITY TOGGLE */
@@ -365,8 +360,8 @@ textarea.form-input{resize:vertical;min-height:72px;line-height:1.5}
   .list-actions{flex-wrap:wrap}
   .list-name{font-size:18px}
   .toolbar{flex-wrap:wrap;gap:6px}
-  .ap-modal{width:100%;max-width:100%;max-height:100vh;border-radius:0;height:100vh}
-  .ap-sheet{max-height:80%}
+  .ap-panel{margin-left:0;margin-right:0;border-radius:var(--radius)}
+  .ap-filter-drop{left:8px;right:8px}
   .compare-view{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 /* ── Comment System (cb- prefix) ── */
@@ -610,7 +605,7 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
 
     <!-- TOOLBAR -->
     <div class="toolbar">
-      <button class="btn-primary" onclick="openAddModal()">+ 기업 추가</button>
+      <button class="btn-primary" id="addToggleBtn" onclick="toggleAddPanel()">+ 기업 추가</button>
       <div class="sort-panel-wrap">
         <button class="sort-btn" id="sortBtn" onclick="toggleSortPanel(event)">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 2v10M3 12l-2-2M3 12l2-2M8 4h6M8 7h4M8 10h2"/></svg>
@@ -631,6 +626,46 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="5" height="11" rx="1"/><rect x="8" y="1" width="5" height="13" rx="1"/></svg>
           비교
         </button>
+      </div>
+    </div>
+
+    <!-- ADD COMPANY INLINE PANEL -->
+    <div class="ap-panel" id="apPanel">
+      <div class="ap-header">
+        <div class="ap-search-box">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+          <input type="text" id="apSearchInput" placeholder="기업명, 업종, 지역으로 검색..." oninput="apSearch()">
+        </div>
+        <button class="ap-close" onclick="closeAddPanel()">×</button>
+      </div>
+      <div class="ap-filters" id="apFilters">
+        <div class="ap-filter-icon" onclick="openApSheet('all')" title="전체 필터">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3.5h10M4 7h6M5.5 10.5h3"/></svg>
+        </div>
+        <button class="ap-chip" data-filter="industry" onclick="openApSheet('industry')">업종 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="region" onclick="openApSheet('region')">지역 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="revenue" onclick="openApSheet('revenue')">매출 규모 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="type" onclick="openApSheet('type')">기업유형 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="emp" onclick="openApSheet('emp')">직원수 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+      </div>
+      <div class="ap-body" id="apBody">
+        <div class="ap-results-info" id="apResultsInfo"></div>
+        <div id="apResultsList"></div>
+      </div>
+      <div class="ap-footer">
+        <div class="ap-footer-count" id="apFooterCount"></div>
+        <button class="ap-footer-btn" onclick="closeAddPanel()">완료</button>
+      </div>
+      <!-- Inline filter dropdown (within panel) -->
+      <div class="ap-filter-drop" id="apFilterDrop">
+        <div class="ap-filter-drop-header">
+          <span class="ap-filter-drop-title" id="apFilterDropTitle">필터</span>
+          <button class="ap-filter-drop-reset" onclick="resetApSheet()">초기화</button>
+        </div>
+        <div class="ap-filter-drop-body" id="apFilterDropBody"></div>
+        <div class="ap-filter-drop-footer">
+          <button class="ap-filter-drop-cta" onclick="applyApSheet()">결과 보기</button>
+        </div>
       </div>
     </div>
 
@@ -721,51 +756,6 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
   </div>
 </div>
 
-<!-- ADD COMPANY MODAL -->
-<div class="ap-overlay" id="apOverlay" onclick="if(event.target===this)closeAddModal()">
-  <div class="ap-modal">
-    <div class="ap-header">
-      <button class="ap-back" onclick="closeAddModal()">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3L5 9.5 12 16"/></svg>
-      </button>
-      <div class="ap-search-box">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
-        <input type="text" id="apSearchInput" placeholder="기업명, 업종, 지역으로 검색..." oninput="apSearch()">
-      </div>
-    </div>
-    <div class="ap-filters" id="apFilters">
-      <div class="ap-filter-icon" onclick="openApSheet('all')" title="전체 필터">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3.5h11M4 7.5h7M6 11.5h3"/></svg>
-      </div>
-      <button class="ap-chip" data-filter="industry" onclick="openApSheet('industry')">업종 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-      <button class="ap-chip" data-filter="region" onclick="openApSheet('region')">지역 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-      <button class="ap-chip" data-filter="revenue" onclick="openApSheet('revenue')">매출 규모 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-      <button class="ap-chip" data-filter="type" onclick="openApSheet('type')">기업유형 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-      <button class="ap-chip" data-filter="emp" onclick="openApSheet('emp')">직원수 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-    </div>
-    <div class="ap-body" id="apBody">
-      <div class="ap-results-info" id="apResultsInfo"></div>
-      <div id="apResultsList"></div>
-    </div>
-    <div class="ap-footer">
-      <div class="ap-footer-count" id="apFooterCount"></div>
-      <button class="ap-footer-btn" id="apFooterBtn" onclick="closeAddModal()">완료</button>
-    </div>
-    <!-- Bottom Sheet for filter options -->
-    <div class="ap-sheet-overlay" id="apSheetOverlay" onclick="if(event.target===this)closeApSheet()">
-      <div class="ap-sheet">
-        <div class="ap-sheet-header">
-          <span class="ap-sheet-title" id="apSheetTitle">필터</span>
-          <button class="ap-sheet-reset" onclick="resetApSheet()">초기화</button>
-        </div>
-        <div class="ap-sheet-body" id="apSheetBody"></div>
-        <div class="ap-sheet-footer">
-          <button class="ap-sheet-cta" onclick="applyApSheet()">결과 보기</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -1259,20 +1249,24 @@ var AP_ALL_COMPANIES = [
 var currentApSheet = null;
 var tempSheetState = [];
 
-function openAddModal() {
+function toggleAddPanel() {
+  var panel = document.getElementById('apPanel');
+  var isOpen = panel.classList.contains('open');
+  if (isOpen) { closeAddPanel(); return; }
   apFilterState = {industry:[],region:[],revenue:[],type:[],emp:[]};
   apAddedNames = [];
   document.getElementById('apSearchInput').value = '';
-  document.getElementById('apOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  panel.classList.add('open');
+  document.getElementById('addToggleBtn').textContent = '× 닫기';
   updateApChips();
   apSearch();
   setTimeout(function(){document.getElementById('apSearchInput').focus();},100);
 }
 
-function closeAddModal() {
-  document.getElementById('apOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+function closeAddPanel() {
+  document.getElementById('apPanel').classList.remove('open');
+  document.getElementById('apFilterDrop').classList.remove('open');
+  document.getElementById('addToggleBtn').textContent = '+ 기업 추가';
 }
 
 function updateApChips() {
@@ -1394,26 +1388,26 @@ function updateApFooter() {
   fc.innerHTML = count > 0 ? '<strong>' + count + '개</strong> 기업 추가됨' : '';
 }
 
-// ── Bottom Sheet Logic ──
+// ── Inline Filter Dropdown Logic ──
 function openApSheet(key) {
   currentApSheet = key;
-  var overlay = document.getElementById('apSheetOverlay');
-  var title = document.getElementById('apSheetTitle');
-  var body = document.getElementById('apSheetBody');
+  var drop = document.getElementById('apFilterDrop');
+  var title = document.getElementById('apFilterDropTitle');
+  var body = document.getElementById('apFilterDropBody');
   if (key === 'all') {
     title.textContent = '전체 필터';
     var html = '';
     Object.keys(AP_FILTERS).forEach(function(k) {
       var f = AP_FILTERS[k];
       var count = apFilterState[k].length;
-      html += '<div class="ap-sheet-option" onclick="openApSheet(\'' + k + '\')" style="justify-content:space-between">' +
-        '<span class="ap-sheet-option-label" style="font-weight:600">' + f.title + '</span>' +
-        (count ? '<span style="font-size:12px;color:var(--brand);font-weight:600">' + count + '개 선택</span>' : '<span style="font-size:12px;color:var(--text-muted)">전체</span>') +
-        '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-left:4px"><path d="M5 3l5 5-5 5"/></svg>' +
+      html += '<div class="ap-filter-drop-opt" onclick="openApSheet(\'' + k + '\')" style="justify-content:space-between">' +
+        '<span class="ap-filter-drop-label" style="font-weight:600">' + f.title + '</span>' +
+        (count ? '<span style="font-size:11px;color:var(--brand);font-weight:600">' + count + '개</span>' : '<span style="font-size:11px;color:var(--text-muted)">전체</span>') +
+        '<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M4.5 2l4 4-4 4"/></svg>' +
       '</div>';
     });
     body.innerHTML = html;
-    overlay.classList.add('open');
+    drop.classList.add('open');
     return;
   }
   var filter = AP_FILTERS[key];
@@ -1422,18 +1416,18 @@ function openApSheet(key) {
   tempSheetState = apFilterState[key].slice();
   var html = '';
   if (filter.search) {
-    html += '<div class="ap-sheet-search"><input placeholder="' + filter.title + ' 검색..." oninput="filterApSheetOptions(this.value)"></div>';
+    html += '<div class="ap-filter-drop-search"><input placeholder="' + filter.title + ' 검색..." oninput="filterApSheetOptions(this.value)"></div>';
   }
   html += filter.options.map(function(opt) {
     var checked = tempSheetState.indexOf(opt.label) >= 0;
-    return '<div class="ap-sheet-option' + (checked ? ' checked' : '') + '" onclick="toggleApSheetOption(this,\'' + opt.label + '\')">' +
-      '<div class="ap-sheet-check">✓</div>' +
-      '<span class="ap-sheet-option-label">' + opt.label + '</span>' +
-      '<span class="ap-sheet-option-count">' + opt.count + '</span>' +
+    return '<div class="ap-filter-drop-opt' + (checked ? ' checked' : '') + '" onclick="toggleApSheetOption(this,\'' + opt.label + '\')">' +
+      '<div class="ap-filter-drop-chk">✓</div>' +
+      '<span class="ap-filter-drop-label">' + opt.label + '</span>' +
+      '<span class="ap-filter-drop-count">' + opt.count + '</span>' +
     '</div>';
   }).join('');
   body.innerHTML = html;
-  overlay.classList.add('open');
+  drop.classList.add('open');
 }
 
 function toggleApSheetOption(el, label) {
@@ -1444,8 +1438,8 @@ function toggleApSheetOption(el, label) {
 
 function filterApSheetOptions(q) {
   q = q.toLowerCase();
-  document.querySelectorAll('#apSheetBody .ap-sheet-option').forEach(function(el) {
-    var label = el.querySelector('.ap-sheet-option-label');
+  document.querySelectorAll('#apFilterDropBody .ap-filter-drop-opt').forEach(function(el) {
+    var label = el.querySelector('.ap-filter-drop-label');
     if (!label) return;
     el.style.display = label.textContent.toLowerCase().indexOf(q) >= 0 ? '' : 'none';
   });
@@ -1460,7 +1454,7 @@ function resetApSheet() {
     return;
   }
   tempSheetState = [];
-  document.querySelectorAll('#apSheetBody .ap-sheet-option').forEach(function(el) {
+  document.querySelectorAll('#apFilterDropBody .ap-filter-drop-opt').forEach(function(el) {
     el.classList.remove('checked');
   });
 }
@@ -1475,15 +1469,15 @@ function applyApSheet() {
 }
 
 function closeApSheet() {
-  document.getElementById('apSheetOverlay').classList.remove('open');
+  document.getElementById('apFilterDrop').classList.remove('open');
   currentApSheet = null;
 }
 
-// Close modal on Escape
+// Close panel on Escape
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    if (document.getElementById('apSheetOverlay').classList.contains('open')) { closeApSheet(); }
-    else if (document.getElementById('apOverlay').classList.contains('open')) { closeAddModal(); }
+    if (document.getElementById('apFilterDrop').classList.contains('open')) { closeApSheet(); }
+    else if (document.getElementById('apPanel').classList.contains('open')) { closeAddPanel(); }
   }
 });
 
@@ -1889,7 +1883,7 @@ function assignAnchorIds(){
 function initCommentClick(){
   document.addEventListener('click',function(e){
     if(!commentMode)return;
-    if(e.target.closest('.cb-pin')||e.target.closest('.cb-thread')||e.target.closest('#cb-new-input')||e.target.closest('#cb-toolbar')||e.target.closest('#cb-sidebar')||e.target.closest('.cb-name-prompt')||e.target.closest('.cb-name-overlay')||e.target.closest('.modal-overlay')||e.target.closest('.ap-overlay'))return;
+    if(e.target.closest('.cb-pin')||e.target.closest('.cb-thread')||e.target.closest('#cb-new-input')||e.target.closest('#cb-toolbar')||e.target.closest('#cb-sidebar')||e.target.closest('.cb-name-prompt')||e.target.closest('.cb-name-overlay')||e.target.closest('.modal-overlay')||e.target.closest('.ap-panel'))return;
     e.preventDefault();e.stopPropagation();
     var anchor=e.target.closest('[data-cb-id]');
     if(!anchor)return;
