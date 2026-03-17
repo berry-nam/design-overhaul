@@ -1110,6 +1110,12 @@ function renderTable() {
         '<td class="td-memo"><input class="memo-input" value="' + (c.memo || '') + '" placeholder="메모 추가..." onchange="updateMemo(' + i + ',this.value)"></td>' +
         '<td class="td-actions"><button class="delete-btn" onclick="deleteRow(' + i + ')" title="리스트에서 제거">&#x2715;</button></td>';
     }
+    // Row click → navigate to detail (skip interactive elements)
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', function(e) {
+      if (e.target.closest('input,button,a,.td-drag,.td-check,.td-actions,.delete-btn')) return;
+      window.location.href = 'prototype-detail.html';
+    });
     // Drag events
     tr.addEventListener('dragstart', function(e) { dragRow = this; this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
     tr.addEventListener('dragend', function() { this.classList.remove('dragging'); document.querySelectorAll('.drag-over').forEach(function(el) { el.classList.remove('drag-over'); }); dragRow = null; });

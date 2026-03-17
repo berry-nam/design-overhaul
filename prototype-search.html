@@ -853,7 +853,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
     <!-- Footer -->
     <div class="adv-footer">
       <span class="adv-footer-text">🔒 Pro 필터는 <strong style="color:var(--amber-600)">CookieDeal Pro</strong> 구독 시 이용 가능</span>
-      <button class="btn-primary" style="font-size:12px;padding:6px 16px" onclick="document.querySelector('.advanced-panel').classList.remove('show');syncColumnsWithFilters()">필터 적용</button>
+      <button class="btn-primary" style="font-size:12px;padding:6px 16px" onclick="document.querySelector('.advanced-panel').classList.remove('show');syncColumnsWithFilters();applyFilters()">필터 적용</button>
     </div>
   </div>
 
@@ -1407,7 +1407,12 @@ function initColDrag(){
 }
 
 var currentDensity = 'comfortable';
-var filteredCompanies = null; // null = show all
+var filteredData = null; // null = show all (set by applyFilters)
+
+function applyFilters(){
+  filteredData = filterCompanies();
+  renderTable();
+}
 
 function filterCompanies(){
   var result = COMPANIES.slice();
@@ -1542,7 +1547,6 @@ function filterCompanies(){
     });
   }
 
-  filteredCompanies = result;
   // Update result count
   document.getElementById('result-count').textContent = result.length.toLocaleString();
   return result;
@@ -1550,8 +1554,7 @@ function filterCompanies(){
 
 function renderTable(){
   var mode = currentDensity;
-  // Apply filters
-  var data = filterCompanies();
+  var data = filteredData || COMPANIES;
   // Build thead
   var thead = document.getElementById('tableHead');
   var thHtml = '<th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this)"></th>';
@@ -1835,12 +1838,12 @@ function toggleFilter(btn,label){
     btn.classList.add('has-value');
     btn.textContent=label;
   }
-  renderTable();
+  applyFilters();
 }
 function clearChips(){
   document.querySelectorAll('.chip').forEach(c=>c.remove());
   document.querySelectorAll('.filter-select').forEach(f=>f.classList.remove('has-value'));
-  renderTable();
+  applyFilters();
 }
 
 // ══ VIEW SELECTOR ══
@@ -1991,6 +1994,7 @@ function resetAdvanced(){
   document.querySelector('.adv-active-count').textContent='0개 필터 활성';
   highlightActiveAdvFilters();
   syncColumnsWithFilters();
+  applyFilters();
 }
 
 // ── 영업이익 적자 포함 토글 ──
