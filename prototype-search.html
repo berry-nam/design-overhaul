@@ -799,10 +799,10 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
         </div>
         <div class="advanced-item" data-filter="영업이익" id="advProfitItem">
           <label>📊 영업이익 <span class="adv-info">?<span class="adv-tip">적자 포함 시 음수(적자) 기업도 결과에 포함됩니다. 미체크 시 최소값은 0 이상만 입력 가능합니다.</span></span></label>
-          <div>
-            <div class="adv-range"><input type="number" id="advProfitMin" placeholder="최소" min="0" value="10" oninput="validateProfitMin()"> <span class="adv-range-sep">~</span> <input type="number" id="advProfitMax" placeholder="최대" value="100"> <span class="adv-range-unit">(억)</span></div>
-            <label class="adv-deficit"><input type="checkbox" id="advDeficitChk" onchange="toggleDeficit()"> 적자 기업 포함</label>
-          </div>
+          <div class="adv-range"><input type="number" id="advProfitMin" placeholder="최소" min="0" value="10" oninput="validateProfitMin()"> <span class="adv-range-sep">~</span> <input type="number" id="advProfitMax" placeholder="최대" value="100"> <span class="adv-range-unit">(억)</span></div>
+        </div>
+        <div style="padding:0 8px 4px;margin-top:-4px">
+          <label class="adv-deficit"><input type="checkbox" id="advDeficitChk" onchange="toggleDeficit()"> 적자 기업 포함</label>
         </div>
         <div class="advanced-item" data-filter="순이익">
           <label>💵 순이익 <span class="adv-info">?<span class="adv-tip">당기순이익 기준입니다. 세후 최종 이익을 나타냅니다.</span></span></label>
