@@ -134,8 +134,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .filter-dropdown-item:hover > .filter-submenu{display:block}
 .filter-submenu .filter-dropdown-item{padding:6px 12px;font-size:12.5px}
 
-/* ── Wider dropdowns for Include/Exclude ── */
-#industryDropdown,#productDropdown{width:320px}
+/* ── Tree dropdowns: allow submenus to overflow to the right ── */
+#industryDropdown,#productDropdown{width:320px;overflow:visible;max-height:none}
+#industryDropdown .filter-dropdown-body,#productDropdown .filter-dropdown-body{overflow:visible;max-height:none}
 #industryDropdown .filter-submenu,#productDropdown .filter-submenu{width:300px}
 #regionDropdown{width:280px}
 /* Include / Exclude actions */
