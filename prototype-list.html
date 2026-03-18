@@ -686,8 +686,7 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
         <button class="ap-chip" data-filter="product" onclick="openApFilter('product')">생산품 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
         <button class="ap-chip" data-filter="region" onclick="openApFilter('region')">지역 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
         <button class="ap-chip" data-filter="revenue" onclick="openApFilter('revenue')">매출 규모 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-        <button class="ap-chip" data-filter="type" onclick="openApFilter('type')">기업유형 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
-        <button class="ap-chip" data-filter="emp" onclick="openApFilter('emp')">직원수 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="profit" onclick="openApFilter('profit')">영업이익 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
       </div>
       <!-- Inline filter expansion (between chips and results) -->
       <div class="ap-expand" id="apExpand">
@@ -1254,7 +1253,7 @@ var apIeState = {
   region:{include:[],exclude:[]}
 };
 // Flat filter state for non-tree filters
-var apFilterState = {revenue:[],type:[],emp:[]};
+var apFilterState = {revenue:[],profit:[]};
 var apAddedNames = [];
 
 // ── KSIC 3-DEPTH TREE DATA ──
@@ -1447,13 +1446,9 @@ var AP_FILTERS = {
     {label:'10억 미만',count:18},{label:'10억~50억',count:24},{label:'50억~100억',count:19},
     {label:'100억~500억',count:31},{label:'500억~1,000억',count:15},{label:'1,000억 이상',count:8}
   ]},
-  type:{title:'기업유형',search:false,options:[
-    {label:'상장/주식회사',count:28},{label:'비상장/주식회사',count:45},{label:'유한회사',count:12},
-    {label:'외감법인',count:18},{label:'벤처기업',count:22},{label:'이노비즈',count:9}
-  ]},
-  emp:{title:'직원수',search:false,options:[
-    {label:'10명 미만',count:15},{label:'10~50명',count:28},{label:'50~100명',count:19},
-    {label:'100~300명',count:14},{label:'300~1,000명',count:8},{label:'1,000명 이상',count:5}
+  profit:{title:'영업이익',search:false,options:[
+    {label:'적자',count:12},{label:'0~10억',count:18},{label:'10~50억',count:24},
+    {label:'50~100억',count:14},{label:'100억 이상',count:8}
   ]}
 };
 
@@ -1483,7 +1478,7 @@ function toggleAddPanel() {
   var isOpen = panel.classList.contains('open');
   if (isOpen) { closeAddPanel(); return; }
   apIeState = {industry:{include:[],exclude:[]},product:{include:[],exclude:[]},region:{include:[],exclude:[]}};
-  apFilterState = {revenue:[],type:[],emp:[]};
+  apFilterState = {revenue:[],profit:[]};
   apColSelection = {industry:{d1:null,d2:null}, product:{d1:null,d2:null}};
   apAddedNames = [];
   document.getElementById('apSearchInput').value = '';
@@ -1504,7 +1499,7 @@ function closeAddPanel() {
 }
 
 function updateApChips() {
-  var titles = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',type:'기업유형',emp:'직원수'};
+  var titles = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',profit:'영업이익'};
   document.querySelectorAll('.ap-chip').forEach(function(chip) {
     var key = chip.getAttribute('data-filter');
     var count = 0;
@@ -1557,11 +1552,6 @@ function apSearch() {
       regNames.forEach(function(n){ if(c.region.indexOf(n)>=0) excluded=true; });
       if(excluded) return false;
     }
-    if (apFilterState.type && apFilterState.type.length) {
-      var match = false;
-      apFilterState.type.forEach(function(t) { if (c.type.indexOf(t.replace('/주식회사','').replace('/유한회사','')) >= 0) match = true; });
-      if (!match) return false;
-    }
     if (apFilterState.revenue && apFilterState.revenue.length) {
       var match = false;
       apFilterState.revenue.forEach(function(r) {
@@ -1571,18 +1561,6 @@ function apSearch() {
         else if (r === '100억~500억' && c.revenue >= 100 && c.revenue < 500) match = true;
         else if (r === '500억~1,000억' && c.revenue >= 500 && c.revenue < 1000) match = true;
         else if (r === '1,000억 이상' && c.revenue >= 1000) match = true;
-      });
-      if (!match) return false;
-    }
-    if (apFilterState.emp && apFilterState.emp.length) {
-      var match = false;
-      apFilterState.emp.forEach(function(e) {
-        if (e === '10명 미만' && c.emp < 10) match = true;
-        else if (e === '10~50명' && c.emp >= 10 && c.emp < 50) match = true;
-        else if (e === '50~100명' && c.emp >= 50 && c.emp < 100) match = true;
-        else if (e === '100~300명' && c.emp >= 100 && c.emp < 300) match = true;
-        else if (e === '300~1,000명' && c.emp >= 300 && c.emp < 1000) match = true;
-        else if (e === '1,000명 이상' && c.emp >= 1000) match = true;
       });
       if (!match) return false;
     }
@@ -1683,7 +1661,7 @@ function openApFilter(key) {
 
   if (key === 'all') {
     title.textContent = '전체 필터';
-    var allFilters = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',type:'기업유형',emp:'직원수'};
+    var allFilters = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',profit:'영업이익'};
     var html = '';
     Object.keys(allFilters).forEach(function(k) {
       var count = 0;
@@ -1717,7 +1695,7 @@ function openApFilter(key) {
     return;
   }
 
-  // Flat filters: revenue, type, emp
+  // Flat filters: revenue, profit
   var filter = AP_FILTERS[key];
   if (!filter) return;
   title.textContent = filter.title;
@@ -1739,13 +1717,48 @@ function openApFilter(key) {
   highlightActiveChip(key);
 }
 
-// ── IE button HTML helper ──
+// ── Ancestor lookup for cascading IE logic ──
+function apFindAncestorCodes(tree, targetCode) {
+  for (var i = 0; i < tree.length; i++) {
+    if (tree[i].code === targetCode) return [];
+    if (tree[i].children) {
+      for (var j = 0; j < tree[i].children.length; j++) {
+        if (tree[i].children[j].code === targetCode) return [tree[i].code];
+        if (tree[i].children[j].children) {
+          for (var k = 0; k < tree[i].children[j].children.length; k++) {
+            if (tree[i].children[j].children[k].code === targetCode) return [tree[i].code, tree[i].children[j].code];
+          }
+        }
+      }
+    }
+  }
+  return [];
+}
+function apGetInheritedIeState(fk, code) {
+  var state = apIeState[fk];
+  var tree = fk === 'industry' ? INDUSTRY_TREE : (fk === 'product' ? PRODUCT_TREE : null);
+  if (!tree) return null;
+  var ancestors = apFindAncestorCodes(tree, code);
+  for (var i = ancestors.length - 1; i >= 0; i--) {
+    if (state.include.indexOf(ancestors[i]) >= 0) return 'include';
+    if (state.exclude.indexOf(ancestors[i]) >= 0) return 'exclude';
+  }
+  return null;
+}
+
+// ── IE button HTML helper with ancestor-aware logic ──
 function apIeHtml(fk, code) {
-  var inc = apIeState[fk].include.indexOf(code) >= 0 ? ' active-include' : '';
-  var exc = apIeState[fk].exclude.indexOf(code) >= 0 ? ' active-exclude' : '';
-  return '<div class="ie-actions">' +
-    '<span class="ie-btn' + inc + '" onclick="apToggleIe(\'' + fk + '\',\'' + code + '\',\'include\',event)">Inc</span>' +
-    '<span class="ie-btn' + exc + '" onclick="apToggleIe(\'' + fk + '\',\'' + code + '\',\'exclude\',event)">Exc</span></div>';
+  var state = apIeState[fk];
+  var isInc = state.include.indexOf(code) >= 0;
+  var isExc = state.exclude.indexOf(code) >= 0;
+  var inherited = apGetInheritedIeState(fk, code);
+  var showInc = inherited !== 'include';
+  var showExc = inherited !== 'exclude';
+  var html = '<div class="ie-actions">';
+  if (showInc) html += '<span class="ie-btn' + (isInc ? ' active-include' : '') + '" onclick="apToggleIe(\'' + fk + '\',\'' + code + '\',\'include\',event)">Inc</span>';
+  if (showExc) html += '<span class="ie-btn' + (isExc ? ' active-exclude' : '') + '" onclick="apToggleIe(\'' + fk + '\',\'' + code + '\',\'exclude\',event)">Exc</span>';
+  html += '</div>';
+  return html;
 }
 
 // ── Track selected item per column for Finder view ──
@@ -1881,22 +1894,10 @@ function apToggleIe(fk, code, action, event) {
   var idx = list.indexOf(code);
   if (idx >= 0) list.splice(idx, 1);
   else { list.push(code); var oi = state[other].indexOf(code); if(oi>=0) state[other].splice(oi,1); }
-  // In-place button update
-  if (event) {
-    var btns = event.target.parentElement.querySelectorAll('.ie-btn');
-    btns[0].className = 'ie-btn' + (state.include.indexOf(code) >= 0 ? ' active-include' : '');
-    btns[1].className = 'ie-btn' + (state.exclude.indexOf(code) >= 0 ? ' active-exclude' : '');
-  }
-  // Update chips inline
+  // Re-render to update descendant button visibility (ancestor cascading)
   var content = document.getElementById('apExpandContent');
-  var chipsArea = content.querySelector('.ie-chips-area');
-  var newChipsHtml = renderApIeChipsHtml(fk);
-  if (chipsArea) {
-    if (newChipsHtml) chipsArea.outerHTML = newChipsHtml;
-    else chipsArea.remove();
-  } else if (newChipsHtml) {
-    content.insertAdjacentHTML('afterbegin', newChipsHtml);
-  }
+  if (fk === 'region') renderApRegionFilter(content);
+  else renderApTreeFilter(fk, content);
   updateApChips();
   apSearch();
 }

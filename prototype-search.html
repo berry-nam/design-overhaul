@@ -137,7 +137,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 /* ── Tree dropdowns: allow submenus to overflow to the right ── */
 #industryDropdown,#productDropdown{width:320px;overflow:visible;max-height:none}
 #industryDropdown .filter-dropdown-body,#productDropdown .filter-dropdown-body{overflow:visible;max-height:none}
-#industryDropdown .filter-submenu,#productDropdown .filter-submenu{width:300px}
+#industryDropdown .filter-submenu,#productDropdown .filter-submenu{width:300px;overflow:visible;max-height:none}
+#industryDropdown .filter-submenu .filter-submenu,#productDropdown .filter-submenu .filter-submenu{overflow-y:auto;max-height:320px;width:280px}
 #regionDropdown{width:280px}
 /* Include / Exclude actions */
 .ie-actions{display:flex;gap:2px;margin-left:8px;flex-shrink:0}
@@ -715,7 +716,7 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
     </button>
     <button class="filter-select">
-      기업유형
+      영업이익
       <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
     </button>
     <div class="filter-divider"></div>
@@ -1936,13 +1937,50 @@ function getNameByCode(fk, code) {
   return findNameInTree(getTreeData(fk), code) || code;
 }
 
-// ── Build IE button HTML for any item ──
+// ── Ancestor lookup for cascading IE logic ──
+function findAncestorCodes(tree, targetCode) {
+  for (var i = 0; i < tree.length; i++) {
+    if (tree[i].code === targetCode) return [];
+    if (tree[i].children) {
+      for (var j = 0; j < tree[i].children.length; j++) {
+        if (tree[i].children[j].code === targetCode) return [tree[i].code];
+        if (tree[i].children[j].children) {
+          for (var k = 0; k < tree[i].children[j].children.length; k++) {
+            if (tree[i].children[j].children[k].code === targetCode) return [tree[i].code, tree[i].children[j].code];
+          }
+        }
+      }
+    }
+  }
+  return [];
+}
+function getInheritedIeState(fk, code) {
+  var state = treeFilterState[fk];
+  var tree = getTreeData(fk);
+  if (!tree) return null;
+  var ancestors = findAncestorCodes(tree, code);
+  // Check closest ancestor first
+  for (var i = ancestors.length - 1; i >= 0; i--) {
+    if (state.include.indexOf(ancestors[i]) >= 0) return 'include';
+    if (state.exclude.indexOf(ancestors[i]) >= 0) return 'exclude';
+  }
+  return null;
+}
+
+// ── Build IE button HTML with ancestor-aware logic ──
 function ieHtml(fk, code) {
-  var inc = treeFilterState[fk].include.indexOf(code) >= 0 ? ' active-include' : '';
-  var exc = treeFilterState[fk].exclude.indexOf(code) >= 0 ? ' active-exclude' : '';
-  return '<div class="ie-actions">' +
-    '<span class="ie-btn' + inc + '" onclick="toggleIeState(\'' + fk + '\',\'' + code + '\',\'include\',event)">Include</span>' +
-    '<span class="ie-btn' + exc + '" onclick="toggleIeState(\'' + fk + '\',\'' + code + '\',\'exclude\',event)">Exclude</span></div>';
+  var state = treeFilterState[fk];
+  var isInc = state.include.indexOf(code) >= 0;
+  var isExc = state.exclude.indexOf(code) >= 0;
+  var inherited = getInheritedIeState(fk, code);
+  // If parent included → only Exclude available; if parent excluded → only Include available
+  var showInc = inherited !== 'include';
+  var showExc = inherited !== 'exclude';
+  var html = '<div class="ie-actions">';
+  if (showInc) html += '<span class="ie-btn' + (isInc ? ' active-include' : '') + '" onclick="toggleIeState(\'' + fk + '\',\'' + code + '\',\'include\',event)">Include</span>';
+  if (showExc) html += '<span class="ie-btn' + (isExc ? ' active-exclude' : '') + '" onclick="toggleIeState(\'' + fk + '\',\'' + code + '\',\'exclude\',event)">Exclude</span>';
+  html += '</div>';
+  return html;
 }
 
 // ── Render hover-submenu tree (3-depth, Finder-style) ──
@@ -1953,14 +1991,14 @@ function renderTreeDropdown(fk) {
   var html = '';
   tree.forEach(function(d1) {
     var hasCh = d1.children && d1.children.length > 0;
-    html += '<div class="filter-dropdown-item"' + (hasCh ? ' onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)"' : '') + '>';
+    html += '<div class="filter-dropdown-item">';
     html += '<span class="fd-label">' + d1.name + '</span>';
     html += ieHtml(fk, d1.code);
     if (hasCh) {
       html += '<span class="fd-chevron">›</span><div class="filter-submenu">';
       d1.children.forEach(function(d2) {
         var hasCh2 = d2.children && d2.children.length > 0;
-        html += '<div class="filter-dropdown-item"' + (hasCh2 ? ' onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)"' : '') + '>';
+        html += '<div class="filter-dropdown-item">';
         html += '<span class="fd-label">' + d2.name + '</span>';
         html += ieHtml(fk, d2.code);
         if (hasCh2) {
@@ -1999,7 +2037,7 @@ function renderRegionDropdown() {
   renderIeChips('region');
 }
 
-// ── Toggle Include/Exclude (in-place update, preserves hover) ──
+// ── Toggle Include/Exclude (re-renders tree to update descendant buttons) ──
 function toggleIeState(fk, code, action, event) {
   event.stopPropagation();
   var state = treeFilterState[fk];
@@ -2008,12 +2046,9 @@ function toggleIeState(fk, code, action, event) {
   var idx = list.indexOf(code);
   if (idx >= 0) list.splice(idx, 1);
   else { list.push(code); var oi = state[other].indexOf(code); if(oi>=0) state[other].splice(oi,1); }
-  // Update buttons in-place (don't re-render tree — preserves hover state)
-  var actions = event.target.parentElement;
-  var btns = actions.querySelectorAll('.ie-btn');
-  btns[0].className = 'ie-btn' + (state.include.indexOf(code) >= 0 ? ' active-include' : '');
-  btns[1].className = 'ie-btn' + (state.exclude.indexOf(code) >= 0 ? ' active-exclude' : '');
-  renderIeChips(fk);
+  // Re-render to update descendant button visibility (ancestor cascading)
+  if (fk === 'region') renderRegionDropdown();
+  else renderTreeDropdown(fk);
   updateFilterButton(fk);
 }
 
