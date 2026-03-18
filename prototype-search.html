@@ -134,6 +134,35 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .filter-dropdown-item:hover > .filter-submenu{display:block}
 .filter-submenu .filter-dropdown-item{padding:6px 12px;font-size:12.5px}
 
+/* ── Tree navigation (3-depth drill-down) ── */
+.fd-tree-header{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-sub)}
+.fd-tree-back{cursor:pointer;display:flex;align-items:center;gap:4px;color:var(--brand);font-weight:500;transition:color .15s}
+.fd-tree-back:hover{color:var(--blue-700)}
+.fd-tree-back svg{width:14px;height:14px}
+.fd-tree-breadcrumb{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--text-muted)}
+.fd-tree-breadcrumb span{cursor:pointer;transition:color .15s}
+.fd-tree-breadcrumb span:hover{color:var(--brand)}
+.fd-tree-breadcrumb .sep{cursor:default;color:var(--text-muted)}
+.fd-tree-item{display:flex;align-items:center;padding:7px 12px;font-size:13px;color:var(--text);cursor:pointer;transition:background .1s;user-select:none}
+.fd-tree-item:hover{background:var(--slate-50)}
+.fd-tree-item .fd-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fd-tree-item .fd-count{font-size:11px;color:var(--text-muted);margin-left:8px}
+.fd-tree-item .fd-chevron{font-size:14px;color:var(--text-muted);margin-left:4px;flex-shrink:0}
+/* Include / Exclude actions */
+.ie-actions{display:flex;gap:2px;margin-left:auto;flex-shrink:0}
+.ie-btn{padding:3px 7px;font-size:11px;cursor:pointer;border-radius:4px;color:var(--text-muted);transition:all .15s;border:1px solid transparent;white-space:nowrap}
+.ie-btn:hover{background:var(--slate-50);color:var(--text)}
+.ie-btn.active-include{color:var(--emerald-600);background:var(--emerald-50);border-color:var(--emerald-200);font-weight:600}
+.ie-btn.active-exclude{color:var(--red-500);background:var(--red-50);border-color:var(--red-200);font-weight:600}
+/* Include/Exclude chips */
+.ie-chips-area{display:flex;flex-wrap:wrap;gap:4px;padding:6px 12px;border-bottom:1px solid var(--border)}
+.ie-chips-area:empty{display:none;padding:0;border:none}
+.ie-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:16px;font-size:11.5px;font-weight:500;cursor:default}
+.ie-chip-include{background:var(--emerald-50);color:var(--emerald-600);border:1px solid var(--emerald-200)}
+.ie-chip-exclude{background:var(--red-50);color:var(--red-500);border:1px solid var(--red-200)}
+.ie-chip .ie-chip-remove{cursor:pointer;font-size:13px;line-height:1;margin-left:2px;opacity:.6;transition:opacity .15s}
+.ie-chip .ie-chip-remove:hover{opacity:1}
+
 /* ── Chips row ── */
 .chips-row{display:flex;align-items:center;gap:6px;padding:4px 0 8px;flex-wrap:wrap}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 12px;border-radius:20px;font-size:12.5px;font-weight:500;background:var(--brand-bg);color:var(--brand);border:1px solid var(--blue-200);cursor:default;transition:var(--transition)}
@@ -182,18 +211,18 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .detail-meta{display:flex;gap:10px;margin-top:3px;font-size:11px;color:var(--text-muted)}
 .detail-meta span{display:flex;align-items:center;gap:3px}
 .detail-meta .meta-label{color:var(--text-sub);font-weight:500}
-.detail-rev{display:inline-flex;flex-direction:column;gap:4px;min-width:140px;text-align:left}
+.detail-rev{display:flex;flex-direction:column;gap:4px;min-width:140px;text-align:left}
 .detail-rev-top{display:flex;align-items:center;gap:8px}
 .detail-rev-bar{height:6px;border-radius:3px;background:var(--slate-100);width:100%;overflow:hidden}
 .detail-rev-bar-fill{height:100%;border-radius:3px;transition:width .3s}
 .detail-rev-yoy{font-size:10.5px;margin-top:1px}
-.detail-profit{display:inline-flex;flex-direction:column;gap:4px;min-width:120px;text-align:left}
+.detail-profit{display:flex;flex-direction:column;gap:4px;min-width:120px;text-align:left}
 .detail-profit-top{display:flex;align-items:center;gap:6px}
 .detail-profit-rate{display:flex;align-items:center;gap:4px;font-size:10.5px}
 .detail-profit-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .detail-profit-bar{height:4px;border-radius:2px;background:var(--slate-100);width:80px;overflow:hidden}
 .detail-profit-bar-fill{height:100%;border-radius:2px}
-.detail-emp{display:inline-flex;flex-direction:column;gap:4px;min-width:110px;text-align:left}
+.detail-emp{display:flex;flex-direction:column;gap:4px;min-width:110px;text-align:left}
 .detail-emp-top{display:flex;align-items:center;gap:6px}
 .detail-emp-bar{display:flex;gap:1px;align-items:flex-end;height:18px}
 .detail-emp-bar-seg{width:6px;border-radius:1px 1px 0 0;background:var(--blue-200);transition:height .3s}
@@ -663,41 +692,10 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
       </button>
       <div class="filter-dropdown" id="industryDropdown">
-        <div class="filter-dropdown-search"><input placeholder="업종 검색..." oninput="filterDropdownItems(this,'industryDropdown')"></div>
-        <div class="filter-dropdown-body">
-          <div class="filter-dropdown-item" onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)">
-            <div class="fd-check"></div><span class="fd-label">제조업</span><span class="fd-count">10</span><span class="fd-chevron">›</span>
-            <div class="filter-submenu">
-              <div class="filter-dropdown-item checked" onclick="toggleFdCheck(this,event)"><div class="fd-check">✓</div><span class="fd-label">반도체 장비</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item checked" onclick="toggleFdCheck(this,event)"><div class="fd-check">✓</div><span class="fd-label">전자부품</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">신재생에너지</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">식품 제조</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">기계부품</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">화학 소재</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">자동차부품</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">산업용 로봇</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">의료기기</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">태양광</span><span class="fd-count">1</span></div>
-            </div>
-          </div>
-          <div class="filter-dropdown-item" onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)">
-            <div class="fd-check"></div><span class="fd-label">정보통신업</span><span class="fd-count">2</span><span class="fd-chevron">›</span>
-            <div class="filter-submenu">
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">SW 개발</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">물류 IT</span><span class="fd-count">1</span></div>
-            </div>
-          </div>
-          <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)">
-            <div class="fd-check"></div><span class="fd-label">전문과학기술</span><span class="fd-count">1</span>
-          </div>
-          <div class="filter-dropdown-item" onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)">
-            <div class="fd-check"></div><span class="fd-label">기타</span><span class="fd-count">2</span><span class="fd-chevron">›</span>
-            <div class="filter-submenu">
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">AI 솔루션</span><span class="fd-count">1</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">클라우드</span><span class="fd-count">1</span></div>
-            </div>
-          </div>
-        </div>
+        <div class="ie-chips-area" id="industryIeChips"></div>
+        <div class="filter-dropdown-search"><input placeholder="업종 검색..." oninput="searchTreeDropdown('industry',this.value)"></div>
+        <div class="fd-tree-header" id="industryTreeHeader" style="display:none"></div>
+        <div class="filter-dropdown-body" id="industryTreeBody"></div>
       </div>
     </div>
     <div class="filter-dropdown-wrap">
@@ -706,62 +704,23 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
       </button>
       <div class="filter-dropdown" id="productDropdown">
-        <div class="filter-dropdown-search"><input placeholder="생산품 검색..." oninput="filterDropdownItems(this,'productDropdown')"></div>
-        <div class="filter-dropdown-body">
-          <div class="filter-dropdown-item" onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)">
-            <div class="fd-check"></div><span class="fd-label">반도체/전자</span><span class="fd-count">3</span><span class="fd-chevron">›</span>
-            <div class="filter-submenu">
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">반도체 검사장비</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">웨이퍼 프로버</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">PCB</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">센서 모듈</span></div>
-            </div>
-          </div>
-          <div class="filter-dropdown-item" onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)">
-            <div class="fd-check"></div><span class="fd-label">소프트웨어/IT</span><span class="fd-count">4</span><span class="fd-chevron">›</span>
-            <div class="filter-submenu">
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">ERP 솔루션</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">물류관리 플랫폼</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">AI 영상분석</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">MSP/클라우드</span></div>
-            </div>
-          </div>
-          <div class="filter-dropdown-item" onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)">
-            <div class="fd-check"></div><span class="fd-label">에너지</span><span class="fd-count">3</span><span class="fd-chevron">›</span>
-            <div class="filter-submenu">
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">태양광 모듈</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">ESS</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">태양광 셀/인버터</span></div>
-            </div>
-          </div>
-          <div class="filter-dropdown-item" onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)">
-            <div class="fd-check"></div><span class="fd-label">기계/자동차</span><span class="fd-count">3</span><span class="fd-chevron">›</span>
-            <div class="filter-submenu">
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">정밀 절삭공구</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">전장부품</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">협동 로봇</span></div>
-            </div>
-          </div>
-          <div class="filter-dropdown-item" onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)">
-            <div class="fd-check"></div><span class="fd-label">바이오/의료</span><span class="fd-count">2</span><span class="fd-chevron">›</span>
-            <div class="filter-submenu">
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">항체 치료제</span></div>
-              <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)"><div class="fd-check"></div><span class="fd-label">초음파 진단기</span></div>
-            </div>
-          </div>
-          <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)">
-            <div class="fd-check"></div><span class="fd-label">식품 (건강기능식품, HMR)</span><span class="fd-count">1</span>
-          </div>
-          <div class="filter-dropdown-item" onclick="toggleFdCheck(this,event)">
-            <div class="fd-check"></div><span class="fd-label">화학 (코팅제, 접착소재)</span><span class="fd-count">1</span>
-          </div>
-        </div>
+        <div class="ie-chips-area" id="productIeChips"></div>
+        <div class="filter-dropdown-search"><input placeholder="생산품 검색..." oninput="searchTreeDropdown('product',this.value)"></div>
+        <div class="fd-tree-header" id="productTreeHeader" style="display:none"></div>
+        <div class="filter-dropdown-body" id="productTreeBody"></div>
       </div>
     </div>
-    <button class="filter-select" onclick="toggleFilter(this,'지역: 서울')">
-      지역
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
-    </button>
+    <div class="filter-dropdown-wrap">
+      <button class="filter-select" onclick="toggleFilterDropdown('regionDropdown',event)">
+        지역
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-dropdown" id="regionDropdown">
+        <div class="ie-chips-area" id="regionIeChips"></div>
+        <div class="filter-dropdown-search"><input placeholder="지역 검색..." oninput="searchTreeDropdown('region',this.value)"></div>
+        <div class="filter-dropdown-body" id="regionTreeBody"></div>
+      </div>
+    </div>
     <button class="filter-select has-value">
       매출: 100억~500억
       <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
@@ -1781,6 +1740,472 @@ function toggleAllChecks(master){
   updateBulk();
 }
 
+// ══ KSIC 3-DEPTH TREE DATA ══
+var INDUSTRY_TREE = [
+  {code:'C',name:'제조업',children:[
+    {code:'26',name:'전자부품·컴퓨터·통신장비',children:[
+      {code:'261',name:'반도체 제조업',count:12},
+      {code:'262',name:'전자부품 제조업',count:15},
+      {code:'263',name:'컴퓨터 및 주변장치',count:8},
+      {code:'264',name:'통신·방송장비',count:6}
+    ]},
+    {code:'27',name:'의료·정밀·광학기기',children:[
+      {code:'271',name:'의료용 기기',count:5},
+      {code:'272',name:'측정·시험·항해기기',count:4}
+    ]},
+    {code:'28',name:'전기장비',children:[
+      {code:'281',name:'전동기·발전기',count:3},
+      {code:'282',name:'전지 및 축전지',count:9},
+      {code:'289',name:'기타 전기장비',count:2}
+    ]},
+    {code:'29',name:'기타 기계·장비',children:[
+      {code:'291',name:'일반목적용 기계',count:7},
+      {code:'292',name:'특수목적용 기계',count:5}
+    ]},
+    {code:'20',name:'화학물질·화학제품',children:[
+      {code:'201',name:'기초화학물질',count:6},
+      {code:'202',name:'합성고무·플라스틱',count:4},
+      {code:'203',name:'비료·농약·의약',count:3}
+    ]},
+    {code:'21',name:'의약품',children:[
+      {code:'211',name:'의약품 제조업',count:5},
+      {code:'212',name:'의약 원료 제조업',count:3}
+    ]},
+    {code:'10',name:'식료품',children:[
+      {code:'101',name:'도축·육류가공',count:2},
+      {code:'102',name:'수산물 가공',count:1},
+      {code:'107',name:'기타 식품',count:3}
+    ]},
+    {code:'30',name:'자동차·트레일러',children:[
+      {code:'301',name:'자동차용 엔진·부품',count:11},
+      {code:'302',name:'자동차 차체·트레일러',count:4}
+    ]}
+  ]},
+  {code:'J',name:'정보통신업',children:[
+    {code:'58',name:'출판업',children:[
+      {code:'581',name:'서적·잡지 출판',count:2},
+      {code:'582',name:'소프트웨어 출판',count:4}
+    ]},
+    {code:'61',name:'통신업',children:[
+      {code:'611',name:'유선통신업',count:3},
+      {code:'612',name:'무선통신업',count:2}
+    ]},
+    {code:'62',name:'소프트웨어 개발·공급',children:[
+      {code:'620',name:'소프트웨어 개발·공급',count:14}
+    ]},
+    {code:'63',name:'정보서비스업',children:[
+      {code:'631',name:'자료처리·호스팅',count:8},
+      {code:'632',name:'포털·기타 인터넷',count:6}
+    ]}
+  ]},
+  {code:'M',name:'전문·과학·기술 서비스업',children:[
+    {code:'70',name:'연구개발업',children:[
+      {code:'701',name:'자연과학 연구개발',count:7},
+      {code:'702',name:'인문·사회과학 연구개발',count:2}
+    ]},
+    {code:'71',name:'전문 서비스업',children:[
+      {code:'711',name:'법무 서비스',count:1},
+      {code:'713',name:'엔지니어링 서비스',count:6}
+    ]}
+  ]},
+  {code:'G',name:'도매·소매업',children:[
+    {code:'46',name:'도매·상품중개',children:[
+      {code:'461',name:'산업용 기계·장비 도매',count:5},
+      {code:'462',name:'기타 도매',count:3}
+    ]}
+  ]},
+  {code:'D',name:'전기·가스·수도',children:[
+    {code:'35',name:'전기·가스·증기업',children:[
+      {code:'351',name:'전기업',count:4},
+      {code:'352',name:'가스업',count:2}
+    ]}
+  ]}
+];
+
+var PRODUCT_TREE = [
+  {code:'SE',name:'반도체/전자',children:[
+    {code:'SE1',name:'반도체 장비',children:[
+      {code:'SE11',name:'검사장비',count:8},
+      {code:'SE12',name:'프로버',count:5},
+      {code:'SE13',name:'웨이퍼 가공장비',count:6},
+      {code:'SE14',name:'식각/증착장비',count:4}
+    ]},
+    {code:'SE2',name:'반도체 소재',children:[
+      {code:'SE21',name:'웨이퍼',count:7},
+      {code:'SE22',name:'메모리칩',count:9},
+      {code:'SE23',name:'SiC/GaN',count:3}
+    ]},
+    {code:'SE3',name:'전자부품',children:[
+      {code:'SE31',name:'PCB',count:6},
+      {code:'SE32',name:'MLCC/커넥터',count:5},
+      {code:'SE33',name:'센서 모듈',count:4}
+    ]}
+  ]},
+  {code:'SW',name:'소프트웨어/IT',children:[
+    {code:'SW1',name:'엔터프라이즈 SW',children:[
+      {code:'SW11',name:'ERP 솔루션',count:4},
+      {code:'SW12',name:'CRM/SFA',count:3},
+      {code:'SW13',name:'물류관리 플랫폼',count:2}
+    ]},
+    {code:'SW2',name:'AI/데이터',children:[
+      {code:'SW21',name:'AI 영상분석',count:5},
+      {code:'SW22',name:'빅데이터 분석',count:4},
+      {code:'SW23',name:'자연어처리',count:3}
+    ]},
+    {code:'SW3',name:'클라우드/인프라',children:[
+      {code:'SW31',name:'MSP/클라우드',count:6},
+      {code:'SW32',name:'보안 솔루션',count:4}
+    ]}
+  ]},
+  {code:'EN',name:'에너지',children:[
+    {code:'EN1',name:'신재생에너지',children:[
+      {code:'EN11',name:'태양광 모듈',count:5},
+      {code:'EN12',name:'ESS',count:4},
+      {code:'EN13',name:'태양광 셀/인버터',count:3}
+    ]},
+    {code:'EN2',name:'2차전지',children:[
+      {code:'EN21',name:'배터리 셀',count:7},
+      {code:'EN22',name:'양극재/음극재',count:5},
+      {code:'EN23',name:'전해질/분리막',count:3}
+    ]}
+  ]},
+  {code:'ME',name:'기계/자동차',children:[
+    {code:'ME1',name:'산업기계',children:[
+      {code:'ME11',name:'정밀 절삭공구',count:4},
+      {code:'ME12',name:'협동 로봇',count:3},
+      {code:'ME13',name:'산업용 펌프/밸브',count:2}
+    ]},
+    {code:'ME2',name:'자동차부품',children:[
+      {code:'ME21',name:'전장부품',count:6},
+      {code:'ME22',name:'구동계 부품',count:4},
+      {code:'ME23',name:'차체 부품',count:3}
+    ]}
+  ]},
+  {code:'BM',name:'바이오/의료',children:[
+    {code:'BM1',name:'바이오의약',children:[
+      {code:'BM11',name:'항체 치료제',count:5},
+      {code:'BM12',name:'세포 치료제',count:3}
+    ]},
+    {code:'BM2',name:'의료기기',children:[
+      {code:'BM21',name:'초음파 진단기',count:4},
+      {code:'BM22',name:'수술 로봇',count:2}
+    ]}
+  ]},
+  {code:'CH',name:'화학/소재',children:[
+    {code:'CH1',name:'정밀화학',children:[
+      {code:'CH11',name:'코팅제',count:3},
+      {code:'CH12',name:'접착소재',count:2},
+      {code:'CH13',name:'전자재료',count:5}
+    ]}
+  ]},
+  {code:'FD',name:'식품/음료',children:[
+    {code:'FD1',name:'식품',children:[
+      {code:'FD11',name:'건강기능식품',count:3},
+      {code:'FD12',name:'HMR',count:2}
+    ]}
+  ]}
+];
+
+var REGION_LIST = [
+  {code:'seoul',name:'서울',count:42},
+  {code:'gyeonggi',name:'경기',count:35},
+  {code:'incheon',name:'인천',count:8},
+  {code:'daejeon',name:'대전',count:6},
+  {code:'busan',name:'부산',count:7},
+  {code:'daegu',name:'대구',count:5},
+  {code:'gwangju',name:'광주',count:4},
+  {code:'chungnam',name:'충남',count:6},
+  {code:'gyeongbuk',name:'경북',count:5},
+  {code:'jeonbuk',name:'전북',count:3},
+  {code:'chungbuk',name:'충북',count:4},
+  {code:'gyeongnam',name:'경남',count:6},
+  {code:'jeonnam',name:'전남',count:2},
+  {code:'gangwon',name:'강원',count:2},
+  {code:'sejong',name:'세종',count:1},
+  {code:'jeju',name:'제주',count:1}
+];
+
+// ── Tree filter state: {include:[], exclude:[]} per filter ──
+var treeFilterState = {
+  industry: {include:[], exclude:[]},
+  product: {include:[], exclude:[]},
+  region: {include:[], exclude:[]}
+};
+// Track current navigation path per tree
+var treePath = {industry:[], product:[]};
+
+// ── Tree rendering ──
+function getTreeData(filterKey) {
+  if (filterKey === 'industry') return INDUSTRY_TREE;
+  if (filterKey === 'product') return PRODUCT_TREE;
+  return null;
+}
+
+function getNodesAtPath(tree, path) {
+  var nodes = tree;
+  for (var i = 0; i < path.length; i++) {
+    var found = null;
+    for (var j = 0; j < nodes.length; j++) {
+      if (nodes[j].code === path[i]) { found = nodes[j]; break; }
+    }
+    if (!found || !found.children) return [];
+    nodes = found.children;
+  }
+  return nodes;
+}
+
+function isLeafLevel(nodes) {
+  return nodes.length > 0 && !nodes[0].children;
+}
+
+function renderTreeDropdown(filterKey) {
+  var tree = getTreeData(filterKey);
+  var bodyId = filterKey + 'TreeBody';
+  var headerId = filterKey + 'TreeHeader';
+  var body = document.getElementById(bodyId);
+  var header = document.getElementById(headerId);
+  if (!tree) return;
+  var path = treePath[filterKey];
+  var nodes = getNodesAtPath(tree, path);
+  // Render breadcrumb header
+  if (path.length > 0) {
+    var bc = '<div class="fd-tree-back" onclick="treeGoBack(\'' + filterKey + '\')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg> 뒤로</div>';
+    bc += '<div class="fd-tree-breadcrumb">';
+    var fullTree = tree;
+    for (var i = 0; i < path.length; i++) {
+      for (var j = 0; j < fullTree.length; j++) {
+        if (fullTree[j].code === path[i]) {
+          if (i > 0) bc += '<span class="sep">›</span>';
+          bc += '<span onclick="treeGoTo(\'' + filterKey + '\',' + i + ')">' + fullTree[j].name + '</span>';
+          fullTree = fullTree[j].children || [];
+          break;
+        }
+      }
+    }
+    bc += '</div>';
+    header.innerHTML = bc;
+    header.style.display = '';
+  } else {
+    header.style.display = 'none';
+    header.innerHTML = '';
+  }
+  // Render items
+  var html = '';
+  if (isLeafLevel(nodes)) {
+    // Leaf: show Include/Exclude buttons
+    nodes.forEach(function(n) {
+      var incState = treeFilterState[filterKey].include.indexOf(n.code) >= 0 ? ' active-include' : '';
+      var excState = treeFilterState[filterKey].exclude.indexOf(n.code) >= 0 ? ' active-exclude' : '';
+      html += '<div class="fd-tree-item">' +
+        '<span class="fd-label">' + n.name + '</span>' +
+        '<span class="fd-count">' + (n.count||'') + '</span>' +
+        '<div class="ie-actions">' +
+          '<span class="ie-btn' + incState + '" onclick="toggleIeState(\'' + filterKey + '\',\'' + n.code + '\',\'include\',event)">Include</span>' +
+          '<span class="ie-btn' + excState + '" onclick="toggleIeState(\'' + filterKey + '\',\'' + n.code + '\',\'exclude\',event)">Exclude</span>' +
+        '</div></div>';
+    });
+  } else {
+    // Parent: show drill-down items
+    nodes.forEach(function(n) {
+      var childCount = 0;
+      if (n.children) n.children.forEach(function(c) { childCount += (c.count || 0); if(c.children) c.children.forEach(function(cc){childCount += cc.count||0;}); });
+      html += '<div class="fd-tree-item" onclick="treeDrillDown(\'' + filterKey + '\',\'' + n.code + '\')">' +
+        '<span class="fd-label">' + n.name + '</span>' +
+        '<span class="fd-count">' + (childCount || '') + '</span>' +
+        '<span class="fd-chevron">›</span></div>';
+    });
+  }
+  body.innerHTML = html;
+  renderIeChips(filterKey);
+}
+
+function renderRegionDropdown() {
+  var body = document.getElementById('regionTreeBody');
+  var html = '';
+  REGION_LIST.forEach(function(r) {
+    var incState = treeFilterState.region.include.indexOf(r.code) >= 0 ? ' active-include' : '';
+    var excState = treeFilterState.region.exclude.indexOf(r.code) >= 0 ? ' active-exclude' : '';
+    html += '<div class="fd-tree-item">' +
+      '<span class="fd-label">' + r.name + '</span>' +
+      '<span class="fd-count">' + r.count + '</span>' +
+      '<div class="ie-actions">' +
+        '<span class="ie-btn' + incState + '" onclick="toggleIeState(\'region\',\'' + r.code + '\',\'include\',event)">Include</span>' +
+        '<span class="ie-btn' + excState + '" onclick="toggleIeState(\'region\',\'' + r.code + '\',\'exclude\',event)">Exclude</span>' +
+      '</div></div>';
+  });
+  body.innerHTML = html;
+  renderIeChips('region');
+}
+
+function treeDrillDown(filterKey, code) {
+  treePath[filterKey].push(code);
+  renderTreeDropdown(filterKey);
+}
+
+function treeGoBack(filterKey) {
+  treePath[filterKey].pop();
+  renderTreeDropdown(filterKey);
+}
+
+function treeGoTo(filterKey, idx) {
+  treePath[filterKey] = treePath[filterKey].slice(0, idx + 1);
+  renderTreeDropdown(filterKey);
+}
+
+// ── Include/Exclude toggle ──
+function toggleIeState(filterKey, code, action, event) {
+  event.stopPropagation();
+  var state = treeFilterState[filterKey];
+  var list = state[action];
+  var otherAction = action === 'include' ? 'exclude' : 'include';
+  var otherList = state[otherAction];
+  var idx = list.indexOf(code);
+  if (idx >= 0) {
+    list.splice(idx, 1);
+  } else {
+    list.push(code);
+    var otherIdx = otherList.indexOf(code);
+    if (otherIdx >= 0) otherList.splice(otherIdx, 1);
+  }
+  // Re-render
+  if (filterKey === 'region') renderRegionDropdown();
+  else renderTreeDropdown(filterKey);
+  updateFilterButton(filterKey);
+}
+
+function removeIeChip(filterKey, code, action, event) {
+  event.stopPropagation();
+  var list = treeFilterState[filterKey][action];
+  var idx = list.indexOf(code);
+  if (idx >= 0) list.splice(idx, 1);
+  if (filterKey === 'region') renderRegionDropdown();
+  else renderTreeDropdown(filterKey);
+  updateFilterButton(filterKey);
+}
+
+function getNameByCode(filterKey, code) {
+  if (filterKey === 'region') {
+    for (var i = 0; i < REGION_LIST.length; i++) {
+      if (REGION_LIST[i].code === code) return REGION_LIST[i].name;
+    }
+    return code;
+  }
+  var tree = getTreeData(filterKey);
+  return findNameInTree(tree, code) || code;
+}
+
+function findNameInTree(nodes, code) {
+  for (var i = 0; i < nodes.length; i++) {
+    if (nodes[i].code === code) return nodes[i].name;
+    if (nodes[i].children) {
+      var found = findNameInTree(nodes[i].children, code);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+function renderIeChips(filterKey) {
+  var chipsId = filterKey + 'IeChips';
+  var container = document.getElementById(chipsId);
+  if (!container) return;
+  var state = treeFilterState[filterKey];
+  var html = '';
+  state.include.forEach(function(code) {
+    var name = getNameByCode(filterKey, code);
+    html += '<span class="ie-chip ie-chip-include">+ ' + name +
+      '<span class="ie-chip-remove" onclick="removeIeChip(\'' + filterKey + '\',\'' + code + '\',\'include\',event)">&times;</span></span>';
+  });
+  state.exclude.forEach(function(code) {
+    var name = getNameByCode(filterKey, code);
+    html += '<span class="ie-chip ie-chip-exclude">- ' + name +
+      '<span class="ie-chip-remove" onclick="removeIeChip(\'' + filterKey + '\',\'' + code + '\',\'exclude\',event)">&times;</span></span>';
+  });
+  container.innerHTML = html;
+}
+
+function updateFilterButton(filterKey) {
+  var state = treeFilterState[filterKey];
+  var total = state.include.length + state.exclude.length;
+  var dropdownId = filterKey + 'Dropdown';
+  var wrap = document.getElementById(dropdownId);
+  if (!wrap) return;
+  var btn = wrap.parentElement.querySelector('.filter-select');
+  if (!btn) return;
+  var labels = {industry:'업종', product:'생산품', region:'지역'};
+  if (total > 0) {
+    btn.classList.add('has-value');
+    btn.innerHTML = labels[filterKey] + ': ' + total + '개 선택 <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>';
+  } else {
+    btn.classList.remove('has-value');
+    btn.innerHTML = labels[filterKey] + ' <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>';
+  }
+}
+
+// ── Search within tree dropdown ──
+function searchTreeDropdown(filterKey, query) {
+  var q = query.toLowerCase().trim();
+  if (filterKey === 'region') {
+    var body = document.getElementById('regionTreeBody');
+    body.querySelectorAll('.fd-tree-item').forEach(function(el) {
+      var label = el.querySelector('.fd-label');
+      if (!label) return;
+      el.style.display = label.textContent.toLowerCase().indexOf(q) >= 0 ? '' : 'none';
+    });
+    return;
+  }
+  var tree = getTreeData(filterKey);
+  if (!tree) return;
+  if (q === '') {
+    renderTreeDropdown(filterKey);
+    return;
+  }
+  // Search all leaf nodes across all depths
+  var results = [];
+  function searchNodes(nodes, parentPath) {
+    nodes.forEach(function(n) {
+      if (n.children) {
+        searchNodes(n.children, parentPath.concat(n.name));
+      } else {
+        if (n.name.toLowerCase().indexOf(q) >= 0 || parentPath.join(' ').toLowerCase().indexOf(q) >= 0) {
+          results.push({code:n.code, name:n.name, count:n.count||0, path:parentPath.join(' › ')});
+        }
+      }
+    });
+  }
+  searchNodes(tree, []);
+  var bodyId = filterKey + 'TreeBody';
+  var headerId = filterKey + 'TreeHeader';
+  document.getElementById(headerId).style.display = 'none';
+  var body = document.getElementById(bodyId);
+  if (results.length === 0) {
+    body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:12px">검색 결과가 없습니다</div>';
+    return;
+  }
+  var html = '';
+  results.forEach(function(r) {
+    var incState = treeFilterState[filterKey].include.indexOf(r.code) >= 0 ? ' active-include' : '';
+    var excState = treeFilterState[filterKey].exclude.indexOf(r.code) >= 0 ? ' active-exclude' : '';
+    html += '<div class="fd-tree-item">' +
+      '<div style="display:flex;flex-direction:column;flex:1;min-width:0"><span class="fd-label">' + r.name + '</span>' +
+      '<span style="font-size:10px;color:var(--text-muted)">' + r.path + '</span></div>' +
+      '<span class="fd-count">' + r.count + '</span>' +
+      '<div class="ie-actions">' +
+        '<span class="ie-btn' + incState + '" onclick="toggleIeState(\'' + filterKey + '\',\'' + r.code + '\',\'include\',event)">Include</span>' +
+        '<span class="ie-btn' + excState + '" onclick="toggleIeState(\'' + filterKey + '\',\'' + r.code + '\',\'exclude\',event)">Exclude</span>' +
+      '</div></div>';
+  });
+  body.innerHTML = html;
+}
+
+// ── Initialize tree dropdowns on page load ──
+function initTreeDropdowns() {
+  treePath = {industry:[], product:[]};
+  renderTreeDropdown('industry');
+  renderTreeDropdown('product');
+  renderRegionDropdown();
+}
+
 // ══ CHIPS ══
 // ══ FILTER DROPDOWN (Notion-style) ══
 function toggleFilterDropdown(id,event){
@@ -1789,7 +2214,16 @@ function toggleFilterDropdown(id,event){
   var wasOpen = dd.classList.contains('open');
   // Close all dropdowns first
   document.querySelectorAll('.filter-dropdown').forEach(function(d){ d.classList.remove('open'); });
-  if(!wasOpen) dd.classList.add('open');
+  if(!wasOpen) {
+    dd.classList.add('open');
+    // Reset tree path and re-render when opening
+    if (id === 'industryDropdown') { treePath.industry = []; renderTreeDropdown('industry'); }
+    else if (id === 'productDropdown') { treePath.product = []; renderTreeDropdown('product'); }
+    else if (id === 'regionDropdown') { renderRegionDropdown(); }
+    // Clear search input
+    var si = dd.querySelector('.filter-dropdown-search input');
+    if (si) si.value = '';
+  }
 }
 function toggleFdCheck(item,event){
   event.stopPropagation();
@@ -2028,6 +2462,7 @@ renderSortPanel();
 syncColumnsWithFilters();
 renderTable();
 highlightActiveAdvFilters();
+initTreeDropdowns();
 </script>
 
 <!-- ══════════════════════════════════════════════════════════════════

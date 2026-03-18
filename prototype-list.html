@@ -191,6 +191,35 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .ap-search-tip a{color:var(--brand);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:3px}
 .ap-search-tip a:hover{text-decoration:underline}
 
+/* ── Tree navigation (3-depth drill-down) ── */
+.ap-tree-header{display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:11.5px;color:var(--text-sub);border-bottom:1px solid var(--border-light)}
+.ap-tree-back{cursor:pointer;display:flex;align-items:center;gap:3px;color:var(--brand);font-weight:500;transition:color .15s}
+.ap-tree-back:hover{color:var(--blue-700)}
+.ap-tree-back svg{width:12px;height:12px}
+.ap-tree-breadcrumb{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--text-muted)}
+.ap-tree-breadcrumb span{cursor:pointer;transition:color .15s}
+.ap-tree-breadcrumb span:hover{color:var(--brand)}
+.ap-tree-breadcrumb .sep{cursor:default;color:var(--text-muted)}
+.ap-tree-item{display:flex;align-items:center;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:background .1s;user-select:none}
+.ap-tree-item:hover{background:rgba(0,0,0,.03)}
+.ap-tree-item .ap-tree-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-tree-item .ap-tree-count{font-size:10.5px;color:var(--text-muted);margin-left:8px}
+.ap-tree-item .ap-tree-chevron{font-size:13px;color:var(--text-muted);margin-left:4px;flex-shrink:0}
+/* Include / Exclude actions */
+.ie-actions{display:flex;gap:2px;margin-left:auto;flex-shrink:0}
+.ie-btn{padding:2px 6px;font-size:10.5px;cursor:pointer;border-radius:3px;color:var(--text-muted);transition:all .15s;border:1px solid transparent;white-space:nowrap}
+.ie-btn:hover{background:var(--slate-100);color:var(--text)}
+.ie-btn.active-include{color:var(--emerald-600);background:var(--emerald-50);border-color:var(--emerald-200);font-weight:600}
+.ie-btn.active-exclude{color:var(--red-500);background:var(--red-50);border-color:var(--red-200);font-weight:600}
+/* Include/Exclude chips */
+.ie-chips-area{display:flex;flex-wrap:wrap;gap:4px;padding:6px 14px;border-bottom:1px solid var(--border-light)}
+.ie-chips-area:empty{display:none;padding:0;border:none}
+.ie-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:12px;font-size:10.5px;font-weight:500;cursor:default}
+.ie-chip-include{background:var(--emerald-50);color:var(--emerald-600);border:1px solid var(--emerald-200)}
+.ie-chip-exclude{background:var(--red-50);color:var(--red-500);border:1px solid var(--red-200)}
+.ie-chip .ie-chip-remove{cursor:pointer;font-size:12px;line-height:1;margin-left:1px;opacity:.6;transition:opacity .15s}
+.ie-chip .ie-chip-remove:hover{opacity:1}
+
 /* TABLE */
 /* DENSITY TOGGLE */
 .density-toggle{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
@@ -653,6 +682,7 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3.5h10M4 7h6M5.5 10.5h3"/></svg>
         </div>
         <button class="ap-chip" data-filter="industry" onclick="openApFilter('industry')">업종 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="product" onclick="openApFilter('product')">생산품 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
         <button class="ap-chip" data-filter="region" onclick="openApFilter('region')">지역 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
         <button class="ap-chip" data-filter="revenue" onclick="openApFilter('revenue')">매출 규모 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
         <button class="ap-chip" data-filter="type" onclick="openApFilter('type')">기업유형 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
@@ -718,7 +748,6 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
             <th>영업이익 · 이익률 · YoY</th>
             <th>직원수</th>
             <th>설립년도</th>
-            <th>점수</th>
             <th>메모</th>
             <th class="td-actions"></th>
           </tr>
@@ -857,8 +886,7 @@ var SORT_COLUMNS = [
   {key:'profit', label:'영업이익 · 이익률 · YoY'},
   {key:'profitG', label:'영업이익 증감률'},
   {key:'emp', label:'직원수'},
-  {key:'year', label:'설립년도'},
-  {key:'score', label:'점수'}
+  {key:'year', label:'설립년도'}
 ];
 
 function toggleSortPanel(e) {
@@ -1010,16 +1038,15 @@ function renderTable() {
   var list = lists[currentList];
   var thead = document.querySelector('#listTable thead tr');
   if(mode === 'compact'){
-    thead.innerHTML = '<th class="td-rank">#</th><th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this.checked)"></th><th>기업명</th><th>업종</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY</th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY</th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'score\')">점수</th><th class="td-actions"></th>';
+    thead.innerHTML = '<th class="td-rank">#</th><th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this.checked)"></th><th>기업명</th><th>업종</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th>생산품</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY</th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY</th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="td-actions"></th>';
   } else if(mode === 'spacious'){
-    thead.innerHTML = '<th class="td-rank">#</th><th class="td-drag"></th><th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this.checked)"></th><th>기업명</th><th>업종</th><th>생산품</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th class="th-sortable" onclick="showColSort(event,\'score\')">점수</th><th>메모</th><th class="td-actions"></th>';
+    thead.innerHTML = '<th class="td-rank">#</th><th class="td-drag"></th><th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this.checked)"></th><th>기업명</th><th>업종</th><th>생산품</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th>메모</th><th class="td-actions"></th>';
   } else {
-    thead.innerHTML = '<th class="td-rank">#</th><th class="td-drag"></th><th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this.checked)"></th><th>기업명</th><th>업종</th><th>생산품</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th class="th-sortable" onclick="showColSort(event,\'score\')">점수</th><th>메모</th><th class="td-actions"></th>';
+    thead.innerHTML = '<th class="td-rank">#</th><th class="td-drag"></th><th class="td-check"><input type="checkbox" onchange="toggleAllChecks(this.checked)"></th><th>기업명</th><th>업종</th><th>생산품</th><th>지역</th><th class="th-sortable" onclick="showColSort(event,\'views\')">조회수</th><th class="th-sortable" onclick="showColSort(event,\'revenue\')">매출액 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'profit\')">영업이익 · 이익률 · YoY<div style="font-size:10px;font-weight:400;color:var(--text-muted)">최신년도 기준</div></th><th class="th-sortable" onclick="showColSort(event,\'emp\')">직원수</th><th class="th-sortable" onclick="showColSort(event,\'year\')">설립년도</th><th>메모</th><th class="td-actions"></th>';
   }
   var body = document.getElementById('listBody');
   body.innerHTML = '';
   list.companies.forEach(function(c, i) {
-    var sc = c.score >= 80 ? 'high' : c.score >= 60 ? 'mid' : 'low';
     var ic = INDUSTRY_COLORS[c.industry] || ['var(--slate-50)','var(--slate-600)'];
     var logoColor = c.color || COLORS[i % COLORS.length];
     var profitClass = c.profit >= 0 ? 'trend-up' : 'trend-down';
@@ -1052,7 +1079,6 @@ function renderTable() {
         '<td style="font-weight:600;font-size:12px;white-space:nowrap">' + c.revenue + '억 <span class="revenue-yoy ' + revenueGClass + '" style="font-size:10.5px">' + revenueGArrow + ' ' + revenueGText + '</span></td>' +
         '<td class="profit-cell"><span class="profit-val ' + profitClass + '" style="font-size:12px">' + c.profit + '억</span> <span style="font-size:10.5px;color:var(--text-sub)">(' + margin + '%)</span> <span class="' + profitClass + '" style="font-size:10.5px">' + profitArrow + ' ' + profitGText + '</span></td>' +
         '<td style="font-size:12px">' + c.emp + '명 <span class="emp-growth ' + empGClass + '" style="font-size:10px"><span class="emp-yoy-label">YoY</span>' + (c.empG >= 0 ? '+' : '') + c.empG + '%</span></td>' +
-        '<td><span class="score-badge ' + sc + '">' + c.score + '</span></td>' +
         '<td class="td-actions"><button class="delete-btn" onclick="deleteRow(' + i + ')" title="리스트에서 제거">&#x2715;</button></td>';
     } else if(mode === 'spacious'){
       var profitRate = (c.profit / c.revenue * 100).toFixed(1);
@@ -1090,7 +1116,6 @@ function renderTable() {
         '<td><div class="detail-profit"><div class="detail-profit-top"><span class="profit-val ' + profitClass + '">' + c.profit + '억</span><span class="revenue-yoy ' + profitClass + '">' + profitArrow + ' ' + profitGText + '</span></div><div class="detail-profit-rate"><div class="detail-profit-dot" style="background:' + profitDotColor + '"></div><span>영업이익률 ' + profitRate + '%</span></div>' + profBarDot + '</div></td>' +
         '<td><div class="detail-emp"><div class="detail-emp-top"><span>' + c.emp + '명</span><span class="emp-growth ' + empGClass + '" style="font-size:11px"><span class="emp-yoy-label">YoY </span>' + (c.empG >= 0 ? '+' : '') + c.empG + '%</span></div><div class="detail-emp-bar">' + empBars + '</div></div></td>' +
         '<td class="year-cell">' + c.year + '</td>' +
-        '<td><span class="score-badge ' + sc + '">' + c.score + '</span></td>' +
         '<td class="td-memo"><input class="memo-input" value="' + (c.memo || '') + '" placeholder="메모 추가..." onchange="updateMemo(' + i + ',this.value)"></td>' +
         '<td class="td-actions"><button class="delete-btn" onclick="deleteRow(' + i + ')" title="리스트에서 제거">&#x2715;</button></td>';
     } else {
@@ -1107,7 +1132,6 @@ function renderTable() {
         '<td class="profit-cell"><span class="profit-val ' + profitClass + '">' + c.profit + '억</span> <span style="font-size:11px;color:var(--text-sub)">' + margin + '%</span> <span class="emp-growth ' + profitClass + '" style="font-size:11px">' + profitArrow + ' ' + profitGText + '</span></td>' +
         '<td class="emp-cell">' + c.emp + '명 <span class="emp-growth ' + empGClass + '"><span class="emp-yoy-label">YoY </span>' + (c.empG >= 0 ? '+' : '') + c.empG + '%</span></td>' +
         '<td class="year-cell">' + c.year + '</td>' +
-        '<td><span class="score-badge ' + sc + '">' + c.score + '</span></td>' +
         '<td class="td-memo"><input class="memo-input" value="' + (c.memo || '') + '" placeholder="메모 추가..." onchange="updateMemo(' + i + ',this.value)"></td>' +
         '<td class="td-actions"><button class="delete-btn" onclick="deleteRow(' + i + ')" title="리스트에서 제거">&#x2715;</button></td>';
     }
@@ -1222,20 +1246,202 @@ function updateSidebarCount() {
 }
 
 // ── ADD COMPANY MODAL (LinkedIn mobile-style) ──
-var apFilterState = {industry:[],region:[],revenue:[],type:[],emp:[]};
+// ── Include/Exclude state for tree-based filters ──
+var apIeState = {
+  industry:{include:[],exclude:[]},
+  product:{include:[],exclude:[]},
+  region:{include:[],exclude:[]}
+};
+// Flat filter state for non-tree filters
+var apFilterState = {revenue:[],type:[],emp:[]};
 var apAddedNames = [];
+
+// ── KSIC 3-DEPTH TREE DATA ──
+var INDUSTRY_TREE = [
+  {code:'C',name:'제조업',children:[
+    {code:'26',name:'전자부품·컴퓨터·통신장비',children:[
+      {code:'261',name:'반도체 제조업',count:12},
+      {code:'262',name:'전자부품 제조업',count:15},
+      {code:'263',name:'컴퓨터 및 주변장치',count:8},
+      {code:'264',name:'통신·방송장비',count:6}
+    ]},
+    {code:'27',name:'의료·정밀·광학기기',children:[
+      {code:'271',name:'의료용 기기',count:5},
+      {code:'272',name:'측정·시험·항해기기',count:4}
+    ]},
+    {code:'28',name:'전기장비',children:[
+      {code:'281',name:'전동기·발전기',count:3},
+      {code:'282',name:'전지 및 축전지',count:9},
+      {code:'289',name:'기타 전기장비',count:2}
+    ]},
+    {code:'29',name:'기타 기계·장비',children:[
+      {code:'291',name:'일반목적용 기계',count:7},
+      {code:'292',name:'특수목적용 기계',count:5}
+    ]},
+    {code:'20',name:'화학물질·화학제품',children:[
+      {code:'201',name:'기초화학물질',count:6},
+      {code:'202',name:'합성고무·플라스틱',count:4},
+      {code:'203',name:'비료·농약·의약',count:3}
+    ]},
+    {code:'21',name:'의약품',children:[
+      {code:'211',name:'의약품 제조업',count:5},
+      {code:'212',name:'의약 원료 제조업',count:3}
+    ]},
+    {code:'10',name:'식료품',children:[
+      {code:'101',name:'도축·육류가공',count:2},
+      {code:'102',name:'수산물 가공',count:1},
+      {code:'107',name:'기타 식품',count:3}
+    ]},
+    {code:'30',name:'자동차·트레일러',children:[
+      {code:'301',name:'자동차용 엔진·부품',count:11},
+      {code:'302',name:'자동차 차체·트레일러',count:4}
+    ]}
+  ]},
+  {code:'J',name:'정보통신업',children:[
+    {code:'58',name:'출판업',children:[
+      {code:'581',name:'서적·잡지 출판',count:2},
+      {code:'582',name:'소프트웨어 출판',count:4}
+    ]},
+    {code:'61',name:'통신업',children:[
+      {code:'611',name:'유선통신업',count:3},
+      {code:'612',name:'무선통신업',count:2}
+    ]},
+    {code:'62',name:'소프트웨어 개발·공급',children:[
+      {code:'620',name:'소프트웨어 개발·공급',count:14}
+    ]},
+    {code:'63',name:'정보서비스업',children:[
+      {code:'631',name:'자료처리·호스팅',count:8},
+      {code:'632',name:'포털·기타 인터넷',count:6}
+    ]}
+  ]},
+  {code:'M',name:'전문·과학·기술 서비스업',children:[
+    {code:'70',name:'연구개발업',children:[
+      {code:'701',name:'자연과학 연구개발',count:7},
+      {code:'702',name:'인문·사회과학 연구개발',count:2}
+    ]},
+    {code:'71',name:'전문 서비스업',children:[
+      {code:'711',name:'법무 서비스',count:1},
+      {code:'713',name:'엔지니어링 서비스',count:6}
+    ]}
+  ]},
+  {code:'G',name:'도매·소매업',children:[
+    {code:'46',name:'도매·상품중개',children:[
+      {code:'461',name:'산업용 기계·장비 도매',count:5},
+      {code:'462',name:'기타 도매',count:3}
+    ]}
+  ]},
+  {code:'D',name:'전기·가스·수도',children:[
+    {code:'35',name:'전기·가스·증기업',children:[
+      {code:'351',name:'전기업',count:4},
+      {code:'352',name:'가스업',count:2}
+    ]}
+  ]}
+];
+
+var PRODUCT_TREE = [
+  {code:'SE',name:'반도체/전자',children:[
+    {code:'SE1',name:'반도체 장비',children:[
+      {code:'SE11',name:'검사장비',count:8},
+      {code:'SE12',name:'프로버',count:5},
+      {code:'SE13',name:'웨이퍼 가공장비',count:6},
+      {code:'SE14',name:'식각/증착장비',count:4}
+    ]},
+    {code:'SE2',name:'반도체 소재',children:[
+      {code:'SE21',name:'웨이퍼',count:7},
+      {code:'SE22',name:'메모리칩',count:9},
+      {code:'SE23',name:'SiC/GaN',count:3}
+    ]},
+    {code:'SE3',name:'전자부품',children:[
+      {code:'SE31',name:'PCB',count:6},
+      {code:'SE32',name:'MLCC/커넥터',count:5},
+      {code:'SE33',name:'센서 모듈',count:4}
+    ]}
+  ]},
+  {code:'SW',name:'소프트웨어/IT',children:[
+    {code:'SW1',name:'엔터프라이즈 SW',children:[
+      {code:'SW11',name:'ERP 솔루션',count:4},
+      {code:'SW12',name:'CRM/SFA',count:3},
+      {code:'SW13',name:'물류관리 플랫폼',count:2}
+    ]},
+    {code:'SW2',name:'AI/데이터',children:[
+      {code:'SW21',name:'AI 영상분석',count:5},
+      {code:'SW22',name:'빅데이터 분석',count:4},
+      {code:'SW23',name:'자연어처리',count:3}
+    ]},
+    {code:'SW3',name:'클라우드/인프라',children:[
+      {code:'SW31',name:'MSP/클라우드',count:6},
+      {code:'SW32',name:'보안 솔루션',count:4}
+    ]}
+  ]},
+  {code:'EN',name:'에너지',children:[
+    {code:'EN1',name:'신재생에너지',children:[
+      {code:'EN11',name:'태양광 모듈',count:5},
+      {code:'EN12',name:'ESS',count:4},
+      {code:'EN13',name:'태양광 셀/인버터',count:3}
+    ]},
+    {code:'EN2',name:'2차전지',children:[
+      {code:'EN21',name:'배터리 셀',count:7},
+      {code:'EN22',name:'양극재/음극재',count:5},
+      {code:'EN23',name:'전해질/분리막',count:3}
+    ]}
+  ]},
+  {code:'ME',name:'기계/자동차',children:[
+    {code:'ME1',name:'산업기계',children:[
+      {code:'ME11',name:'정밀 절삭공구',count:4},
+      {code:'ME12',name:'협동 로봇',count:3},
+      {code:'ME13',name:'산업용 펌프/밸브',count:2}
+    ]},
+    {code:'ME2',name:'자동차부품',children:[
+      {code:'ME21',name:'전장부품',count:6},
+      {code:'ME22',name:'구동계 부품',count:4},
+      {code:'ME23',name:'차체 부품',count:3}
+    ]}
+  ]},
+  {code:'BM',name:'바이오/의료',children:[
+    {code:'BM1',name:'바이오의약',children:[
+      {code:'BM11',name:'항체 치료제',count:5},
+      {code:'BM12',name:'세포 치료제',count:3}
+    ]},
+    {code:'BM2',name:'의료기기',children:[
+      {code:'BM21',name:'초음파 진단기',count:4},
+      {code:'BM22',name:'수술 로봇',count:2}
+    ]}
+  ]},
+  {code:'CH',name:'화학/소재',children:[
+    {code:'CH1',name:'정밀화학',children:[
+      {code:'CH11',name:'코팅제',count:3},
+      {code:'CH12',name:'접착소재',count:2},
+      {code:'CH13',name:'전자재료',count:5}
+    ]}
+  ]},
+  {code:'FD',name:'식품/음료',children:[
+    {code:'FD1',name:'식품',children:[
+      {code:'FD11',name:'건강기능식품',count:3},
+      {code:'FD12',name:'HMR',count:2}
+    ]}
+  ]}
+];
+
+var REGION_LIST = [
+  {code:'seoul',name:'서울',count:42},
+  {code:'gyeonggi',name:'경기',count:35},
+  {code:'incheon',name:'인천',count:8},
+  {code:'daejeon',name:'대전',count:6},
+  {code:'busan',name:'부산',count:7},
+  {code:'daegu',name:'대구',count:5},
+  {code:'gwangju',name:'광주',count:4},
+  {code:'chungnam',name:'충남',count:6},
+  {code:'gyeongbuk',name:'경북',count:5},
+  {code:'jeonbuk',name:'전북',count:3},
+  {code:'chungbuk',name:'충북',count:4},
+  {code:'gyeongnam',name:'경남',count:6},
+  {code:'jeonnam',name:'전남',count:2},
+  {code:'gangwon',name:'강원',count:2},
+  {code:'sejong',name:'세종',count:1},
+  {code:'jeju',name:'제주',count:1}
+];
+
 var AP_FILTERS = {
-  industry:{title:'업종',search:true,options:[
-    {label:'반도체장비',count:12},{label:'반도체설계',count:8},{label:'전자부품',count:15},
-    {label:'디스플레이',count:6},{label:'2차전지',count:9},{label:'자동차부품',count:11},
-    {label:'기계/장비',count:7},{label:'화학/소재',count:10},{label:'바이오/의료',count:5},
-    {label:'소프트웨어',count:14},{label:'AI/빅데이터',count:8},{label:'식품/음료',count:4}
-  ]},
-  region:{title:'지역',search:true,options:[
-    {label:'서울',count:42},{label:'경기',count:35},{label:'인천',count:8},
-    {label:'대전',count:6},{label:'부산',count:7},{label:'대구',count:5},
-    {label:'광주',count:4},{label:'충남',count:6},{label:'경북',count:5},{label:'전북',count:3}
-  ]},
   revenue:{title:'매출 규모',search:false,options:[
     {label:'10억 미만',count:18},{label:'10억~50억',count:24},{label:'50억~100억',count:19},
     {label:'100억~500억',count:31},{label:'500억~1,000억',count:15},{label:'1,000억 이상',count:8}
@@ -1249,6 +1455,10 @@ var AP_FILTERS = {
     {label:'100~300명',count:14},{label:'300~1,000명',count:8},{label:'1,000명 이상',count:5}
   ]}
 };
+
+// Tree navigation state
+var apTreePath = {industry:[], product:[]};
+var AP_TREE_FILTERS = ['industry','product','region'];
 var AP_ALL_COMPANIES = [
   {name:'한솔네오텍',type:'비상장',industry:'반도체장비',region:'경기',revenue:180,emp:85,color:'#0D9488'},
   {name:'유니셈',type:'상장',industry:'반도체장비',region:'경기',revenue:320,emp:210,color:'#EA580C'},
@@ -1273,7 +1483,9 @@ function toggleAddPanel() {
   var panel = document.getElementById('apPanel');
   var isOpen = panel.classList.contains('open');
   if (isOpen) { closeAddPanel(); return; }
-  apFilterState = {industry:[],region:[],revenue:[],type:[],emp:[]};
+  apIeState = {industry:{include:[],exclude:[]},product:{include:[],exclude:[]},region:{include:[],exclude:[]}};
+  apFilterState = {revenue:[],type:[],emp:[]};
+  apTreePath = {industry:[], product:[]};
   apAddedNames = [];
   document.getElementById('apSearchInput').value = '';
   document.getElementById('apExpand').classList.remove('open');
@@ -1293,15 +1505,21 @@ function closeAddPanel() {
 }
 
 function updateApChips() {
+  var titles = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',type:'기업유형',emp:'직원수'};
   document.querySelectorAll('.ap-chip').forEach(function(chip) {
     var key = chip.getAttribute('data-filter');
-    var vals = apFilterState[key];
-    if (vals && vals.length > 0) {
+    var count = 0;
+    if (AP_TREE_FILTERS.indexOf(key) >= 0) {
+      count = apIeState[key].include.length + apIeState[key].exclude.length;
+    } else if (apFilterState[key]) {
+      count = apFilterState[key].length;
+    }
+    if (count > 0) {
       chip.classList.add('active');
-      chip.childNodes[0].textContent = AP_FILTERS[key].title + ': ' + (vals.length === 1 ? vals[0] : vals.length + '개') + ' ';
+      chip.childNodes[0].textContent = titles[key] + ': ' + count + '개 선택 ';
     } else {
       chip.classList.remove('active');
-      chip.childNodes[0].textContent = AP_FILTERS[key].title + ' ';
+      chip.childNodes[0].textContent = titles[key] + ' ';
     }
   });
 }
@@ -1310,14 +1528,42 @@ function apSearch() {
   var q = document.getElementById('apSearchInput').value.trim().toLowerCase();
   var results = AP_ALL_COMPANIES.filter(function(c) {
     if (q && c.name.toLowerCase().indexOf(q) < 0 && c.industry.toLowerCase().indexOf(q) < 0 && c.region.toLowerCase().indexOf(q) < 0) return false;
-    if (apFilterState.industry.length && apFilterState.industry.indexOf(c.industry) < 0) return false;
-    if (apFilterState.region.length && apFilterState.region.indexOf(c.region) < 0) return false;
-    if (apFilterState.type.length) {
+    // Industry include/exclude (match by name since AP_ALL_COMPANIES uses name-based industry)
+    var indInc = apIeState.industry.include;
+    var indExc = apIeState.industry.exclude;
+    if (indInc.length) {
+      var incNames = indInc.map(function(code){return apFindNameInTree(INDUSTRY_TREE,code)||code;});
+      var match = false;
+      incNames.forEach(function(n){ if(c.industry.indexOf(n)>=0 || n.indexOf(c.industry)>=0) match=true; });
+      if(!match) return false;
+    }
+    if (indExc.length) {
+      var excNames = indExc.map(function(code){return apFindNameInTree(INDUSTRY_TREE,code)||code;});
+      var excluded = false;
+      excNames.forEach(function(n){ if(c.industry.indexOf(n)>=0 || n.indexOf(c.industry)>=0) excluded=true; });
+      if(excluded) return false;
+    }
+    // Region include/exclude
+    var regInc = apIeState.region.include;
+    var regExc = apIeState.region.exclude;
+    if (regInc.length) {
+      var regNames = regInc.map(function(code){ for(var i=0;i<REGION_LIST.length;i++){if(REGION_LIST[i].code===code)return REGION_LIST[i].name;} return code; });
+      var match = false;
+      regNames.forEach(function(n){ if(c.region.indexOf(n)>=0) match=true; });
+      if(!match) return false;
+    }
+    if (regExc.length) {
+      var regNames = regExc.map(function(code){ for(var i=0;i<REGION_LIST.length;i++){if(REGION_LIST[i].code===code)return REGION_LIST[i].name;} return code; });
+      var excluded = false;
+      regNames.forEach(function(n){ if(c.region.indexOf(n)>=0) excluded=true; });
+      if(excluded) return false;
+    }
+    if (apFilterState.type && apFilterState.type.length) {
       var match = false;
       apFilterState.type.forEach(function(t) { if (c.type.indexOf(t.replace('/주식회사','').replace('/유한회사','')) >= 0) match = true; });
       if (!match) return false;
     }
-    if (apFilterState.revenue.length) {
+    if (apFilterState.revenue && apFilterState.revenue.length) {
       var match = false;
       apFilterState.revenue.forEach(function(r) {
         if (r === '10억 미만' && c.revenue < 10) match = true;
@@ -1329,7 +1575,7 @@ function apSearch() {
       });
       if (!match) return false;
     }
-    if (apFilterState.emp.length) {
+    if (apFilterState.emp && apFilterState.emp.length) {
       var match = false;
       apFilterState.emp.forEach(function(e) {
         if (e === '10명 미만' && c.emp < 10) match = true;
@@ -1346,10 +1592,22 @@ function apSearch() {
   renderApResults(results);
 }
 
+function apFindNameInTree(nodes, code) {
+  for (var i = 0; i < nodes.length; i++) {
+    if (nodes[i].code === code) return nodes[i].name;
+    if (nodes[i].children) {
+      var found = apFindNameInTree(nodes[i].children, code);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
 function renderApResults(results) {
   var existingNames = lists[currentList].companies.map(function(c){return c.name;});
   var info = document.getElementById('apResultsInfo');
   var activeCount = 0;
+  AP_TREE_FILTERS.forEach(function(k){activeCount += apIeState[k].include.length + apIeState[k].exclude.length;});
   Object.keys(apFilterState).forEach(function(k){activeCount += apFilterState[k].length;});
   info.textContent = results.length + '개 기업' + (activeCount ? ' · 필터 ' + activeCount + '개 적용' : '');
   var list = document.getElementById('apResultsList');
@@ -1412,12 +1670,26 @@ function updateApFooter() {
 }
 
 // ── Inline Filter Expansion Logic ──
+// Tree helpers
+function apGetNodesAtPath(tree, path) {
+  var nodes = tree;
+  for (var i = 0; i < path.length; i++) {
+    var found = null;
+    for (var j = 0; j < nodes.length; j++) {
+      if (nodes[j].code === path[i]) { found = nodes[j]; break; }
+    }
+    if (!found || !found.children) return [];
+    nodes = found.children;
+  }
+  return nodes;
+}
+function apIsLeafLevel(nodes) { return nodes.length > 0 && !nodes[0].children; }
+
 function openApFilter(key) {
   var expand = document.getElementById('apExpand');
   var title = document.getElementById('apExpandTitle');
   var content = document.getElementById('apExpandContent');
 
-  // Toggle: clicking same chip again closes
   if (currentApFilter === key && expand.classList.contains('open')) {
     closeApFilter();
     return;
@@ -1426,17 +1698,18 @@ function openApFilter(key) {
 
   if (key === 'all') {
     title.textContent = '전체 필터';
+    var allFilters = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',type:'기업유형',emp:'직원수'};
     var html = '';
-    Object.keys(AP_FILTERS).forEach(function(k) {
-      var f = AP_FILTERS[k];
-      var count = apFilterState[k].length;
+    Object.keys(allFilters).forEach(function(k) {
+      var count = 0;
+      if (AP_TREE_FILTERS.indexOf(k) >= 0) count = apIeState[k].include.length + apIeState[k].exclude.length;
+      else if (apFilterState[k]) count = apFilterState[k].length;
       html += '<div class="ap-expand-cat" onclick="openApFilter(\'' + k + '\')">' +
-        '<span class="ap-expand-cat-name">' + f.title + '</span>' +
+        '<span class="ap-expand-cat-name">' + allFilters[k] + '</span>' +
         '<div class="ap-expand-cat-info">' +
           (count ? '<span class="ap-expand-cat-badge" style="color:var(--brand)">' + count + '개 선택</span>' : '<span class="ap-expand-cat-badge" style="color:var(--text-muted)">전체</span>') +
           '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 2l4 4-4 4"/></svg>' +
-        '</div>' +
-      '</div>';
+        '</div></div>';
     });
     content.innerHTML = html;
     expand.classList.add('open');
@@ -1444,6 +1717,22 @@ function openApFilter(key) {
     return;
   }
 
+  // Tree-based filters: industry, product, region
+  if (AP_TREE_FILTERS.indexOf(key) >= 0) {
+    var titles = {industry:'업종',product:'생산품',region:'지역'};
+    title.textContent = titles[key];
+    if (key === 'region') {
+      renderApRegionFilter(content);
+    } else {
+      apTreePath[key] = [];
+      renderApTreeFilter(key, content);
+    }
+    expand.classList.add('open');
+    highlightActiveChip(key);
+    return;
+  }
+
+  // Flat filters: revenue, type, emp
   var filter = AP_FILTERS[key];
   if (!filter) return;
   title.textContent = filter.title;
@@ -1463,6 +1752,201 @@ function openApFilter(key) {
   content.innerHTML = html;
   expand.classList.add('open');
   highlightActiveChip(key);
+}
+
+function renderApTreeFilter(filterKey, container) {
+  var tree = filterKey === 'industry' ? INDUSTRY_TREE : PRODUCT_TREE;
+  var path = apTreePath[filterKey];
+  var nodes = apGetNodesAtPath(tree, path);
+  var html = '';
+
+  // IE chips at top
+  html += renderApIeChipsHtml(filterKey);
+
+  // Search
+  html += '<div class="ap-expand-search"><input placeholder="검색..." oninput="apSearchTree(\'' + filterKey + '\',this.value)"></div>';
+
+  // Breadcrumb
+  if (path.length > 0) {
+    html += '<div class="ap-tree-header">';
+    html += '<div class="ap-tree-back" onclick="apTreeBack(\'' + filterKey + '\')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg> 뒤로</div>';
+    html += '<div class="ap-tree-breadcrumb">';
+    var walk = tree;
+    for (var i = 0; i < path.length; i++) {
+      for (var j = 0; j < walk.length; j++) {
+        if (walk[j].code === path[i]) {
+          if (i > 0) html += '<span class="sep">›</span>';
+          html += '<span onclick="apTreeGoTo(\'' + filterKey + '\',' + i + ')">' + walk[j].name + '</span>';
+          walk = walk[j].children || [];
+          break;
+        }
+      }
+    }
+    html += '</div></div>';
+  }
+
+  // Items
+  html += '<div class="ap-expand-opts" id="apTreeOpts">';
+  if (apIsLeafLevel(nodes)) {
+    nodes.forEach(function(n) {
+      var incState = apIeState[filterKey].include.indexOf(n.code) >= 0 ? ' active-include' : '';
+      var excState = apIeState[filterKey].exclude.indexOf(n.code) >= 0 ? ' active-exclude' : '';
+      html += '<div class="ap-tree-item"><span class="ap-tree-label">' + n.name + '</span>' +
+        '<span class="ap-tree-count">' + (n.count||'') + '</span>' +
+        '<div class="ie-actions">' +
+          '<span class="ie-btn' + incState + '" onclick="apToggleIe(\'' + filterKey + '\',\'' + n.code + '\',\'include\')">Include</span>' +
+          '<span class="ie-btn' + excState + '" onclick="apToggleIe(\'' + filterKey + '\',\'' + n.code + '\',\'exclude\')">Exclude</span>' +
+        '</div></div>';
+    });
+  } else {
+    nodes.forEach(function(n) {
+      var childCount = 0;
+      if (n.children) n.children.forEach(function(c) { childCount += (c.count||0); if(c.children) c.children.forEach(function(cc){childCount += cc.count||0;}); });
+      html += '<div class="ap-tree-item" onclick="apTreeDrill(\'' + filterKey + '\',\'' + n.code + '\')">' +
+        '<span class="ap-tree-label">' + n.name + '</span>' +
+        '<span class="ap-tree-count">' + (childCount||'') + '</span>' +
+        '<span class="ap-tree-chevron">›</span></div>';
+    });
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function renderApRegionFilter(container) {
+  var html = '';
+  html += renderApIeChipsHtml('region');
+  html += '<div class="ap-expand-search"><input placeholder="지역 검색..." oninput="apSearchRegion(this.value)"></div>';
+  html += '<div class="ap-expand-opts" id="apTreeOpts">';
+  REGION_LIST.forEach(function(r) {
+    var incState = apIeState.region.include.indexOf(r.code) >= 0 ? ' active-include' : '';
+    var excState = apIeState.region.exclude.indexOf(r.code) >= 0 ? ' active-exclude' : '';
+    html += '<div class="ap-tree-item"><span class="ap-tree-label">' + r.name + '</span>' +
+      '<span class="ap-tree-count">' + r.count + '</span>' +
+      '<div class="ie-actions">' +
+        '<span class="ie-btn' + incState + '" onclick="apToggleIe(\'region\',\'' + r.code + '\',\'include\')">Include</span>' +
+        '<span class="ie-btn' + excState + '" onclick="apToggleIe(\'region\',\'' + r.code + '\',\'exclude\')">Exclude</span>' +
+      '</div></div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function renderApIeChipsHtml(filterKey) {
+  var state = apIeState[filterKey];
+  if (state.include.length === 0 && state.exclude.length === 0) return '';
+  var html = '<div class="ie-chips-area">';
+  state.include.forEach(function(code) {
+    var name = apGetNameByCode(filterKey, code);
+    html += '<span class="ie-chip ie-chip-include">+ ' + name +
+      '<span class="ie-chip-remove" onclick="apRemoveIe(\'' + filterKey + '\',\'' + code + '\',\'include\')">&times;</span></span>';
+  });
+  state.exclude.forEach(function(code) {
+    var name = apGetNameByCode(filterKey, code);
+    html += '<span class="ie-chip ie-chip-exclude">- ' + name +
+      '<span class="ie-chip-remove" onclick="apRemoveIe(\'' + filterKey + '\',\'' + code + '\',\'exclude\')">&times;</span></span>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function apGetNameByCode(filterKey, code) {
+  if (filterKey === 'region') {
+    for (var i = 0; i < REGION_LIST.length; i++) {
+      if (REGION_LIST[i].code === code) return REGION_LIST[i].name;
+    }
+    return code;
+  }
+  var tree = filterKey === 'industry' ? INDUSTRY_TREE : PRODUCT_TREE;
+  return apFindNameInTree(tree, code) || code;
+}
+
+function apTreeDrill(filterKey, code) {
+  apTreePath[filterKey].push(code);
+  renderApTreeFilter(filterKey, document.getElementById('apExpandContent'));
+}
+
+function apTreeBack(filterKey) {
+  apTreePath[filterKey].pop();
+  renderApTreeFilter(filterKey, document.getElementById('apExpandContent'));
+}
+
+function apTreeGoTo(filterKey, idx) {
+  apTreePath[filterKey] = apTreePath[filterKey].slice(0, idx + 1);
+  renderApTreeFilter(filterKey, document.getElementById('apExpandContent'));
+}
+
+function apToggleIe(filterKey, code, action) {
+  var state = apIeState[filterKey];
+  var list = state[action];
+  var other = action === 'include' ? 'exclude' : 'include';
+  var idx = list.indexOf(code);
+  if (idx >= 0) list.splice(idx, 1);
+  else { list.push(code); var oi = state[other].indexOf(code); if(oi>=0) state[other].splice(oi,1); }
+  var content = document.getElementById('apExpandContent');
+  if (filterKey === 'region') renderApRegionFilter(content);
+  else renderApTreeFilter(filterKey, content);
+  updateApChips();
+  apSearch();
+}
+
+function apRemoveIe(filterKey, code, action) {
+  var list = apIeState[filterKey][action];
+  var idx = list.indexOf(code);
+  if (idx >= 0) list.splice(idx, 1);
+  var content = document.getElementById('apExpandContent');
+  if (filterKey === 'region') renderApRegionFilter(content);
+  else renderApTreeFilter(filterKey, content);
+  updateApChips();
+  apSearch();
+}
+
+function apSearchTree(filterKey, query) {
+  var q = query.toLowerCase().trim();
+  if (q === '') {
+    renderApTreeFilter(filterKey, document.getElementById('apExpandContent'));
+    return;
+  }
+  var tree = filterKey === 'industry' ? INDUSTRY_TREE : PRODUCT_TREE;
+  var results = [];
+  function search(nodes, pp) {
+    nodes.forEach(function(n) {
+      if (n.children) search(n.children, pp.concat(n.name));
+      else if (n.name.toLowerCase().indexOf(q) >= 0 || pp.join(' ').toLowerCase().indexOf(q) >= 0)
+        results.push({code:n.code, name:n.name, count:n.count||0, path:pp.join(' › ')});
+    });
+  }
+  search(tree, []);
+  var opts = document.getElementById('apTreeOpts');
+  if (!opts) return;
+  if (results.length === 0) {
+    opts.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-muted);font-size:11px">검색 결과 없음</div>';
+    return;
+  }
+  var html = '';
+  results.forEach(function(r) {
+    var incState = apIeState[filterKey].include.indexOf(r.code) >= 0 ? ' active-include' : '';
+    var excState = apIeState[filterKey].exclude.indexOf(r.code) >= 0 ? ' active-exclude' : '';
+    html += '<div class="ap-tree-item">' +
+      '<div style="display:flex;flex-direction:column;flex:1;min-width:0"><span class="ap-tree-label">' + r.name + '</span>' +
+      '<span style="font-size:9.5px;color:var(--text-muted)">' + r.path + '</span></div>' +
+      '<span class="ap-tree-count">' + r.count + '</span>' +
+      '<div class="ie-actions">' +
+        '<span class="ie-btn' + incState + '" onclick="apToggleIe(\'' + filterKey + '\',\'' + r.code + '\',\'include\')">Include</span>' +
+        '<span class="ie-btn' + excState + '" onclick="apToggleIe(\'' + filterKey + '\',\'' + r.code + '\',\'exclude\')">Exclude</span>' +
+      '</div></div>';
+  });
+  opts.innerHTML = html;
+}
+
+function apSearchRegion(query) {
+  var q = query.toLowerCase().trim();
+  var opts = document.getElementById('apTreeOpts');
+  if (!opts) return;
+  opts.querySelectorAll('.ap-tree-item').forEach(function(el) {
+    var label = el.querySelector('.ap-tree-label');
+    if (!label) return;
+    el.style.display = label.textContent.toLowerCase().indexOf(q) >= 0 ? '' : 'none';
+  });
 }
 
 function highlightActiveChip(key) {
@@ -1490,10 +1974,20 @@ function filterApExpandOptions(q) {
 
 function resetApFilter() {
   if (currentApFilter === 'all') {
+    AP_TREE_FILTERS.forEach(function(k){apIeState[k]={include:[],exclude:[]};});
     Object.keys(apFilterState).forEach(function(k){apFilterState[k]=[];});
     updateApChips();
     apSearch();
     closeApFilter();
+    return;
+  }
+  if (AP_TREE_FILTERS.indexOf(currentApFilter) >= 0) {
+    apIeState[currentApFilter] = {include:[],exclude:[]};
+    var content = document.getElementById('apExpandContent');
+    if (currentApFilter === 'region') renderApRegionFilter(content);
+    else { apTreePath[currentApFilter] = []; renderApTreeFilter(currentApFilter, content); }
+    updateApChips();
+    apSearch();
     return;
   }
   tempFilterState = [];
@@ -1503,7 +1997,7 @@ function resetApFilter() {
 }
 
 function applyApFilter() {
-  if (currentApFilter && currentApFilter !== 'all') {
+  if (currentApFilter && currentApFilter !== 'all' && AP_TREE_FILTERS.indexOf(currentApFilter) < 0) {
     apFilterState[currentApFilter] = tempFilterState.slice();
   }
   closeApFilter();
