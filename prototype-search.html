@@ -134,24 +134,14 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .filter-dropdown-item:hover > .filter-submenu{display:block}
 .filter-submenu .filter-dropdown-item{padding:6px 12px;font-size:12.5px}
 
-/* ── Tree navigation (3-depth drill-down) ── */
-.fd-tree-header{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-sub)}
-.fd-tree-back{cursor:pointer;display:flex;align-items:center;gap:4px;color:var(--brand);font-weight:500;transition:color .15s}
-.fd-tree-back:hover{color:var(--blue-700)}
-.fd-tree-back svg{width:14px;height:14px}
-.fd-tree-breadcrumb{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--text-muted)}
-.fd-tree-breadcrumb span{cursor:pointer;transition:color .15s}
-.fd-tree-breadcrumb span:hover{color:var(--brand)}
-.fd-tree-breadcrumb .sep{cursor:default;color:var(--text-muted)}
-.fd-tree-item{display:flex;align-items:center;padding:7px 12px;font-size:13px;color:var(--text);cursor:pointer;transition:background .1s;user-select:none}
-.fd-tree-item:hover{background:var(--slate-50)}
-.fd-tree-item .fd-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fd-tree-item .fd-count{font-size:11px;color:var(--text-muted);margin-left:8px}
-.fd-tree-item .fd-chevron{font-size:14px;color:var(--text-muted);margin-left:4px;flex-shrink:0}
+/* ── Wider dropdowns for Include/Exclude ── */
+#industryDropdown,#productDropdown{width:320px}
+#industryDropdown .filter-submenu,#productDropdown .filter-submenu{width:300px}
+#regionDropdown{width:280px}
 /* Include / Exclude actions */
-.ie-actions{display:flex;gap:2px;margin-left:auto;flex-shrink:0}
-.ie-btn{padding:3px 7px;font-size:11px;cursor:pointer;border-radius:4px;color:var(--text-muted);transition:all .15s;border:1px solid transparent;white-space:nowrap}
-.ie-btn:hover{background:var(--slate-50);color:var(--text)}
+.ie-actions{display:flex;gap:2px;margin-left:8px;flex-shrink:0}
+.ie-btn{padding:2px 6px;font-size:10px;cursor:pointer;border-radius:3px;color:var(--text-muted);transition:all .15s;border:1px solid transparent;white-space:nowrap}
+.ie-btn:hover{background:var(--slate-100);color:var(--text)}
 .ie-btn.active-include{color:var(--emerald-600);background:var(--emerald-50);border-color:var(--emerald-200);font-weight:600}
 .ie-btn.active-exclude{color:var(--red-500);background:var(--red-50);border-color:var(--red-200);font-weight:600}
 /* Include/Exclude chips */
@@ -694,7 +684,6 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       <div class="filter-dropdown" id="industryDropdown">
         <div class="ie-chips-area" id="industryIeChips"></div>
         <div class="filter-dropdown-search"><input placeholder="업종 검색..." oninput="searchTreeDropdown('industry',this.value)"></div>
-        <div class="fd-tree-header" id="industryTreeHeader" style="display:none"></div>
         <div class="filter-dropdown-body" id="industryTreeBody"></div>
       </div>
     </div>
@@ -706,7 +695,6 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       <div class="filter-dropdown" id="productDropdown">
         <div class="ie-chips-area" id="productIeChips"></div>
         <div class="filter-dropdown-search"><input placeholder="생산품 검색..." oninput="searchTreeDropdown('product',this.value)"></div>
-        <div class="fd-tree-header" id="productTreeHeader" style="display:none"></div>
         <div class="filter-dropdown-body" id="productTreeBody"></div>
       </div>
     </div>
@@ -1925,282 +1913,186 @@ var REGION_LIST = [
   {code:'jeju',name:'제주',count:1}
 ];
 
-// ── Tree filter state: {include:[], exclude:[]} per filter ──
+// ── Include/Exclude filter state ──
 var treeFilterState = {
   industry: {include:[], exclude:[]},
   product: {include:[], exclude:[]},
   region: {include:[], exclude:[]}
 };
-// Track current navigation path per tree
-var treePath = {industry:[], product:[]};
 
-// ── Tree rendering ──
-function getTreeData(filterKey) {
-  if (filterKey === 'industry') return INDUSTRY_TREE;
-  if (filterKey === 'product') return PRODUCT_TREE;
+function getTreeData(fk) {
+  return fk === 'industry' ? INDUSTRY_TREE : fk === 'product' ? PRODUCT_TREE : null;
+}
+function findNameInTree(nodes, code) {
+  for (var i = 0; i < nodes.length; i++) {
+    if (nodes[i].code === code) return nodes[i].name;
+    if (nodes[i].children) { var f = findNameInTree(nodes[i].children, code); if (f) return f; }
+  }
   return null;
 }
-
-function getNodesAtPath(tree, path) {
-  var nodes = tree;
-  for (var i = 0; i < path.length; i++) {
-    var found = null;
-    for (var j = 0; j < nodes.length; j++) {
-      if (nodes[j].code === path[i]) { found = nodes[j]; break; }
-    }
-    if (!found || !found.children) return [];
-    nodes = found.children;
-  }
-  return nodes;
+function getNameByCode(fk, code) {
+  if (fk === 'region') { for (var i=0;i<REGION_LIST.length;i++) if(REGION_LIST[i].code===code) return REGION_LIST[i].name; return code; }
+  return findNameInTree(getTreeData(fk), code) || code;
 }
 
-function isLeafLevel(nodes) {
-  return nodes.length > 0 && !nodes[0].children;
+// ── Build IE button HTML for any item ──
+function ieHtml(fk, code) {
+  var inc = treeFilterState[fk].include.indexOf(code) >= 0 ? ' active-include' : '';
+  var exc = treeFilterState[fk].exclude.indexOf(code) >= 0 ? ' active-exclude' : '';
+  return '<div class="ie-actions">' +
+    '<span class="ie-btn' + inc + '" onclick="toggleIeState(\'' + fk + '\',\'' + code + '\',\'include\',event)">Include</span>' +
+    '<span class="ie-btn' + exc + '" onclick="toggleIeState(\'' + fk + '\',\'' + code + '\',\'exclude\',event)">Exclude</span></div>';
 }
 
-function renderTreeDropdown(filterKey) {
-  var tree = getTreeData(filterKey);
-  var bodyId = filterKey + 'TreeBody';
-  var headerId = filterKey + 'TreeHeader';
-  var body = document.getElementById(bodyId);
-  var header = document.getElementById(headerId);
-  if (!tree) return;
-  var path = treePath[filterKey];
-  var nodes = getNodesAtPath(tree, path);
-  // Render breadcrumb header
-  if (path.length > 0) {
-    var bc = '<div class="fd-tree-back" onclick="treeGoBack(\'' + filterKey + '\')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg> 뒤로</div>';
-    bc += '<div class="fd-tree-breadcrumb">';
-    var fullTree = tree;
-    for (var i = 0; i < path.length; i++) {
-      for (var j = 0; j < fullTree.length; j++) {
-        if (fullTree[j].code === path[i]) {
-          if (i > 0) bc += '<span class="sep">›</span>';
-          bc += '<span onclick="treeGoTo(\'' + filterKey + '\',' + i + ')">' + fullTree[j].name + '</span>';
-          fullTree = fullTree[j].children || [];
-          break;
-        }
-      }
-    }
-    bc += '</div>';
-    header.innerHTML = bc;
-    header.style.display = '';
-  } else {
-    header.style.display = 'none';
-    header.innerHTML = '';
-  }
-  // Render items
+// ── Render hover-submenu tree (3-depth, Finder-style) ──
+function renderTreeDropdown(fk) {
+  var tree = getTreeData(fk);
+  var body = document.getElementById(fk + 'TreeBody');
+  if (!tree || !body) return;
   var html = '';
-  if (isLeafLevel(nodes)) {
-    // Leaf: show Include/Exclude buttons
-    nodes.forEach(function(n) {
-      var incState = treeFilterState[filterKey].include.indexOf(n.code) >= 0 ? ' active-include' : '';
-      var excState = treeFilterState[filterKey].exclude.indexOf(n.code) >= 0 ? ' active-exclude' : '';
-      html += '<div class="fd-tree-item">' +
-        '<span class="fd-label">' + n.name + '</span>' +
-        '<span class="fd-count">' + (n.count||'') + '</span>' +
-        '<div class="ie-actions">' +
-          '<span class="ie-btn' + incState + '" onclick="toggleIeState(\'' + filterKey + '\',\'' + n.code + '\',\'include\',event)">Include</span>' +
-          '<span class="ie-btn' + excState + '" onclick="toggleIeState(\'' + filterKey + '\',\'' + n.code + '\',\'exclude\',event)">Exclude</span>' +
-        '</div></div>';
-    });
-  } else {
-    // Parent: show drill-down items
-    nodes.forEach(function(n) {
-      var childCount = 0;
-      if (n.children) n.children.forEach(function(c) { childCount += (c.count || 0); if(c.children) c.children.forEach(function(cc){childCount += cc.count||0;}); });
-      html += '<div class="fd-tree-item" onclick="treeDrillDown(\'' + filterKey + '\',\'' + n.code + '\')">' +
-        '<span class="fd-label">' + n.name + '</span>' +
-        '<span class="fd-count">' + (childCount || '') + '</span>' +
-        '<span class="fd-chevron">›</span></div>';
-    });
-  }
+  tree.forEach(function(d1) {
+    var hasCh = d1.children && d1.children.length > 0;
+    html += '<div class="filter-dropdown-item"' + (hasCh ? ' onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)"' : '') + '>';
+    html += '<span class="fd-label">' + d1.name + '</span>';
+    html += ieHtml(fk, d1.code);
+    if (hasCh) {
+      html += '<span class="fd-chevron">›</span><div class="filter-submenu">';
+      d1.children.forEach(function(d2) {
+        var hasCh2 = d2.children && d2.children.length > 0;
+        html += '<div class="filter-dropdown-item"' + (hasCh2 ? ' onmouseenter="showSubmenu(this)" onmouseleave="hideSubmenu(this)"' : '') + '>';
+        html += '<span class="fd-label">' + d2.name + '</span>';
+        html += ieHtml(fk, d2.code);
+        if (hasCh2) {
+          html += '<span class="fd-chevron">›</span><div class="filter-submenu">';
+          d2.children.forEach(function(d3) {
+            html += '<div class="filter-dropdown-item">';
+            html += '<span class="fd-label">' + d3.name + '</span>';
+            html += '<span class="fd-count">' + (d3.count||'') + '</span>';
+            html += ieHtml(fk, d3.code);
+            html += '</div>';
+          });
+          html += '</div>';
+        }
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
   body.innerHTML = html;
-  renderIeChips(filterKey);
+  renderIeChips(fk);
 }
 
+// ── Render flat region list with IE ──
 function renderRegionDropdown() {
   var body = document.getElementById('regionTreeBody');
   var html = '';
   REGION_LIST.forEach(function(r) {
-    var incState = treeFilterState.region.include.indexOf(r.code) >= 0 ? ' active-include' : '';
-    var excState = treeFilterState.region.exclude.indexOf(r.code) >= 0 ? ' active-exclude' : '';
-    html += '<div class="fd-tree-item">' +
-      '<span class="fd-label">' + r.name + '</span>' +
-      '<span class="fd-count">' + r.count + '</span>' +
-      '<div class="ie-actions">' +
-        '<span class="ie-btn' + incState + '" onclick="toggleIeState(\'region\',\'' + r.code + '\',\'include\',event)">Include</span>' +
-        '<span class="ie-btn' + excState + '" onclick="toggleIeState(\'region\',\'' + r.code + '\',\'exclude\',event)">Exclude</span>' +
-      '</div></div>';
+    html += '<div class="filter-dropdown-item">';
+    html += '<span class="fd-label">' + r.name + '</span>';
+    html += '<span class="fd-count">' + r.count + '</span>';
+    html += ieHtml('region', r.code);
+    html += '</div>';
   });
   body.innerHTML = html;
   renderIeChips('region');
 }
 
-function treeDrillDown(filterKey, code) {
-  treePath[filterKey].push(code);
-  renderTreeDropdown(filterKey);
-}
-
-function treeGoBack(filterKey) {
-  treePath[filterKey].pop();
-  renderTreeDropdown(filterKey);
-}
-
-function treeGoTo(filterKey, idx) {
-  treePath[filterKey] = treePath[filterKey].slice(0, idx + 1);
-  renderTreeDropdown(filterKey);
-}
-
-// ── Include/Exclude toggle ──
-function toggleIeState(filterKey, code, action, event) {
+// ── Toggle Include/Exclude (in-place update, preserves hover) ──
+function toggleIeState(fk, code, action, event) {
   event.stopPropagation();
-  var state = treeFilterState[filterKey];
+  var state = treeFilterState[fk];
   var list = state[action];
-  var otherAction = action === 'include' ? 'exclude' : 'include';
-  var otherList = state[otherAction];
-  var idx = list.indexOf(code);
-  if (idx >= 0) {
-    list.splice(idx, 1);
-  } else {
-    list.push(code);
-    var otherIdx = otherList.indexOf(code);
-    if (otherIdx >= 0) otherList.splice(otherIdx, 1);
-  }
-  // Re-render
-  if (filterKey === 'region') renderRegionDropdown();
-  else renderTreeDropdown(filterKey);
-  updateFilterButton(filterKey);
-}
-
-function removeIeChip(filterKey, code, action, event) {
-  event.stopPropagation();
-  var list = treeFilterState[filterKey][action];
+  var other = action === 'include' ? 'exclude' : 'include';
   var idx = list.indexOf(code);
   if (idx >= 0) list.splice(idx, 1);
-  if (filterKey === 'region') renderRegionDropdown();
-  else renderTreeDropdown(filterKey);
-  updateFilterButton(filterKey);
+  else { list.push(code); var oi = state[other].indexOf(code); if(oi>=0) state[other].splice(oi,1); }
+  // Update buttons in-place (don't re-render tree — preserves hover state)
+  var actions = event.target.parentElement;
+  var btns = actions.querySelectorAll('.ie-btn');
+  btns[0].className = 'ie-btn' + (state.include.indexOf(code) >= 0 ? ' active-include' : '');
+  btns[1].className = 'ie-btn' + (state.exclude.indexOf(code) >= 0 ? ' active-exclude' : '');
+  renderIeChips(fk);
+  updateFilterButton(fk);
 }
 
-function getNameByCode(filterKey, code) {
-  if (filterKey === 'region') {
-    for (var i = 0; i < REGION_LIST.length; i++) {
-      if (REGION_LIST[i].code === code) return REGION_LIST[i].name;
-    }
-    return code;
-  }
-  var tree = getTreeData(filterKey);
-  return findNameInTree(tree, code) || code;
+function removeIeChip(fk, code, action, event) {
+  event.stopPropagation();
+  var list = treeFilterState[fk][action];
+  var idx = list.indexOf(code);
+  if (idx >= 0) list.splice(idx, 1);
+  if (fk === 'region') renderRegionDropdown();
+  else renderTreeDropdown(fk);
+  updateFilterButton(fk);
 }
 
-function findNameInTree(nodes, code) {
-  for (var i = 0; i < nodes.length; i++) {
-    if (nodes[i].code === code) return nodes[i].name;
-    if (nodes[i].children) {
-      var found = findNameInTree(nodes[i].children, code);
-      if (found) return found;
-    }
-  }
-  return null;
-}
-
-function renderIeChips(filterKey) {
-  var chipsId = filterKey + 'IeChips';
-  var container = document.getElementById(chipsId);
-  if (!container) return;
-  var state = treeFilterState[filterKey];
-  var html = '';
-  state.include.forEach(function(code) {
-    var name = getNameByCode(filterKey, code);
-    html += '<span class="ie-chip ie-chip-include">+ ' + name +
-      '<span class="ie-chip-remove" onclick="removeIeChip(\'' + filterKey + '\',\'' + code + '\',\'include\',event)">&times;</span></span>';
+function renderIeChips(fk) {
+  var el = document.getElementById(fk + 'IeChips');
+  if (!el) return;
+  var s = treeFilterState[fk], html = '';
+  s.include.forEach(function(c) {
+    html += '<span class="ie-chip ie-chip-include">+ ' + getNameByCode(fk,c) +
+      '<span class="ie-chip-remove" onclick="removeIeChip(\'' + fk + '\',\'' + c + '\',\'include\',event)">&times;</span></span>';
   });
-  state.exclude.forEach(function(code) {
-    var name = getNameByCode(filterKey, code);
-    html += '<span class="ie-chip ie-chip-exclude">- ' + name +
-      '<span class="ie-chip-remove" onclick="removeIeChip(\'' + filterKey + '\',\'' + code + '\',\'exclude\',event)">&times;</span></span>';
+  s.exclude.forEach(function(c) {
+    html += '<span class="ie-chip ie-chip-exclude">- ' + getNameByCode(fk,c) +
+      '<span class="ie-chip-remove" onclick="removeIeChip(\'' + fk + '\',\'' + c + '\',\'exclude\',event)">&times;</span></span>';
   });
-  container.innerHTML = html;
+  el.innerHTML = html;
 }
 
-function updateFilterButton(filterKey) {
-  var state = treeFilterState[filterKey];
-  var total = state.include.length + state.exclude.length;
-  var dropdownId = filterKey + 'Dropdown';
-  var wrap = document.getElementById(dropdownId);
+function updateFilterButton(fk) {
+  var s = treeFilterState[fk], total = s.include.length + s.exclude.length;
+  var wrap = document.getElementById(fk + 'Dropdown');
   if (!wrap) return;
   var btn = wrap.parentElement.querySelector('.filter-select');
   if (!btn) return;
   var labels = {industry:'업종', product:'생산품', region:'지역'};
   if (total > 0) {
     btn.classList.add('has-value');
-    btn.innerHTML = labels[filterKey] + ': ' + total + '개 선택 <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>';
+    btn.innerHTML = labels[fk] + ': ' + total + '개 선택 <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>';
   } else {
     btn.classList.remove('has-value');
-    btn.innerHTML = labels[filterKey] + ' <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>';
+    btn.innerHTML = labels[fk] + ' <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>';
   }
 }
 
-// ── Search within tree dropdown ──
-function searchTreeDropdown(filterKey, query) {
+// ── Search within dropdown ──
+function searchTreeDropdown(fk, query) {
   var q = query.toLowerCase().trim();
-  if (filterKey === 'region') {
-    var body = document.getElementById('regionTreeBody');
-    body.querySelectorAll('.fd-tree-item').forEach(function(el) {
-      var label = el.querySelector('.fd-label');
-      if (!label) return;
-      el.style.display = label.textContent.toLowerCase().indexOf(q) >= 0 ? '' : 'none';
+  if (fk === 'region') {
+    document.getElementById('regionTreeBody').querySelectorAll('.filter-dropdown-item').forEach(function(el) {
+      var l = el.querySelector('.fd-label');
+      el.style.display = (!l || l.textContent.toLowerCase().indexOf(q) >= 0) ? '' : 'none';
     });
     return;
   }
-  var tree = getTreeData(filterKey);
-  if (!tree) return;
-  if (q === '') {
-    renderTreeDropdown(filterKey);
-    return;
-  }
-  // Search all leaf nodes across all depths
-  var results = [];
-  function searchNodes(nodes, parentPath) {
+  if (q === '') { renderTreeDropdown(fk); return; }
+  // Search all nodes across all depths
+  var tree = getTreeData(fk), results = [];
+  function walk(nodes, pp) {
     nodes.forEach(function(n) {
-      if (n.children) {
-        searchNodes(n.children, parentPath.concat(n.name));
-      } else {
-        if (n.name.toLowerCase().indexOf(q) >= 0 || parentPath.join(' ').toLowerCase().indexOf(q) >= 0) {
-          results.push({code:n.code, name:n.name, count:n.count||0, path:parentPath.join(' › ')});
-        }
-      }
+      var match = n.name.toLowerCase().indexOf(q) >= 0 || pp.join(' ').toLowerCase().indexOf(q) >= 0;
+      if (match) results.push({code:n.code, name:n.name, count:n.count||0, path:pp.join(' › '), hasChildren:!!(n.children&&n.children.length)});
+      if (n.children) walk(n.children, pp.concat(n.name));
     });
   }
-  searchNodes(tree, []);
-  var bodyId = filterKey + 'TreeBody';
-  var headerId = filterKey + 'TreeHeader';
-  document.getElementById(headerId).style.display = 'none';
-  var body = document.getElementById(bodyId);
-  if (results.length === 0) {
-    body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:12px">검색 결과가 없습니다</div>';
-    return;
-  }
+  walk(tree, []);
+  var body = document.getElementById(fk + 'TreeBody');
+  if (results.length === 0) { body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:12px">검색 결과가 없습니다</div>'; return; }
   var html = '';
   results.forEach(function(r) {
-    var incState = treeFilterState[filterKey].include.indexOf(r.code) >= 0 ? ' active-include' : '';
-    var excState = treeFilterState[filterKey].exclude.indexOf(r.code) >= 0 ? ' active-exclude' : '';
-    html += '<div class="fd-tree-item">' +
+    html += '<div class="filter-dropdown-item" style="flex-wrap:wrap">' +
       '<div style="display:flex;flex-direction:column;flex:1;min-width:0"><span class="fd-label">' + r.name + '</span>' +
-      '<span style="font-size:10px;color:var(--text-muted)">' + r.path + '</span></div>' +
-      '<span class="fd-count">' + r.count + '</span>' +
-      '<div class="ie-actions">' +
-        '<span class="ie-btn' + incState + '" onclick="toggleIeState(\'' + filterKey + '\',\'' + r.code + '\',\'include\',event)">Include</span>' +
-        '<span class="ie-btn' + excState + '" onclick="toggleIeState(\'' + filterKey + '\',\'' + r.code + '\',\'exclude\',event)">Exclude</span>' +
-      '</div></div>';
+      (r.path ? '<span style="font-size:10px;color:var(--text-muted)">' + r.path + '</span>' : '') + '</div>' +
+      (r.count ? '<span class="fd-count">' + r.count + '</span>' : '') +
+      ieHtml(fk, r.code) + '</div>';
   });
   body.innerHTML = html;
 }
 
-// ── Initialize tree dropdowns on page load ──
+// ── Init ──
 function initTreeDropdowns() {
-  treePath = {industry:[], product:[]};
   renderTreeDropdown('industry');
   renderTreeDropdown('product');
   renderRegionDropdown();
@@ -2216,10 +2108,10 @@ function toggleFilterDropdown(id,event){
   document.querySelectorAll('.filter-dropdown').forEach(function(d){ d.classList.remove('open'); });
   if(!wasOpen) {
     dd.classList.add('open');
-    // Reset tree path and re-render when opening
-    if (id === 'industryDropdown') { treePath.industry = []; renderTreeDropdown('industry'); }
-    else if (id === 'productDropdown') { treePath.product = []; renderTreeDropdown('product'); }
-    else if (id === 'regionDropdown') { renderRegionDropdown(); }
+    // Re-render when opening
+    if (id === 'industryDropdown') renderTreeDropdown('industry');
+    else if (id === 'productDropdown') renderTreeDropdown('product');
+    else if (id === 'regionDropdown') renderRegionDropdown();
     // Clear search input
     var si = dd.querySelector('.filter-dropdown-search input');
     if (si) si.value = '';

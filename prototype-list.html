@@ -191,33 +191,30 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .ap-search-tip a{color:var(--brand);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:3px}
 .ap-search-tip a:hover{text-decoration:underline}
 
-/* ── Tree navigation (3-depth drill-down) ── */
-.ap-tree-header{display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:11.5px;color:var(--text-sub);border-bottom:1px solid var(--border-light)}
-.ap-tree-back{cursor:pointer;display:flex;align-items:center;gap:3px;color:var(--brand);font-weight:500;transition:color .15s}
-.ap-tree-back:hover{color:var(--blue-700)}
-.ap-tree-back svg{width:12px;height:12px}
-.ap-tree-breadcrumb{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--text-muted)}
-.ap-tree-breadcrumb span{cursor:pointer;transition:color .15s}
-.ap-tree-breadcrumb span:hover{color:var(--brand)}
-.ap-tree-breadcrumb .sep{cursor:default;color:var(--text-muted)}
-.ap-tree-item{display:flex;align-items:center;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:background .1s;user-select:none}
-.ap-tree-item:hover{background:rgba(0,0,0,.03)}
+/* ── Finder column-view (3-depth side-by-side) ── */
+.ap-tree-columns{display:flex;height:240px;border-top:1px solid var(--border-light)}
+.ap-tree-col{flex:1;min-width:0;border-right:1px solid var(--border-light);overflow-y:auto;padding:2px 0;background:#fff}
+.ap-tree-col:last-child{border-right:none}
+.ap-tree-col-empty{display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:11px}
+.ap-tree-item{display:flex;align-items:center;padding:5px 10px;font-size:11.5px;color:var(--text);cursor:pointer;transition:background .1s;user-select:none;gap:4px}
+.ap-tree-item:hover{background:var(--slate-50)}
+.ap-tree-item.selected{background:var(--brand-bg);color:var(--brand);font-weight:600}
 .ap-tree-item .ap-tree-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ap-tree-item .ap-tree-count{font-size:10.5px;color:var(--text-muted);margin-left:8px}
-.ap-tree-item .ap-tree-chevron{font-size:13px;color:var(--text-muted);margin-left:4px;flex-shrink:0}
+.ap-tree-item .ap-tree-count{font-size:9.5px;color:var(--text-muted);flex-shrink:0}
+.ap-tree-item .ap-tree-chevron{font-size:12px;color:var(--text-muted);flex-shrink:0}
 /* Include / Exclude actions */
-.ie-actions{display:flex;gap:2px;margin-left:auto;flex-shrink:0}
-.ie-btn{padding:2px 6px;font-size:10.5px;cursor:pointer;border-radius:3px;color:var(--text-muted);transition:all .15s;border:1px solid transparent;white-space:nowrap}
+.ie-actions{display:flex;gap:1px;flex-shrink:0}
+.ie-btn{padding:1px 5px;font-size:9.5px;cursor:pointer;border-radius:3px;color:var(--text-muted);transition:all .15s;border:1px solid transparent;white-space:nowrap}
 .ie-btn:hover{background:var(--slate-100);color:var(--text)}
 .ie-btn.active-include{color:var(--emerald-600);background:var(--emerald-50);border-color:var(--emerald-200);font-weight:600}
 .ie-btn.active-exclude{color:var(--red-500);background:var(--red-50);border-color:var(--red-200);font-weight:600}
 /* Include/Exclude chips */
-.ie-chips-area{display:flex;flex-wrap:wrap;gap:4px;padding:6px 14px;border-bottom:1px solid var(--border-light)}
+.ie-chips-area{display:flex;flex-wrap:wrap;gap:4px;padding:6px 10px;border-bottom:1px solid var(--border-light)}
 .ie-chips-area:empty{display:none;padding:0;border:none}
-.ie-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:12px;font-size:10.5px;font-weight:500;cursor:default}
+.ie-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:500;cursor:default}
 .ie-chip-include{background:var(--emerald-50);color:var(--emerald-600);border:1px solid var(--emerald-200)}
 .ie-chip-exclude{background:var(--red-50);color:var(--red-500);border:1px solid var(--red-200)}
-.ie-chip .ie-chip-remove{cursor:pointer;font-size:12px;line-height:1;margin-left:1px;opacity:.6;transition:opacity .15s}
+.ie-chip .ie-chip-remove{cursor:pointer;font-size:11px;line-height:1;margin-left:1px;opacity:.6;transition:opacity .15s}
 .ie-chip .ie-chip-remove:hover{opacity:1}
 
 /* TABLE */
@@ -1456,8 +1453,6 @@ var AP_FILTERS = {
   ]}
 };
 
-// Tree navigation state
-var apTreePath = {industry:[], product:[]};
 var AP_TREE_FILTERS = ['industry','product','region'];
 var AP_ALL_COMPANIES = [
   {name:'한솔네오텍',type:'비상장',industry:'반도체장비',region:'경기',revenue:180,emp:85,color:'#0D9488'},
@@ -1485,7 +1480,7 @@ function toggleAddPanel() {
   if (isOpen) { closeAddPanel(); return; }
   apIeState = {industry:{include:[],exclude:[]},product:{include:[],exclude:[]},region:{include:[],exclude:[]}};
   apFilterState = {revenue:[],type:[],emp:[]};
-  apTreePath = {industry:[], product:[]};
+  apColSelection = {industry:{d1:null,d2:null}, product:{d1:null,d2:null}};
   apAddedNames = [];
   document.getElementById('apSearchInput').value = '';
   document.getElementById('apExpand').classList.remove('open');
@@ -1670,20 +1665,6 @@ function updateApFooter() {
 }
 
 // ── Inline Filter Expansion Logic ──
-// Tree helpers
-function apGetNodesAtPath(tree, path) {
-  var nodes = tree;
-  for (var i = 0; i < path.length; i++) {
-    var found = null;
-    for (var j = 0; j < nodes.length; j++) {
-      if (nodes[j].code === path[i]) { found = nodes[j]; break; }
-    }
-    if (!found || !found.children) return [];
-    nodes = found.children;
-  }
-  return nodes;
-}
-function apIsLeafLevel(nodes) { return nodes.length > 0 && !nodes[0].children; }
 
 function openApFilter(key) {
   var expand = document.getElementById('apExpand');
@@ -1724,7 +1705,7 @@ function openApFilter(key) {
     if (key === 'region') {
       renderApRegionFilter(content);
     } else {
-      apTreePath[key] = [];
+      apColSelection[key] = {d1:null,d2:null};
       renderApTreeFilter(key, content);
     }
     expand.classList.add('open');
@@ -1754,188 +1735,169 @@ function openApFilter(key) {
   highlightActiveChip(key);
 }
 
-function renderApTreeFilter(filterKey, container) {
-  var tree = filterKey === 'industry' ? INDUSTRY_TREE : PRODUCT_TREE;
-  var path = apTreePath[filterKey];
-  var nodes = apGetNodesAtPath(tree, path);
+// ── IE button HTML helper ──
+function apIeHtml(fk, code) {
+  var inc = apIeState[fk].include.indexOf(code) >= 0 ? ' active-include' : '';
+  var exc = apIeState[fk].exclude.indexOf(code) >= 0 ? ' active-exclude' : '';
+  return '<div class="ie-actions">' +
+    '<span class="ie-btn' + inc + '" onclick="apToggleIe(\'' + fk + '\',\'' + code + '\',\'include\',event)">Inc</span>' +
+    '<span class="ie-btn' + exc + '" onclick="apToggleIe(\'' + fk + '\',\'' + code + '\',\'exclude\',event)">Exc</span></div>';
+}
+
+// ── Track selected item per column for Finder view ──
+var apColSelection = {industry:{d1:null,d2:null}, product:{d1:null,d2:null}};
+
+// ── Render Finder column-view tree (3 columns side-by-side) ──
+function renderApTreeFilter(fk, container) {
+  var tree = fk === 'industry' ? INDUSTRY_TREE : PRODUCT_TREE;
+  var sel = apColSelection[fk];
   var html = '';
-
-  // IE chips at top
-  html += renderApIeChipsHtml(filterKey);
-
-  // Search
-  html += '<div class="ap-expand-search"><input placeholder="검색..." oninput="apSearchTree(\'' + filterKey + '\',this.value)"></div>';
-
-  // Breadcrumb
-  if (path.length > 0) {
-    html += '<div class="ap-tree-header">';
-    html += '<div class="ap-tree-back" onclick="apTreeBack(\'' + filterKey + '\')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg> 뒤로</div>';
-    html += '<div class="ap-tree-breadcrumb">';
-    var walk = tree;
-    for (var i = 0; i < path.length; i++) {
-      for (var j = 0; j < walk.length; j++) {
-        if (walk[j].code === path[i]) {
-          if (i > 0) html += '<span class="sep">›</span>';
-          html += '<span onclick="apTreeGoTo(\'' + filterKey + '\',' + i + ')">' + walk[j].name + '</span>';
-          walk = walk[j].children || [];
-          break;
-        }
-      }
+  html += renderApIeChipsHtml(fk);
+  html += '<div class="ap-tree-columns">';
+  // Column 1: 대분류
+  html += '<div class="ap-tree-col" id="apCol1_' + fk + '">';
+  tree.forEach(function(d1) {
+    var isSel = sel.d1 === d1.code;
+    html += '<div class="ap-tree-item' + (isSel ? ' selected' : '') + '" onclick="apSelectCol1(\'' + fk + '\',\'' + d1.code + '\')">' +
+      '<span class="ap-tree-label">' + d1.name + '</span>' +
+      apIeHtml(fk, d1.code) +
+      (d1.children ? '<span class="ap-tree-chevron">›</span>' : '') +
+      '</div>';
+  });
+  html += '</div>';
+  // Column 2: 중분류
+  html += '<div class="ap-tree-col" id="apCol2_' + fk + '">';
+  if (sel.d1) {
+    var d1Node = null;
+    for (var i=0;i<tree.length;i++) if(tree[i].code===sel.d1){d1Node=tree[i];break;}
+    if (d1Node && d1Node.children) {
+      d1Node.children.forEach(function(d2) {
+        var isSel2 = sel.d2 === d2.code;
+        html += '<div class="ap-tree-item' + (isSel2 ? ' selected' : '') + '" onclick="apSelectCol2(\'' + fk + '\',\'' + d2.code + '\')">' +
+          '<span class="ap-tree-label">' + d2.name + '</span>' +
+          apIeHtml(fk, d2.code) +
+          (d2.children ? '<span class="ap-tree-chevron">›</span>' : '') +
+          '</div>';
+      });
     }
-    html += '</div></div>';
-  }
-
-  // Items
-  html += '<div class="ap-expand-opts" id="apTreeOpts">';
-  if (apIsLeafLevel(nodes)) {
-    nodes.forEach(function(n) {
-      var incState = apIeState[filterKey].include.indexOf(n.code) >= 0 ? ' active-include' : '';
-      var excState = apIeState[filterKey].exclude.indexOf(n.code) >= 0 ? ' active-exclude' : '';
-      html += '<div class="ap-tree-item"><span class="ap-tree-label">' + n.name + '</span>' +
-        '<span class="ap-tree-count">' + (n.count||'') + '</span>' +
-        '<div class="ie-actions">' +
-          '<span class="ie-btn' + incState + '" onclick="apToggleIe(\'' + filterKey + '\',\'' + n.code + '\',\'include\')">Include</span>' +
-          '<span class="ie-btn' + excState + '" onclick="apToggleIe(\'' + filterKey + '\',\'' + n.code + '\',\'exclude\')">Exclude</span>' +
-        '</div></div>';
-    });
   } else {
-    nodes.forEach(function(n) {
-      var childCount = 0;
-      if (n.children) n.children.forEach(function(c) { childCount += (c.count||0); if(c.children) c.children.forEach(function(cc){childCount += cc.count||0;}); });
-      html += '<div class="ap-tree-item" onclick="apTreeDrill(\'' + filterKey + '\',\'' + n.code + '\')">' +
-        '<span class="ap-tree-label">' + n.name + '</span>' +
-        '<span class="ap-tree-count">' + (childCount||'') + '</span>' +
-        '<span class="ap-tree-chevron">›</span></div>';
-    });
+    html += '<div class="ap-tree-col-empty">대분류를 선택하세요</div>';
   }
+  html += '</div>';
+  // Column 3: 소분류
+  html += '<div class="ap-tree-col" id="apCol3_' + fk + '">';
+  if (sel.d1 && sel.d2) {
+    var d1Node = null, d2Node = null;
+    for (var i=0;i<tree.length;i++) if(tree[i].code===sel.d1){d1Node=tree[i];break;}
+    if (d1Node && d1Node.children) {
+      for (var j=0;j<d1Node.children.length;j++) if(d1Node.children[j].code===sel.d2){d2Node=d1Node.children[j];break;}
+    }
+    if (d2Node && d2Node.children) {
+      d2Node.children.forEach(function(d3) {
+        html += '<div class="ap-tree-item">' +
+          '<span class="ap-tree-label">' + d3.name + '</span>' +
+          '<span class="ap-tree-count">' + (d3.count||'') + '</span>' +
+          apIeHtml(fk, d3.code) +
+          '</div>';
+      });
+    }
+  } else if (sel.d1) {
+    html += '<div class="ap-tree-col-empty">중분류를 선택하세요</div>';
+  } else {
+    html += '<div class="ap-tree-col-empty"></div>';
+  }
+  html += '</div>';
   html += '</div>';
   container.innerHTML = html;
 }
 
+function apSelectCol1(fk, code) {
+  apColSelection[fk].d1 = code;
+  apColSelection[fk].d2 = null;
+  renderApTreeFilter(fk, document.getElementById('apExpandContent'));
+}
+
+function apSelectCol2(fk, code) {
+  apColSelection[fk].d2 = code;
+  renderApTreeFilter(fk, document.getElementById('apExpandContent'));
+}
+
+// ── Render region (flat list with IE) ──
 function renderApRegionFilter(container) {
   var html = '';
   html += renderApIeChipsHtml('region');
   html += '<div class="ap-expand-search"><input placeholder="지역 검색..." oninput="apSearchRegion(this.value)"></div>';
   html += '<div class="ap-expand-opts" id="apTreeOpts">';
   REGION_LIST.forEach(function(r) {
-    var incState = apIeState.region.include.indexOf(r.code) >= 0 ? ' active-include' : '';
-    var excState = apIeState.region.exclude.indexOf(r.code) >= 0 ? ' active-exclude' : '';
-    html += '<div class="ap-tree-item"><span class="ap-tree-label">' + r.name + '</span>' +
+    html += '<div class="ap-tree-item">' +
+      '<span class="ap-tree-label">' + r.name + '</span>' +
       '<span class="ap-tree-count">' + r.count + '</span>' +
-      '<div class="ie-actions">' +
-        '<span class="ie-btn' + incState + '" onclick="apToggleIe(\'region\',\'' + r.code + '\',\'include\')">Include</span>' +
-        '<span class="ie-btn' + excState + '" onclick="apToggleIe(\'region\',\'' + r.code + '\',\'exclude\')">Exclude</span>' +
-      '</div></div>';
+      apIeHtml('region', r.code) +
+      '</div>';
   });
   html += '</div>';
   container.innerHTML = html;
 }
 
-function renderApIeChipsHtml(filterKey) {
-  var state = apIeState[filterKey];
-  if (state.include.length === 0 && state.exclude.length === 0) return '';
+function renderApIeChipsHtml(fk) {
+  var s = apIeState[fk];
+  if (s.include.length === 0 && s.exclude.length === 0) return '';
   var html = '<div class="ie-chips-area">';
-  state.include.forEach(function(code) {
-    var name = apGetNameByCode(filterKey, code);
-    html += '<span class="ie-chip ie-chip-include">+ ' + name +
-      '<span class="ie-chip-remove" onclick="apRemoveIe(\'' + filterKey + '\',\'' + code + '\',\'include\')">&times;</span></span>';
+  s.include.forEach(function(c) {
+    html += '<span class="ie-chip ie-chip-include">+ ' + apGetNameByCode(fk,c) +
+      '<span class="ie-chip-remove" onclick="apRemoveIe(\'' + fk + '\',\'' + c + '\',\'include\')">&times;</span></span>';
   });
-  state.exclude.forEach(function(code) {
-    var name = apGetNameByCode(filterKey, code);
-    html += '<span class="ie-chip ie-chip-exclude">- ' + name +
-      '<span class="ie-chip-remove" onclick="apRemoveIe(\'' + filterKey + '\',\'' + code + '\',\'exclude\')">&times;</span></span>';
+  s.exclude.forEach(function(c) {
+    html += '<span class="ie-chip ie-chip-exclude">- ' + apGetNameByCode(fk,c) +
+      '<span class="ie-chip-remove" onclick="apRemoveIe(\'' + fk + '\',\'' + c + '\',\'exclude\')">&times;</span></span>';
   });
   html += '</div>';
   return html;
 }
 
-function apGetNameByCode(filterKey, code) {
-  if (filterKey === 'region') {
-    for (var i = 0; i < REGION_LIST.length; i++) {
-      if (REGION_LIST[i].code === code) return REGION_LIST[i].name;
-    }
-    return code;
-  }
-  var tree = filterKey === 'industry' ? INDUSTRY_TREE : PRODUCT_TREE;
+function apGetNameByCode(fk, code) {
+  if (fk === 'region') { for(var i=0;i<REGION_LIST.length;i++) if(REGION_LIST[i].code===code) return REGION_LIST[i].name; return code; }
+  var tree = fk === 'industry' ? INDUSTRY_TREE : PRODUCT_TREE;
   return apFindNameInTree(tree, code) || code;
 }
 
-function apTreeDrill(filterKey, code) {
-  apTreePath[filterKey].push(code);
-  renderApTreeFilter(filterKey, document.getElementById('apExpandContent'));
-}
-
-function apTreeBack(filterKey) {
-  apTreePath[filterKey].pop();
-  renderApTreeFilter(filterKey, document.getElementById('apExpandContent'));
-}
-
-function apTreeGoTo(filterKey, idx) {
-  apTreePath[filterKey] = apTreePath[filterKey].slice(0, idx + 1);
-  renderApTreeFilter(filterKey, document.getElementById('apExpandContent'));
-}
-
-function apToggleIe(filterKey, code, action) {
-  var state = apIeState[filterKey];
+function apToggleIe(fk, code, action, event) {
+  if (event) event.stopPropagation();
+  var state = apIeState[fk];
   var list = state[action];
   var other = action === 'include' ? 'exclude' : 'include';
   var idx = list.indexOf(code);
   if (idx >= 0) list.splice(idx, 1);
   else { list.push(code); var oi = state[other].indexOf(code); if(oi>=0) state[other].splice(oi,1); }
+  // In-place button update
+  if (event) {
+    var btns = event.target.parentElement.querySelectorAll('.ie-btn');
+    btns[0].className = 'ie-btn' + (state.include.indexOf(code) >= 0 ? ' active-include' : '');
+    btns[1].className = 'ie-btn' + (state.exclude.indexOf(code) >= 0 ? ' active-exclude' : '');
+  }
+  // Update chips inline
   var content = document.getElementById('apExpandContent');
-  if (filterKey === 'region') renderApRegionFilter(content);
-  else renderApTreeFilter(filterKey, content);
+  var chipsArea = content.querySelector('.ie-chips-area');
+  var newChipsHtml = renderApIeChipsHtml(fk);
+  if (chipsArea) {
+    if (newChipsHtml) chipsArea.outerHTML = newChipsHtml;
+    else chipsArea.remove();
+  } else if (newChipsHtml) {
+    content.insertAdjacentHTML('afterbegin', newChipsHtml);
+  }
   updateApChips();
   apSearch();
 }
 
-function apRemoveIe(filterKey, code, action) {
-  var list = apIeState[filterKey][action];
+function apRemoveIe(fk, code, action) {
+  var list = apIeState[fk][action];
   var idx = list.indexOf(code);
   if (idx >= 0) list.splice(idx, 1);
   var content = document.getElementById('apExpandContent');
-  if (filterKey === 'region') renderApRegionFilter(content);
-  else renderApTreeFilter(filterKey, content);
+  if (fk === 'region') renderApRegionFilter(content);
+  else renderApTreeFilter(fk, content);
   updateApChips();
   apSearch();
-}
-
-function apSearchTree(filterKey, query) {
-  var q = query.toLowerCase().trim();
-  if (q === '') {
-    renderApTreeFilter(filterKey, document.getElementById('apExpandContent'));
-    return;
-  }
-  var tree = filterKey === 'industry' ? INDUSTRY_TREE : PRODUCT_TREE;
-  var results = [];
-  function search(nodes, pp) {
-    nodes.forEach(function(n) {
-      if (n.children) search(n.children, pp.concat(n.name));
-      else if (n.name.toLowerCase().indexOf(q) >= 0 || pp.join(' ').toLowerCase().indexOf(q) >= 0)
-        results.push({code:n.code, name:n.name, count:n.count||0, path:pp.join(' › ')});
-    });
-  }
-  search(tree, []);
-  var opts = document.getElementById('apTreeOpts');
-  if (!opts) return;
-  if (results.length === 0) {
-    opts.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-muted);font-size:11px">검색 결과 없음</div>';
-    return;
-  }
-  var html = '';
-  results.forEach(function(r) {
-    var incState = apIeState[filterKey].include.indexOf(r.code) >= 0 ? ' active-include' : '';
-    var excState = apIeState[filterKey].exclude.indexOf(r.code) >= 0 ? ' active-exclude' : '';
-    html += '<div class="ap-tree-item">' +
-      '<div style="display:flex;flex-direction:column;flex:1;min-width:0"><span class="ap-tree-label">' + r.name + '</span>' +
-      '<span style="font-size:9.5px;color:var(--text-muted)">' + r.path + '</span></div>' +
-      '<span class="ap-tree-count">' + r.count + '</span>' +
-      '<div class="ie-actions">' +
-        '<span class="ie-btn' + incState + '" onclick="apToggleIe(\'' + filterKey + '\',\'' + r.code + '\',\'include\')">Include</span>' +
-        '<span class="ie-btn' + excState + '" onclick="apToggleIe(\'' + filterKey + '\',\'' + r.code + '\',\'exclude\')">Exclude</span>' +
-      '</div></div>';
-  });
-  opts.innerHTML = html;
 }
 
 function apSearchRegion(query) {
@@ -1985,7 +1947,7 @@ function resetApFilter() {
     apIeState[currentApFilter] = {include:[],exclude:[]};
     var content = document.getElementById('apExpandContent');
     if (currentApFilter === 'region') renderApRegionFilter(content);
-    else { apTreePath[currentApFilter] = []; renderApTreeFilter(currentApFilter, content); }
+    else { apColSelection[currentApFilter] = {d1:null,d2:null}; renderApTreeFilter(currentApFilter, content); }
     updateApChips();
     apSearch();
     return;
