@@ -87,8 +87,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .cta-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-bg)}
 .cta-btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
 .cta-btn.primary:hover{background:var(--brand-hover)}
-.cta-btn.primary.active{background:var(--amber-500);border-color:var(--amber-500);color:#fff}
-.cta-btn.primary.active:hover{background:var(--amber-600)}
+.cta-btn.primary.active{background:var(--red-500);border-color:var(--red-500);color:#fff}
+.cta-btn.primary.active:hover{background:var(--red-600)}
+.cta-btn.following{background:var(--amber-500);border-color:var(--amber-500);color:#fff}
+.cta-btn.following:hover{background:var(--amber-600)}
 
 /* TABS */
 .tabs-wrap{position:sticky;top:var(--nav-h);z-index:100;background:#fff;border-bottom:1px solid var(--border)}
@@ -684,8 +686,8 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
 
   <!-- CTA Bar -->
   <div class="cta-bar">
-    <button class="cta-btn primary" id="heroSaveBtn" onclick="toggleHeroSave(this)">★ 저장</button>
-    <button class="cta-btn" id="heroFollowBtn" onclick="toggleHeroFollow(this)">+ 팔로우</button>
+    <button class="cta-btn primary" id="heroSaveBtn" onclick="toggleHeroSave(this)">♡ 저장</button>
+    <button class="cta-btn" id="heroFollowBtn" onclick="toggleHeroFollow(this)">🔔 팔로우</button>
     <button class="cta-btn" onclick="openListModal()">리스트에 추가</button>
     <button class="cta-btn">↗ 내보내기</button>
     <button class="cta-btn">↗ 공유</button>
@@ -2317,21 +2319,21 @@ function showToast(msg){
 function toggleHeroSave(btn){
   btn.classList.toggle('active');
   if(btn.classList.contains('active')){
-    btn.innerHTML='★ 저장됨';
+    btn.innerHTML='♥ 저장됨';
     showToast('저장되었습니다');
   } else {
-    btn.innerHTML='★ 저장';
+    btn.innerHTML='♡ 저장';
     showToast('저장 해제되었습니다');
   }
 }
 function toggleHeroFollow(btn){
-  if(btn.textContent.trim()==='+ 팔로우'){
-    btn.textContent='팔로잉';
-    btn.classList.add('primary');
+  if(btn.textContent.indexOf('팔로우')>=0 && btn.textContent.indexOf('팔로잉')<0){
+    btn.textContent='🔔 팔로잉';
+    btn.classList.add('following');
     showToast('팔로우합니다');
   } else {
-    btn.textContent='+ 팔로우';
-    btn.classList.remove('primary');
+    btn.textContent='🔔 팔로우';
+    btn.classList.remove('following');
     showToast('팔로우 해제되었습니다');
   }
 }
