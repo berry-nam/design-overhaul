@@ -839,11 +839,11 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
 <!-- BULK ACTION BAR -->
 <div class="bulk-bar" id="bulkBar">
   <span class="count" id="bulkCount">0</span>개 기업 선택됨
-  <button class="bulk-btn" onclick="bulkAddToList()">리스트에 추가</button>
   <button class="bulk-btn" onclick="bulkExportCSV()">내보내기 (CSV)</button>
   <button class="bulk-btn" onclick="showToast('태그 추가 기능 준비 중')">태그 추가</button>
   <button class="bulk-btn" onclick="bulkSave()">♡ 저장</button>
   <button class="bulk-btn" onclick="bulkFollow()">🔔 팔로우</button>
+  <button class="bulk-btn" onclick="bulkDelete()" style="border-color:rgba(239,68,68,.5);color:var(--red-300)">삭제</button>
   <button class="bulk-btn" onclick="bulkClear()" style="border-color:rgba(255,255,255,.1)">선택 해제</button>
 </div>
 <div class="toast" id="toast"></div>
