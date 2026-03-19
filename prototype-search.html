@@ -715,10 +715,24 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
       매출: 100억~500억
       <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
     </button>
-    <button class="filter-select">
-      영업이익
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
-    </button>
+    <div class="filter-dropdown-wrap">
+      <button class="filter-select" onclick="toggleFilterDropdown('profitDropdown',event)">
+        영업이익
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-dropdown" id="profitDropdown" style="width:240px;padding:12px 16px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">영업이익 (억)</div>
+        <div class="adv-range" style="display:flex;align-items:center;gap:6px">
+          <input type="number" id="basicProfitMin" placeholder="최소" min="0" style="flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit" oninput="validateBasicProfitMin()">
+          <span style="color:var(--text-muted);font-size:13px">~</span>
+          <input type="number" id="basicProfitMax" placeholder="최대" style="flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit">
+        </div>
+        <label style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--text-sub);cursor:pointer">
+          <input type="checkbox" id="basicDeficitChk" onchange="toggleBasicDeficit()" style="accent-color:var(--brand)"> 적자 기업 포함
+        </label>
+        <button onclick="applyBasicProfitFilter()" style="width:100%;margin-top:10px;padding:7px 0;background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer">적용</button>
+      </div>
+    </div>
     <div class="filter-divider"></div>
     <button class="filter-advanced-btn" onclick="document.querySelector('.advanced-panel').classList.toggle('show')">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4h12M4 8h8M6 12h4"/></svg>
@@ -750,6 +764,10 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
         <div class="advanced-item" data-filter="벤처기업 인증">
           <label>🏅 벤처기업 인증 <span class="adv-info">?<span class="adv-tip">중소벤처기업부 벤처확인 기업 여부로 필터링합니다.</span></span></label>
           <select><option>전체</option><option>인증 기업만</option><option>비인증 기업만</option></select>
+        </div>
+        <div class="advanced-item" data-filter="대표자명">
+          <label>👤 대표자명</label>
+          <input type="text" id="advCeoInput" placeholder="대표자명 입력..." oninput="applyFilters()">
         </div>
         <div class="advanced-item phase2" data-filter="기업 유사도">
           <label>🔍 기업 유사도 <span class="adv-tag ai">AI</span> <span class="adv-tag phase2">Phase 2</span></label>
@@ -1495,6 +1513,13 @@ function filterCompanies(){
       if(v==='감소 기업') return c.revenueG < 0;
       return true;
     });
+  }
+
+  // 대표자명
+  var ceoInp = document.getElementById('advCeoInput');
+  if(ceoInp && ceoInp.value.trim()){
+    var cq = ceoInp.value.trim().toLowerCase();
+    result = result.filter(function(c){ return c.ceo && c.ceo.toLowerCase().indexOf(cq)>=0; });
   }
 
   // Update result count
@@ -2360,16 +2385,21 @@ function resetAdvanced(){
   applyFilters();
 }
 
-// ── 영업이익 적자 포함 토글 ──
+// ── 영업이익 적자 포함 토글 (고급 필터) ──
 function toggleDeficit(){
   var chk=document.getElementById('advDeficitChk');
   var minInput=document.getElementById('advProfitMin');
   if(chk.checked){
     minInput.removeAttribute('min');
     minInput.placeholder='최소 (음수 가능)';
+    minInput.disabled=true;
+    minInput.value='';
+    minInput.style.opacity='0.5';
   }else{
     minInput.min='0';
     minInput.placeholder='최소';
+    minInput.disabled=false;
+    minInput.style.opacity='1';
     if(parseFloat(minInput.value)<0)minInput.value='0';
   }
 }
@@ -2377,6 +2407,44 @@ function validateProfitMin(){
   var chk=document.getElementById('advDeficitChk');
   var minInput=document.getElementById('advProfitMin');
   if(!chk.checked&&parseFloat(minInput.value)<0){minInput.value='0';}
+}
+
+// ── 영업이익 적자 포함 토글 (기본 필터) ──
+function toggleBasicDeficit(){
+  var chk=document.getElementById('basicDeficitChk');
+  var minInput=document.getElementById('basicProfitMin');
+  if(chk.checked){
+    minInput.removeAttribute('min');
+    minInput.disabled=true;
+    minInput.value='';
+    minInput.style.opacity='0.5';
+    minInput.placeholder='최소 (적자 포함)';
+  }else{
+    minInput.min='0';
+    minInput.disabled=false;
+    minInput.style.opacity='1';
+    minInput.placeholder='최소';
+  }
+}
+function validateBasicProfitMin(){
+  var chk=document.getElementById('basicDeficitChk');
+  var minInput=document.getElementById('basicProfitMin');
+  if(!chk.checked&&parseFloat(minInput.value)<0){minInput.value='0';}
+}
+function applyBasicProfitFilter(){
+  var min=document.getElementById('basicProfitMin').value;
+  var max=document.getElementById('basicProfitMax').value;
+  var deficit=document.getElementById('basicDeficitChk').checked;
+  var btn=document.querySelector('#profitDropdown').closest('.filter-dropdown-wrap').querySelector('.filter-select');
+  var parts=[];
+  if(deficit)parts.push('적자 포함');
+  if(min)parts.push(min+'억~');
+  if(max)parts.push((min?'':'~')+max+'억');
+  if(parts.length>0){
+    btn.classList.add('has-value');
+    btn.innerHTML='영업이익: '+parts.join('')+' <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>';
+  }
+  document.getElementById('profitDropdown').classList.remove('open');
 }
 
 // ══ CLOSE DROPDOWNS ON OUTSIDE CLICK ══

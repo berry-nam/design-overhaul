@@ -75,6 +75,26 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sidebar-footer{padding:12px;border-top:1px solid var(--border)}
 .sidebar-add-btn{width:100%;padding:8px 12px;border:1px dashed var(--border);border-radius:var(--radius);background:transparent;color:var(--text-sub);font-size:13px;font-family:inherit;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px}
 .sidebar-add-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-bg)}
+/* SIDEBAR GROUP EDIT */
+.sidebar-footer-row{display:flex;gap:6px}
+.sidebar-footer-row .sidebar-add-btn{flex:1}
+.sidebar-group-edit-btn{padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);background:transparent;color:var(--text-sub);font-size:13px;font-family:inherit;cursor:pointer;transition:var(--transition);white-space:nowrap}
+.sidebar-group-edit-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-bg)}
+.sidebar-group-edit-btn.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+.sidebar-edit-controls{display:none;align-items:center;gap:4px;flex-shrink:0}
+.group-editing .sidebar-edit-controls{display:flex}
+.group-editing .sidebar-item{padding-left:8px}
+.sidebar-edit-del{width:24px;height:24px;border-radius:50%;background:var(--red-50);color:var(--red-600);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;border:none;transition:var(--transition)}
+.sidebar-edit-del:hover{background:var(--red-600);color:#fff}
+.sidebar-edit-rename{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-sub);flex-shrink:0;border:none;background:none;transition:var(--transition)}
+.sidebar-edit-rename:hover{color:var(--brand)}
+.sidebar-edit-drag{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:grab;color:var(--text-muted);font-size:16px;flex-shrink:0}
+.sidebar-edit-drag:active{cursor:grabbing}
+.sidebar-item-name input{width:100%;border:1px solid var(--brand);border-radius:4px;padding:2px 6px;font-size:13px;font-family:inherit;outline:none}
+.group-editing .sidebar-item{cursor:default}
+.group-editing .sidebar-item:hover{background:transparent}
+.sidebar-done-btn{width:100%;padding:8px 12px;border:none;border-radius:var(--radius);background:var(--brand);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:var(--transition)}
+.sidebar-done-btn:hover{background:var(--brand-hover)}
 /* SIDEBAR QUICK-ACCESS SECTIONS */
 .sidebar-section{border-top:1px solid var(--border-light)}
 .sidebar-section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;transition:var(--transition);font-size:12px;font-weight:600;color:var(--text-sub);letter-spacing:.02em}
@@ -382,6 +402,16 @@ textarea.form-input{resize:vertical;min-height:72px;line-height:1.5}
 .modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
 
 /* TOAST */
+/* ── BULK ACTION BAR ── */
+.bulk-bar{position:fixed;bottom:0;left:0;right:0;background:var(--slate-900);color:#fff;padding:12px 24px;display:flex;align-items:center;gap:10px;z-index:500;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 -4px 20px rgba(17,24,39,.3)}
+.bulk-bar.show{transform:translateY(0)}
+.bulk-bar-count{font-size:14px;font-weight:700;padding:5px 16px;border-radius:var(--radius);background:var(--brand);flex-shrink:0}
+.bulk-bar-btn{padding:8px 18px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;border:none;background:var(--slate-700);color:#fff;transition:var(--transition);white-space:nowrap}
+.bulk-bar-btn:hover{background:var(--slate-600)}
+.bulk-bar-btn.danger{background:var(--red-600)}
+.bulk-bar-btn.danger:hover{background:var(--red-500)}
+.bulk-bar-spacer{flex:1}
+
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--slate-800);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);z-index:600;transition:transform .3s cubic-bezier(.4,0,.2,1);pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
@@ -554,8 +584,15 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
         </div>
       </div>
     </div>
-    <div class="sidebar-footer">
-      <button class="sidebar-add-btn" onclick="openNewListModal()">+ 새 리스트 만들기</button>
+    <div class="sidebar-footer" id="sidebarFooter">
+      <div class="sidebar-footer-row" id="sidebarFooterNormal">
+        <button class="sidebar-add-btn" onclick="openNewListModal()">+ 새 리스트 만들기</button>
+        <button class="sidebar-group-edit-btn" onclick="toggleGroupEditMode()">그룹 편집</button>
+      </div>
+      <div class="sidebar-footer-row" id="sidebarFooterEdit" style="display:none">
+        <button class="sidebar-add-btn" onclick="openNewListModal()">+ 새 리스트</button>
+        <button class="sidebar-done-btn" onclick="toggleGroupEditMode()">완료</button>
+      </div>
     </div>
     <!-- QUICK ACCESS: 열람 가능 기업 -->
     <div class="sidebar-section open" id="sectionUnlocked">
@@ -687,6 +724,7 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
         <button class="ap-chip" data-filter="region" onclick="openApFilter('region')">지역 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
         <button class="ap-chip" data-filter="revenue" onclick="openApFilter('revenue')">매출 규모 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
         <button class="ap-chip" data-filter="profit" onclick="openApFilter('profit')">영업이익 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
+        <button class="ap-chip" data-filter="ceo" onclick="openApFilter('ceo')">대표자명 <svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 4.5l3 3 3-3"/></svg></button>
       </div>
       <!-- Inline filter expansion (between chips and results) -->
       <div class="ap-expand" id="apExpand">
@@ -801,6 +839,18 @@ body.cb-sidebar-open{padding-left:340px;transition:padding-left .25s cubic-bezie
 
 
 <!-- TOAST -->
+<!-- BULK ACTION BAR -->
+<div class="bulk-bar" id="bulkBar">
+  <div class="bulk-bar-count"><span id="bulkCount">0</span> 개 기업 선택됨</div>
+  <button class="bulk-bar-btn" onclick="bulkAddToList()">리스트에 추가</button>
+  <button class="bulk-bar-btn" onclick="bulkExportCSV()">내보내기 (CSV)</button>
+  <button class="bulk-bar-btn" onclick="showToast('태그 추가 기능 준비 중')">태그 추가</button>
+  <button class="bulk-bar-btn" onclick="bulkSave()">★ 저장</button>
+  <button class="bulk-bar-btn" onclick="bulkFollow()">+ 팔로우</button>
+  <button class="bulk-bar-btn danger" onclick="bulkDelete()">삭제</button>
+  <div class="bulk-bar-spacer"></div>
+  <button class="bulk-bar-btn" onclick="bulkClear()" style="background:var(--slate-600)">선택 해제</button>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1191,6 +1241,7 @@ function toggleCheck(idx, val) {
   var tr = document.querySelectorAll('#listBody tr')[idx];
   if (tr) tr.classList.toggle('selected', val);
   updateCompareBtn();
+  updateBulkBar();
 }
 
 function toggleAllChecks(val) {
@@ -1200,6 +1251,69 @@ function toggleAllChecks(val) {
   }
   renderTable();
   updateCompareBtn();
+  updateBulkBar();
+}
+
+function updateBulkBar() {
+  var count = Object.keys(checked).length;
+  document.getElementById('bulkCount').textContent = count;
+  document.getElementById('bulkBar').classList.toggle('show', count > 0);
+}
+
+function bulkDelete() {
+  var indices = Object.keys(checked).map(Number).sort(function(a,b){return b-a});
+  if (!indices.length) return;
+  if (!confirm(indices.length+'개 기업을 삭제하시겠습니까?')) return;
+  indices.forEach(function(idx){ lists[currentList].companies.splice(idx,1) });
+  checked = {};
+  renderTable();
+  updateCompareBtn();
+  updateBulkBar();
+  updateSidebarCount();
+  showToast(indices.length+'개 기업이 삭제되었습니다');
+}
+
+function bulkAddToList() {
+  showToast('리스트에 추가 기능 준비 중');
+}
+
+function bulkExportCSV() {
+  var indices = Object.keys(checked).map(Number).sort(function(a,b){return a-b});
+  var comps = indices.map(function(i){ return lists[currentList].companies[i] });
+  var header = '기업명,업종,지역,매출액,영업이익,직원수';
+  var rows = comps.map(function(c){ return [c.name,c.industry||'',c.region||'',c.revenue||'',c.profit||'',c.emp||''].join(',') });
+  var csv = header+'\n'+rows.join('\n');
+  var blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  var a = document.createElement('a');a.href=URL.createObjectURL(blob);a.download='export_'+lists[currentList].name+'.csv';a.click();
+  showToast('CSV 파일이 다운로드되었습니다');
+}
+
+function bulkSave() {
+  var count = Object.keys(checked).length;
+  if (!count) return;
+  Object.keys(checked).forEach(function(idx) {
+    var c = lists[currentList].companies[idx];
+    c.saved = !c.saved;
+  });
+  showToast(count + '개 기업이 저장되었습니다');
+}
+
+function bulkFollow() {
+  var count = Object.keys(checked).length;
+  if (!count) return;
+  Object.keys(checked).forEach(function(idx) {
+    var c = lists[currentList].companies[idx];
+    c.followed = !c.followed;
+  });
+  showToast(count + '개 기업을 팔로우합니다');
+}
+
+function bulkClear() {
+  checked = {};
+  document.getElementById('checkAll').checked = false;
+  renderTable();
+  updateCompareBtn();
+  updateBulkBar();
 }
 
 function updateCompareBtn() {
@@ -1253,7 +1367,7 @@ var apIeState = {
   region:{include:[],exclude:[]}
 };
 // Flat filter state for non-tree filters
-var apFilterState = {revenue:[],profit:[]};
+var apFilterState = {revenue:[],profit:[],ceo:''};
 var apAddedNames = [];
 
 // ── KSIC 3-DEPTH TREE DATA ──
@@ -1447,28 +1561,28 @@ var AP_FILTERS = {
     {label:'100억~500억',count:31},{label:'500억~1,000억',count:15},{label:'1,000억 이상',count:8}
   ]},
   profit:{title:'영업이익',search:false,options:[
-    {label:'적자',count:12},{label:'0~10억',count:18},{label:'10~50억',count:24},
+    {label:'적자 포함',count:12},{label:'0~10억',count:18},{label:'10~50억',count:24},
     {label:'50~100억',count:14},{label:'100억 이상',count:8}
   ]}
 };
 
 var AP_TREE_FILTERS = ['industry','product','region'];
 var AP_ALL_COMPANIES = [
-  {name:'한솔네오텍',type:'비상장',industry:'반도체장비',region:'경기',revenue:180,emp:85,color:'#0D9488'},
-  {name:'유니셈',type:'상장',industry:'반도체장비',region:'경기',revenue:320,emp:210,color:'#EA580C'},
-  {name:'원익IPS',type:'상장',industry:'반도체장비',region:'경기',revenue:890,emp:450,color:'#6366F1'},
-  {name:'비에이치아이',type:'비상장',industry:'전자부품',region:'서울',revenue:95,emp:62,color:'#B45309'},
-  {name:'나인디비',type:'비상장',industry:'반도체설계',region:'서울',revenue:45,emp:38,color:'#14B8A6'},
-  {name:'실리콘마이터스',type:'상장',industry:'반도체설계',region:'서울',revenue:210,emp:120,color:'#7C3AED'},
-  {name:'넥스트반도체',type:'비상장',industry:'반도체장비',region:'경기',revenue:67,emp:42,color:'#0891B2'},
-  {name:'케이앤도체',type:'비상장',industry:'반도체설계',region:'대전',revenue:28,emp:22,color:'#DC2626'},
-  {name:'코어셈텍',type:'상장',industry:'반도체장비',region:'경기',revenue:520,emp:280,color:'#059669'},
-  {name:'솔브레인',type:'상장',industry:'화학/소재',region:'경기',revenue:750,emp:380,color:'#D97706'},
-  {name:'리노공업',type:'상장',industry:'전자부품',region:'대구',revenue:410,emp:195,color:'#4F46E5'},
-  {name:'이오테크닉스',type:'상장',industry:'반도체장비',region:'경기',revenue:380,emp:220,color:'#0284C7'},
-  {name:'피에스케이',type:'상장',industry:'반도체장비',region:'경기',revenue:290,emp:170,color:'#9333EA'},
-  {name:'테스',type:'상장',industry:'반도체장비',region:'경기',revenue:350,emp:200,color:'#E11D48'},
-  {name:'디아이티',type:'비상장',industry:'소프트웨어',region:'서울',revenue:55,emp:48,color:'#2563EB'}
+  {name:'한솔네오텍',type:'비상장',industry:'반도체장비',region:'경기',revenue:180,emp:85,color:'#0D9488',ceo:'김태현'},
+  {name:'유니셈',type:'상장',industry:'반도체장비',region:'경기',revenue:320,emp:210,color:'#EA580C',ceo:'이상훈'},
+  {name:'원익IPS',type:'상장',industry:'반도체장비',region:'경기',revenue:890,emp:450,color:'#6366F1',ceo:'박영우'},
+  {name:'비에이치아이',type:'비상장',industry:'전자부품',region:'서울',revenue:95,emp:62,color:'#B45309',ceo:'정민수'},
+  {name:'나인디비',type:'비상장',industry:'반도체설계',region:'서울',revenue:45,emp:38,color:'#14B8A6',ceo:'최재원'},
+  {name:'실리콘마이터스',type:'상장',industry:'반도체설계',region:'서울',revenue:210,emp:120,color:'#7C3AED',ceo:'최성우'},
+  {name:'넥스트반도체',type:'비상장',industry:'반도체장비',region:'경기',revenue:67,emp:42,color:'#0891B2',ceo:'한동진'},
+  {name:'케이앤도체',type:'비상장',industry:'반도체설계',region:'대전',revenue:28,emp:22,color:'#DC2626',ceo:'강도현'},
+  {name:'코어셈텍',type:'상장',industry:'반도체장비',region:'경기',revenue:520,emp:280,color:'#059669',ceo:'윤석호'},
+  {name:'솔브레인',type:'상장',industry:'화학/소재',region:'경기',revenue:750,emp:380,color:'#D97706',ceo:'정영일'},
+  {name:'리노공업',type:'상장',industry:'전자부품',region:'대구',revenue:410,emp:195,color:'#4F46E5',ceo:'이원재'},
+  {name:'이오테크닉스',type:'상장',industry:'반도체장비',region:'경기',revenue:380,emp:220,color:'#0284C7',ceo:'김형준'},
+  {name:'피에스케이',type:'상장',industry:'반도체장비',region:'경기',revenue:290,emp:170,color:'#9333EA',ceo:'백승현'},
+  {name:'테스',type:'상장',industry:'반도체장비',region:'경기',revenue:350,emp:200,color:'#E11D48',ceo:'조현진'},
+  {name:'디아이티',type:'비상장',industry:'소프트웨어',region:'서울',revenue:55,emp:48,color:'#2563EB',ceo:'송지훈'}
 ];
 var currentApFilter = null;
 var tempFilterState = [];
@@ -1478,7 +1592,7 @@ function toggleAddPanel() {
   var isOpen = panel.classList.contains('open');
   if (isOpen) { closeAddPanel(); return; }
   apIeState = {industry:{include:[],exclude:[]},product:{include:[],exclude:[]},region:{include:[],exclude:[]}};
-  apFilterState = {revenue:[],profit:[]};
+  apFilterState = {revenue:[],profit:[],ceo:''};
   apColSelection = {industry:{d1:null,d2:null}, product:{d1:null,d2:null}};
   apAddedNames = [];
   document.getElementById('apSearchInput').value = '';
@@ -1499,18 +1613,20 @@ function closeAddPanel() {
 }
 
 function updateApChips() {
-  var titles = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',profit:'영업이익'};
+  var titles = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',profit:'영업이익',ceo:'대표자명'};
   document.querySelectorAll('.ap-chip').forEach(function(chip) {
     var key = chip.getAttribute('data-filter');
     var count = 0;
-    if (AP_TREE_FILTERS.indexOf(key) >= 0) {
+    if (key === 'ceo') {
+      count = apFilterState.ceo ? 1 : 0;
+    } else if (AP_TREE_FILTERS.indexOf(key) >= 0) {
       count = apIeState[key].include.length + apIeState[key].exclude.length;
     } else if (apFilterState[key]) {
       count = apFilterState[key].length;
     }
     if (count > 0) {
       chip.classList.add('active');
-      chip.childNodes[0].textContent = titles[key] + ': ' + count + '개 선택 ';
+      chip.childNodes[0].textContent = key === 'ceo' ? titles[key] + ': ' + apFilterState.ceo + ' ' : titles[key] + ': ' + count + '개 선택 ';
     } else {
       chip.classList.remove('active');
       chip.childNodes[0].textContent = titles[key] + ' ';
@@ -1552,6 +1668,10 @@ function apSearch() {
       regNames.forEach(function(n){ if(c.region.indexOf(n)>=0) excluded=true; });
       if(excluded) return false;
     }
+    // CEO name filter
+    if (apFilterState.ceo) {
+      if (!c.ceo || c.ceo.toLowerCase().indexOf(apFilterState.ceo.toLowerCase()) < 0) return false;
+    }
     if (apFilterState.revenue && apFilterState.revenue.length) {
       var match = false;
       apFilterState.revenue.forEach(function(r) {
@@ -1585,7 +1705,7 @@ function renderApResults(results) {
   var info = document.getElementById('apResultsInfo');
   var activeCount = 0;
   AP_TREE_FILTERS.forEach(function(k){activeCount += apIeState[k].include.length + apIeState[k].exclude.length;});
-  Object.keys(apFilterState).forEach(function(k){activeCount += apFilterState[k].length;});
+  Object.keys(apFilterState).forEach(function(k){activeCount += k==='ceo'?(apFilterState[k]?1:0):apFilterState[k].length;});
   info.textContent = results.length + '개 기업' + (activeCount ? ' · 필터 ' + activeCount + '개 적용' : '');
   var list = document.getElementById('apResultsList');
   if (results.length === 0) {
@@ -1661,11 +1781,12 @@ function openApFilter(key) {
 
   if (key === 'all') {
     title.textContent = '전체 필터';
-    var allFilters = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',profit:'영업이익'};
+    var allFilters = {industry:'업종',product:'생산품',region:'지역',revenue:'매출 규모',profit:'영업이익',ceo:'대표자명'};
     var html = '';
     Object.keys(allFilters).forEach(function(k) {
       var count = 0;
       if (AP_TREE_FILTERS.indexOf(k) >= 0) count = apIeState[k].include.length + apIeState[k].exclude.length;
+      else if (k === 'ceo') count = apFilterState.ceo ? 1 : 0;
       else if (apFilterState[k]) count = apFilterState[k].length;
       html += '<div class="ap-expand-cat" onclick="openApFilter(\'' + k + '\')">' +
         '<span class="ap-expand-cat-name">' + allFilters[k] + '</span>' +
@@ -1692,6 +1813,16 @@ function openApFilter(key) {
     }
     expand.classList.add('open');
     highlightActiveChip(key);
+    return;
+  }
+
+  // CEO text filter
+  if (key === 'ceo') {
+    title.textContent = '대표자명';
+    content.innerHTML = '<div style="padding:8px 0"><input type="text" id="apCeoInput" placeholder="대표자명 입력..." value="' + (apFilterState.ceo||'') + '" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px" oninput="apFilterState.ceo=this.value.trim();updateApChips();apSearch()"></div>';
+    expand.classList.add('open');
+    highlightActiveChip(key);
+    setTimeout(function(){var inp=document.getElementById('apCeoInput');if(inp)inp.focus();},100);
     return;
   }
 
@@ -1950,10 +2081,18 @@ function filterApExpandOptions(q) {
 function resetApFilter() {
   if (currentApFilter === 'all') {
     AP_TREE_FILTERS.forEach(function(k){apIeState[k]={include:[],exclude:[]};});
-    Object.keys(apFilterState).forEach(function(k){apFilterState[k]=[];});
+    Object.keys(apFilterState).forEach(function(k){apFilterState[k]= k==='ceo'?'':[];});
     updateApChips();
     apSearch();
     closeApFilter();
+    return;
+  }
+  if (currentApFilter === 'ceo') {
+    apFilterState.ceo = '';
+    var inp = document.getElementById('apCeoInput');
+    if (inp) inp.value = '';
+    updateApChips();
+    apSearch();
     return;
   }
   if (AP_TREE_FILTERS.indexOf(currentApFilter) >= 0) {
@@ -2170,6 +2309,129 @@ function createNewList() {
   closeNewListModal();
   selectList(lists.length - 1, item);
   showToast('리스트 "' + name + '"이(가) 생성되었습니다');
+}
+
+// ── GROUP EDIT MODE ──
+var groupEditMode = false;
+
+function toggleGroupEditMode() {
+  groupEditMode = !groupEditMode;
+  var sidebar = document.querySelector('.sidebar');
+  var normalFooter = document.getElementById('sidebarFooterNormal');
+  var editFooter = document.getElementById('sidebarFooterEdit');
+  if (groupEditMode) {
+    sidebar.classList.add('group-editing');
+    normalFooter.style.display = 'none';
+    editFooter.style.display = 'flex';
+    renderGroupEditControls();
+  } else {
+    sidebar.classList.remove('group-editing');
+    normalFooter.style.display = 'flex';
+    editFooter.style.display = 'none';
+    removeGroupEditControls();
+  }
+}
+
+function renderGroupEditControls() {
+  var items = document.querySelectorAll('#sidebarList .sidebar-item');
+  items.forEach(function(item, i) {
+    if (item.querySelector('.sidebar-edit-controls')) return;
+    var controls = document.createElement('div');
+    controls.className = 'sidebar-edit-controls';
+    controls.innerHTML = '<button class="sidebar-edit-del" onclick="event.stopPropagation();deleteListGroup(' + i + ')" title="삭제">−</button>';
+    item.insertBefore(controls, item.firstChild);
+    var right = document.createElement('div');
+    right.className = 'sidebar-edit-controls';
+    right.innerHTML = '<button class="sidebar-edit-rename" onclick="event.stopPropagation();renameListGroup(' + i + ')" title="이름 변경"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><div class="sidebar-edit-drag" draggable="true" ondragstart="onGroupDragStart(event,' + i + ')" ondragover="onGroupDragOver(event)" ondrop="onGroupDrop(event,' + i + ')">⠿</div>';
+    item.appendChild(right);
+    item.setAttribute('draggable', 'true');
+    item.ondragstart = function(e) { onGroupDragStart(e, i); };
+    item.ondragover = function(e) { onGroupDragOver(e); };
+    item.ondrop = function(e) { onGroupDrop(e, i); };
+  });
+}
+
+function removeGroupEditControls() {
+  document.querySelectorAll('#sidebarList .sidebar-edit-controls').forEach(function(c) { c.remove(); });
+  document.querySelectorAll('#sidebarList .sidebar-item').forEach(function(item) {
+    item.removeAttribute('draggable');
+    item.ondragstart = null;
+    item.ondragover = null;
+    item.ondrop = null;
+  });
+}
+
+function deleteListGroup(idx) {
+  if (lists.length <= 1) { showToast('최소 1개 리스트는 유지해야 합니다'); return; }
+  if (!confirm('"' + lists[idx].name + '" 리스트를 삭제하시겠습니까?')) return;
+  lists.splice(idx, 1);
+  if (currentList >= lists.length) currentList = lists.length - 1;
+  rebuildSidebar();
+  selectList(currentList, document.querySelectorAll('#sidebarList .sidebar-item')[currentList]);
+  showToast('리스트가 삭제되었습니다');
+}
+
+function renameListGroup(idx) {
+  var nameEl = document.querySelectorAll('#sidebarList .sidebar-item-name')[idx];
+  if (!nameEl) return;
+  var oldName = lists[idx].name;
+  nameEl.innerHTML = '<input type="text" value="' + oldName + '" />';
+  var input = nameEl.querySelector('input');
+  input.focus();
+  input.select();
+  function commit() {
+    var val = input.value.trim();
+    if (val) {
+      lists[idx].name = val;
+      nameEl.textContent = val;
+      if (idx === currentList) document.getElementById('listName').textContent = val;
+      showToast('이름이 변경되었습니다');
+    } else {
+      nameEl.textContent = oldName;
+    }
+  }
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+    if (e.key === 'Escape') { input.value = oldName; input.blur(); }
+  });
+}
+
+var dragSrcIdx = null;
+function onGroupDragStart(e, idx) {
+  if (!groupEditMode) { e.preventDefault(); return; }
+  dragSrcIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onGroupDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+}
+function onGroupDrop(e, targetIdx) {
+  e.preventDefault();
+  if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+  var moved = lists.splice(dragSrcIdx, 1)[0];
+  lists.splice(targetIdx, 0, moved);
+  if (currentList === dragSrcIdx) currentList = targetIdx;
+  else if (dragSrcIdx < currentList && targetIdx >= currentList) currentList--;
+  else if (dragSrcIdx > currentList && targetIdx <= currentList) currentList++;
+  rebuildSidebar();
+  dragSrcIdx = null;
+  showToast('순서가 변경되었습니다');
+}
+
+function rebuildSidebar() {
+  var sidebarList = document.getElementById('sidebarList');
+  sidebarList.innerHTML = '';
+  lists.forEach(function(list, i) {
+    var item = document.createElement('div');
+    item.className = 'sidebar-item' + (i === currentList ? ' active' : '');
+    item.dataset.list = i;
+    item.onclick = function() { if (!groupEditMode) selectList(i, item); };
+    item.innerHTML = '<div class="sidebar-dot" style="background:' + list.color + '"></div><div class="sidebar-item-info"><div class="sidebar-item-name">' + list.name + '</div><div class="sidebar-item-count">' + list.companies.length + '개 기업</div></div>';
+    sidebarList.appendChild(item);
+  });
+  if (groupEditMode) renderGroupEditControls();
 }
 
 // ── TOAST ──
