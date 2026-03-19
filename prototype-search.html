@@ -1008,6 +1008,8 @@ body.show-design-notes *:has(> .design-note){overflow:visible !important}
   <button class="bulk-btn" onclick="openListModal()">리스트에 추가</button>
   <button class="bulk-btn">내보내기 (CSV)</button>
   <button class="bulk-btn">태그 추가</button>
+  <button class="bulk-btn" onclick="bulkSaveSearch()">♡ 저장</button>
+  <button class="bulk-btn" onclick="bulkFollowSearch()">🔔 팔로우</button>
   <button class="bulk-btn" onclick="clearSelection()" style="border-color:rgba(255,255,255,.1)">선택 해제</button>
 </div>
 
@@ -1753,6 +1755,16 @@ function clearSelection(){
 function toggleAllChecks(master){
   document.querySelectorAll('#tableBody input[type=checkbox]').forEach(cb=>cb.checked=master.checked);
   updateBulk();
+}
+function bulkSaveSearch(){
+  var count=document.querySelectorAll('#tableBody input[type=checkbox]:checked').length;
+  if(!count)return;
+  showToast(count+'개 기업이 저장되었습니다');
+}
+function bulkFollowSearch(){
+  var count=document.querySelectorAll('#tableBody input[type=checkbox]:checked').length;
+  if(!count)return;
+  showToast(count+'개 기업을 팔로우합니다');
 }
 
 // ══ KSIC 3-DEPTH TREE DATA ══

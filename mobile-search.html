@@ -84,18 +84,24 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .result-sort{font-size:13px;color:var(--text-sub);cursor:pointer;display:flex;align-items:center;gap:4px;font-weight:500}
 .result-sort:active{color:var(--brand)}
 
-/* Company cards — expanded info */
+/* Company list — compact rows (synced with desktop search & list view) */
 .company-list{padding:0 var(--m-section-pad);padding-bottom:calc(var(--m-tab-bar-h) + var(--m-safe-bottom) + 16px)}
-.company-card{padding:16px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:var(--transition)}
-.company-card:active{background:var(--slate-50);margin:0 -16px;padding:16px}
-.company-name{font-size:17px;font-weight:800;margin-bottom:3px}
-.company-ceo-addr{font-size:12.5px;color:var(--text-sub);margin-bottom:10px}
-.company-financials{display:flex;gap:24px;margin-bottom:10px}
-.company-fin-col{flex:1}
-.company-fin-label{font-size:11px;color:var(--text-sub);margin-bottom:2px}
-.company-fin-value{font-size:20px;font-weight:800;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
-.company-tags{display:flex;flex-wrap:wrap;gap:6px}
-.company-tag{padding:4px 10px;border-radius:var(--radius-sm);font-size:12px;color:var(--text-sub);background:var(--slate-50);border:1px solid var(--border-light)}
+.search-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-light);cursor:pointer;transition:var(--transition)}
+.search-item:active{background:var(--slate-50);margin:0 -16px;padding:12px 16px}
+.search-cb{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition)}
+.search-cb.checked{background:var(--brand);border-color:var(--brand)}
+.search-cb.checked::after{content:'✓';color:#fff;font-size:12px;font-weight:700}
+.search-item-logo{width:40px;height:40px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.search-item-info{flex:1;min-width:0}
+.search-item-name{font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.search-item-sub{font-size:12px;color:var(--text-sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.search-item-metrics{text-align:right;flex-shrink:0;display:flex;flex-direction:column;gap:1px}
+.search-item-metric{display:flex;align-items:baseline;gap:4px;justify-content:flex-end}
+.search-item-metric-label{font-size:10px;color:var(--text-muted);font-weight:500}
+.search-item-metric-val{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.search-item-metric-change{font-size:10px;font-weight:500}
+.search-item-metric-change.up{color:var(--emerald-600)}
+.search-item-metric-change.down{color:var(--red-600)}
 
 /* ═══ LIST VIEW ═══ */
 .list-header{padding:12px var(--m-section-pad) 0}
@@ -342,6 +348,16 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
     <div class="result-sort" onclick="openSheet('sort')">정렬 <span id="sortLabel">매출액 높은 순</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
   </div>
   <div class="company-list" id="companyList"></div>
+  <div class="sel-bar" id="searchSelBar">
+    <div class="sel-bar-count"><span id="searchSelCount">0</span> 개 기업 선택됨</div>
+    <div class="sel-bar-spacer"></div>
+    <button class="sel-bar-btn" onclick="searchBulkAddToList()">리스트에 추가</button>
+    <button class="sel-bar-btn" onclick="searchBulkExportCSV()">내보내기(CSV)</button>
+    <button class="sel-bar-btn" onclick="showToast('태그 추가 기능 준비 중')">태그 추가</button>
+    <button class="sel-bar-btn" onclick="searchBulkSave()">♡ 저장</button>
+    <button class="sel-bar-btn" onclick="searchBulkFollow()">🔔 팔로우</button>
+    <button class="sel-bar-btn" onclick="searchClearSelection()" style="background:var(--slate-600)">선택 해제</button>
+  </div>
 </div>
 
 <!-- ═══ LIST VIEW ═══ -->
@@ -374,8 +390,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
     <div class="sel-bar-spacer"></div>
     <button class="sel-bar-btn" onclick="openMoveSheet()">이동</button>
     <button class="sel-bar-btn" onclick="toggleComparison()">비교</button>
-    <button class="sel-bar-btn" onclick="bulkSaveMobile()">★ 저장</button>
-    <button class="sel-bar-btn" onclick="bulkFollowMobile()">+ 팔로우</button>
+    <button class="sel-bar-btn" onclick="listBulkExportCSV()">내보내기(CSV)</button>
+    <button class="sel-bar-btn" onclick="bulkSaveMobile()">♡ 저장</button>
+    <button class="sel-bar-btn" onclick="bulkFollowMobile()">🔔 팔로우</button>
     <button class="sel-bar-btn danger" onclick="deleteSelected()">삭제</button>
     <button class="sel-bar-btn" onclick="clearSelection()" style="background:var(--slate-600)">선택 해제</button>
   </div>
@@ -565,34 +582,76 @@ function fmtRev(v) {
   return v+'억원';
 }
 
+var searchChecked = {};
+var searchFilteredList = [];
+
 function renderCompanyList(data) {
   var list = data || getFilteredCompanies();
+  searchFilteredList = list;
   document.getElementById('resultCount').textContent = list.length;
   document.getElementById('sheetResultCount').textContent = list.length;
   var html = '';
-  list.forEach(function(c){
-    html += '<div class="company-card" onclick="goDetail(\''+c.name+'\')">' +
-      '<div class="company-name">'+c.name+'</div>' +
-      '<div class="company-ceo-addr">'+c.ceo+' · '+c.addr+'</div>' +
-      '<div class="company-financials">' +
-        '<div class="company-fin-col">' +
-          '<div class="company-fin-label">매출액 2024년 기준</div>' +
-          '<div class="company-fin-value">'+fmtRev(c.revenue)+'</div>' +
-        '</div>' +
-        '<div class="company-fin-col">' +
-          '<div class="company-fin-label">영업이익 2024년 기준</div>' +
-          '<div class="company-fin-value"'+(c.profit<0?' style="color:var(--red-600)"':'')+'>'+fmtRev(c.profit)+'</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="company-tags">' +
-        '<div class="company-tag">업종: '+c.industry+'</div>' +
-        '<div class="company-tag">생산품: '+c.products+'</div>' +
-        '<div class="company-tag">사업자번호: '+c.bizNo+'</div>' +
-      '</div>' +
-    '</div>';
+  list.forEach(function(c, i){
+    var rClass=c.revenueG>0?'up':(c.revenueG<0?'down':''),rSign=c.revenueG>0?'+':'';
+    var pClass=c.profitG>0?'up':(c.profitG<0?'down':''),pSign=c.profitG>0?'+':'';
+    html += '<div class="search-item" data-idx="'+i+'" onclick="goDetail(\''+c.name+'\')">';
+    html += '<div class="search-cb'+(searchChecked[i]?' checked':'')+'" onclick="event.stopPropagation();toggleSearchCheck('+i+')"></div>';
+    html += '<div class="search-item-logo" style="background:'+c.color+'">'+c.name.charAt(0)+'</div>';
+    html += '<div class="search-item-info"><div class="search-item-name">'+c.name+'</div><div class="search-item-sub">'+c.industry+' · '+c.region+' · '+c.ceo+'</div></div>';
+    html += '<div class="search-item-metrics">';
+    html += '<div class="search-item-metric"><span class="search-item-metric-label">매출</span><span class="search-item-metric-val">'+fmtRev(c.revenue)+'</span><span class="search-item-metric-change '+rClass+'">'+rSign+c.revenueG+'%</span></div>';
+    html += '<div class="search-item-metric"><span class="search-item-metric-label">영업이익</span><span class="search-item-metric-val"'+(c.profit<0?' style="color:var(--red-600)"':'')+'>'+fmtRev(c.profit)+'</span>'+(c.profitG!==-999?'<span class="search-item-metric-change '+pClass+'">'+pSign+c.profitG+'%</span>':'')+'</div>';
+    html += '</div>';
+    html += '</div>';
   });
   if (!list.length) html = '<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">검색 결과가 없습니다.<br>다른 조건으로 검색해보세요.</div></div>';
   document.getElementById('companyList').innerHTML = html;
+}
+
+function toggleSearchCheck(idx) {
+  searchChecked[idx] = !searchChecked[idx];
+  if (!searchChecked[idx]) delete searchChecked[idx];
+  renderCompanyList(searchFilteredList);
+  updateSearchSelBar();
+}
+
+function updateSearchSelBar() {
+  var c = Object.keys(searchChecked).length;
+  document.getElementById('searchSelCount').textContent = c;
+  document.getElementById('searchSelBar').classList.toggle('show', c > 0);
+}
+
+function searchClearSelection() {
+  searchChecked = {};
+  renderCompanyList(searchFilteredList);
+  updateSearchSelBar();
+}
+
+function searchBulkSave() {
+  var count = Object.keys(searchChecked).length;
+  if (!count) return;
+  showToast(count + '개 기업이 저장되었습니다');
+}
+
+function searchBulkFollow() {
+  var count = Object.keys(searchChecked).length;
+  if (!count) return;
+  showToast(count + '개 기업을 팔로우합니다');
+}
+
+function searchBulkAddToList() {
+  showToast('리스트에 추가 기능 준비 중');
+}
+
+function searchBulkExportCSV() {
+  var indices = Object.keys(searchChecked).map(Number);
+  var comps = indices.map(function(i) { return searchFilteredList[i]; });
+  var header = '기업명,업종,지역,매출액,영업이익,직원수';
+  var rows = comps.map(function(c) { return [c.name,c.industry||'',c.region||'',c.revenue||'',c.profit||'',c.emp||''].join(','); });
+  var csv = header + '\n' + rows.join('\n');
+  var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'export_search.csv'; a.click();
+  showToast('CSV 파일이 다운로드되었습니다');
 }
 
 function getFilteredCompanies() {
@@ -1384,6 +1443,17 @@ function bulkFollowMobile(){
   var count=Object.keys(editChecked).filter(function(k){return editChecked[k]}).length;
   if(!count)return;
   showToast(count+'개 기업을 팔로우합니다');
+}
+function listBulkExportCSV(){
+  var indices=[];Object.keys(editChecked).forEach(function(k){if(editChecked[k])indices.push(Number(k))});
+  if(!indices.length)return;
+  var comps=indices.map(function(i){var name=lists[currentListIdx].companies[i];return COMPANIES.find(function(co){return co.name===name})||{name:name}});
+  var header='기업명,업종,지역,매출액,영업이익,직원수';
+  var rows=comps.map(function(c){return [c.name,c.industry||'',c.region||'',c.revenue||'',c.profit||'',c.emp||''].join(',')});
+  var csv=header+'\n'+rows.join('\n');
+  var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='export_'+lists[currentListIdx].name+'.csv';a.click();
+  showToast('CSV 파일이 다운로드되었습니다');
 }
 
 // ═══ INIT ═══
