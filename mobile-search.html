@@ -127,6 +127,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .list-item-info{flex:1;min-width:0}
 .list-item-name{font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .list-item-sub{font-size:12px;color:var(--text-sub)}
+.search-item-bizno,.list-item-bizno{font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums;margin-top:1px}
 .list-item-right{text-align:right;flex-shrink:0}
 .list-item-val{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
 .list-item-change{font-size:12px;font-weight:500}
@@ -597,7 +598,7 @@ function renderCompanyList(data) {
     html += '<div class="search-item" data-idx="'+i+'" onclick="goDetail(\''+c.name+'\')">';
     html += '<div class="search-cb'+(searchChecked[i]?' checked':'')+'" onclick="event.stopPropagation();toggleSearchCheck('+i+')"></div>';
     html += '<div class="search-item-logo" style="background:'+c.color+'">'+c.name.charAt(0)+'</div>';
-    html += '<div class="search-item-info"><div class="search-item-name">'+c.name+'</div><div class="search-item-sub">'+c.industry+' · '+c.region+' · '+c.ceo+'</div></div>';
+    html += '<div class="search-item-info"><div class="search-item-name">'+c.name+'</div><div class="search-item-sub">'+c.industry+' · '+c.region+' · '+c.ceo+'</div><div class="search-item-bizno">'+c.bizNo+'</div></div>';
     html += '<div class="search-item-metrics">';
     html += '<div class="search-item-metric"><span class="search-item-metric-label">매출</span><span class="search-item-metric-val">'+fmtRev(c.revenue)+'</span><span class="search-item-metric-change '+rClass+'">'+rSign+c.revenueG+'%</span></div>';
     html += '<div class="search-item-metric"><span class="search-item-metric-label">영업이익</span><span class="search-item-metric-val"'+(c.profit<0?' style="color:var(--red-600)"':'')+'>'+fmtRev(c.profit)+'</span>'+(c.profitG!==-999?'<span class="search-item-metric-change '+pClass+'">'+pSign+c.profitG+'%</span>':'')+'</div>';
@@ -1080,7 +1081,7 @@ function renderListItems() {
     html+='<div class="list-item" data-idx="'+i+'" onclick="goDetail(\''+c.name+'\')">';
     html+='<div class="list-cb'+(editChecked[i]?' checked':'')+'" onclick="event.stopPropagation();toggleEditCheck('+i+')"></div>';
     html+='<div class="list-item-logo" style="background:'+c.color+'">'+c.name.charAt(0)+'</div>';
-    html+='<div class="list-item-info"><div class="list-item-name">'+c.name+'</div><div class="list-item-sub">'+c.industry+'</div></div>';
+    html+='<div class="list-item-info"><div class="list-item-name">'+c.name+'</div><div class="list-item-sub">'+c.industry+' · '+c.region+' · '+c.ceo+'</div><div class="list-item-bizno">'+c.bizNo+'</div></div>';
     html+='<div class="list-item-metrics">';
     html+='<div class="list-item-metric"><span class="list-item-metric-label">매출</span><span class="list-item-metric-val">'+fmtRev(c.revenue)+'</span><span class="list-item-metric-change '+rClass+'">'+rSign+c.revenueG+'%</span></div>';
     html+='<div class="list-item-metric"><span class="list-item-metric-label">영업이익</span><span class="list-item-metric-val"'+(c.profit<0?' style="color:var(--red-600)"':'')+'>'+fmtRev(c.profit)+'</span>'+(c.profitG!==-999?'<span class="list-item-metric-change '+pClass+'">'+pSign+c.profitG+'%</span>':'')+'</div>';
