@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CookieDeal Design System — Color Palette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Fragment+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+
+    --bg: #faf7f5;
+    --bg-warm: #f5f0eb;
+    --surface: #ffffff;
+    --surface-elevated: #ffffff;
+    --border: rgba(0, 0, 0, 0.07);
+    --border-bright: rgba(0, 0, 0, 0.13);
+    --text: #1a1612;
+    --text-dim: #8c7e72;
+    --text-mid: #5c5047;
+    --accent: #0549CC;
+    --accent-dim: rgba(5, 73, 204, 0.06);
+    --tag-bg: rgba(0, 0, 0, 0.04);
+    --tag-border: rgba(0, 0, 0, 0.08);
+    --file-d: #0549CC;
+    --file-d-bg: rgba(5, 73, 204, 0.08);
+    --file-m: #059669;
+    --file-m-bg: rgba(5, 150, 105, 0.08);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111010;
+      --bg-warm: #1a1716;
+      --surface: #1e1b19;
+      --surface-elevated: #262220;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-bright: rgba(255, 255, 255, 0.12);
+      --text: #ede8e3;
+      --text-dim: #8c7e72;
+      --text-mid: #a99b8f;
+      --accent: #6395FF;
+      --accent-dim: rgba(99, 149, 255, 0.1);
+      --tag-bg: rgba(255, 255, 255, 0.06);
+      --tag-border: rgba(255, 255, 255, 0.1);
+      --file-d: #6395FF;
+      --file-d-bg: rgba(99, 149, 255, 0.12);
+      --file-m: #34D399;
+      --file-m-bg: rgba(52, 211, 153, 0.12);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, var(--accent-dim) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(5, 150, 105, 0.04) 0%, transparent 40%);
+    color: var(--text);
+    font-family: var(--font-body);
+    padding: 48px 40px;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .animate {
+    animation: fadeUp 0.4s ease-out both;
+    animation-delay: calc(var(--i, 0) * 0.04s);
+  }
+
+  .animate-scale {
+    animation: fadeScale 0.35s ease-out both;
+    animation-delay: calc(var(--i, 0) * 0.04s);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  .container {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border-bright);
+  }
+
+  .header__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .header__sub {
+    color: var(--text-dim);
+    font-size: 16px;
+    font-weight: 400;
+    max-width: 680px;
+    line-height: 1.5;
+  }
+
+  /* ===== LEGEND ===== */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .legend__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .legend__badge {
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== KPI ROW ===== */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 48px;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  .kpi-card__value {
+    font-size: 36px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+  }
+
+  .kpi-card__label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  /* ===== CATEGORY SECTION ===== */
+  .category {
+    margin-bottom: 48px;
+  }
+
+  .category__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .category__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .category__title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .category__count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--bg-warm);
+    padding: 2px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== COLOR GRID ===== */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .swatch {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: default;
+  }
+
+  .swatch:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .swatch__color {
+    height: 72px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .swatch__color--hero {
+    height: 100px;
+  }
+
+  .swatch__color--light::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(45deg, #ddd 25%, transparent 25%),
+      linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ddd 75%),
+      linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-size: 10px 10px;
+    background-position: 0 0, 0 5px, 5px -5px, -5px 0;
+    opacity: 0.15;
+    z-index: 0;
+  }
+
+  .swatch__info {
+    padding: 10px 12px;
+  }
+
+  .swatch__hex {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+
+  .swatch__hex:hover {
+    color: var(--accent);
+  }
+
+  .swatch__hex.copied {
+    color: #059669;
+  }
+
+  .swatch__name {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+  }
+
+  .swatch__purpose {
+    font-size: 11px;
+    color: var(--text-mid);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* ===== USAGE SECTION ===== */
+  .swatch__usage {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .swatch__usage-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+  }
+
+  .usage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .usage-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    color: var(--text-mid);
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    min-width: 0;
+  }
+
+  .usage-tag--token {
+    background: var(--accent-dim);
+    border-color: rgba(5, 73, 204, 0.15);
+    color: var(--accent);
+  }
+
+  .usage-files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 4px;
+  }
+
+  .file-badge {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.3px;
+  }
+
+  .file-badge--d {
+    background: var(--file-d-bg);
+    color: var(--file-d);
+  }
+
+  .file-badge--m {
+    background: var(--file-m-bg);
+    color: var(--file-m);
+  }
+
+  .file-badge--all {
+    background: var(--tag-bg);
+    color: var(--text-dim);
+  }
+
+  /* Hero swatch (primary brand) */
+  .swatch--hero {
+    grid-column: span 2;
+  }
+
+  .swatch--hero .swatch__color {
+    height: 120px;
+  }
+
+  .swatch--hero .swatch__hex {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .swatch--hero .swatch__purpose {
+    font-size: 12px;
+  }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: var(--text);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    body { padding: 24px 16px; }
+    h1 { font-size: 28px; }
+    .color-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+    .swatch--hero { grid-column: span 1; }
+    .swatch--hero .swatch__color { height: 80px; }
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header animate" style="--i:0">
+    <div class="header__eyebrow">Design System</div>
+    <h1>CookieDeal Color Palette</h1>
+    <p class="header__sub">71 colors extracted from the design-overhaul prototypes, organized by semantic role. Click any hex code to copy. Each swatch shows where the color is actually used in the prototype files.</p>
+    <div class="legend">
+      <div class="legend__item"><span class="legend__badge file-badge--d">D</span> Desktop files (list, detail, search)</div>
+      <div class="legend__item"><span class="legend__badge file-badge--m">M</span> Mobile files (detail, search)</div>
+      <div class="legend__item"><span class="legend__badge" style="background:var(--accent-dim);color:var(--accent)">token</span> CSS variable (not hardcoded)</div>
+    </div>
+  </div>
+
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi-card animate-scale" style="--i:1">
+      <div class="kpi-card__value" style="color:#0549CC">71</div>
+      <div class="kpi-card__label">Total Colors</div>
+    </div>
+    <div class="kpi-card animate-scale" style="--i:2">
+      <div class="kpi-card__value" style="color:#0549CC">6</div>
+      <div class="kpi-card__label">Categories</div>
+    </div>
+    <div class="kpi-card animate-scale" style="--i:3">
+      <div class="kpi-card__value" style="color:#0549CC">20</div>
+      <div class="kpi-card__label">Brand Blues</div>
+    </div>
+    <div class="kpi-card animate-scale" style="--i:4">
+      <div class="kpi-card__value" style="color:#6B7689">15</div>
+      <div class="kpi-card__label">Neutrals</div>
+    </div>
+    <div class="kpi-card animate-scale" style="--i:5">
+      <div class="kpi-card__value" style="color:#059669">9</div>
+      <div class="kpi-card__label">Success</div>
+    </div>
+    <div class="kpi-card animate-scale" style="--i:6">
+      <div class="kpi-card__value" style="color:#D97706">11</div>
+      <div class="kpi-card__label">Warning</div>
+    </div>
+    <div class="kpi-card animate-scale" style="--i:7">
+      <div class="kpi-card__value" style="color:#DC2626">7</div>
+      <div class="kpi-card__label">Danger</div>
+    </div>
+    <div class="kpi-card animate-scale" style="--i:8">
+      <div class="kpi-card__value" style="color:#8B5CF6">9</div>
+      <div class="kpi-card__label">Accent</div>
+    </div>
+  </div>
+
+  <!-- ==================== PRIMARY / BRAND ==================== -->
+  <section class="category animate" style="--i:9">
+    <div class="category__header">
+      <div class="category__dot" style="background:#0549CC"></div>
+      <h2 class="category__title">Primary / Brand</h2>
+      <span class="category__count">20 colors</span>
+    </div>
+    <div class="color-grid">
+      <!-- Hero: #0549CC -->
+      <div class="swatch swatch--hero animate-scale" style="--i:10">
+        <div class="swatch__color swatch__color--hero" style="background:#0549CC"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#0549CC">#0549CC</div>
+          <div class="swatch__name">blue-500 &middot; --brand</div>
+          <div class="swatch__purpose">Primary brand — buttons, links, active tabs, selected states</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.cb-send-btn bg</span>
+              <span class="usage-tag">.cb-name-prompt button bg</span>
+              <span class="usage-tag">.cb-sb-tab.active border + color</span>
+              <span class="usage-tag">.cb-sb-link-icon color</span>
+              <span class="usage-tag">.cb-thread-input :focus border</span>
+              <span class="usage-tag">.ind-avg-label bg</span>
+              <span class="usage-tag">.sidebar-dot inline</span>
+              <span class="usage-tag">.color-dot inline</span>
+            </div>
+            <div class="usage-files">
+              <span class="file-badge file-badge--all">All 5 files</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #EBF1FB -->
+      <div class="swatch animate-scale" style="--i:10">
+        <div class="swatch__color swatch__color--light" style="background:#EBF1FB"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#EBF1FB">#EBF1FB</div>
+          <div class="swatch__name">blue-50 &middot; --brand-bg</div>
+          <div class="swatch__purpose">Brand light bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--brand-bg)</span>
+              <span class="usage-tag">Card hover tint, active row bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #C8D9F5 -->
+      <div class="swatch animate-scale" style="--i:11">
+        <div class="swatch__color swatch__color--light" style="background:#C8D9F5"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#C8D9F5">#C8D9F5</div>
+          <div class="swatch__name">blue-100 &middot; --brand-badge</div>
+          <div class="swatch__purpose">Chart fills, light accents</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--brand-badge)</span>
+              <span class="usage-tag">Badge backgrounds, chart area fills</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #9BBBEE -->
+      <div class="swatch animate-scale" style="--i:12">
+        <div class="swatch__color" style="background:#9BBBEE"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#9BBBEE">#9BBBEE</div>
+          <div class="swatch__name">blue-200</div>
+          <div class="swatch__purpose">Chart fills, gradient border</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--blue-200)</span>
+              <span class="usage-tag">Chart area gradient fills</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #6D9DE7 -->
+      <div class="swatch animate-scale" style="--i:13">
+        <div class="swatch__color" style="background:#6D9DE7"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#6D9DE7">#6D9DE7</div>
+          <div class="swatch__name">blue-300</div>
+          <div class="swatch__purpose">Chart fills, category tags</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--blue-300)</span>
+              <span class="usage-tag">Chart series, category tag bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #3A7ADF -->
+      <div class="swatch animate-scale" style="--i:14">
+        <div class="swatch__color" style="background:#3A7ADF"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#3A7ADF">#3A7ADF</div>
+          <div class="swatch__name">blue-400 &middot; --brand-light</div>
+          <div class="swatch__purpose">Secondary brand accent</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--brand-light)</span>
+              <span class="usage-tag">Lighter interactive accent</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #043EB0 -->
+      <div class="swatch animate-scale" style="--i:15">
+        <div class="swatch__color" style="background:#043EB0"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#043EB0">#043EB0</div>
+          <div class="swatch__name">blue-600 &middot; --brand-hover</div>
+          <div class="swatch__purpose">Brand hover state</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--brand-hover)</span>
+              <span class="usage-tag">Button :hover, link :hover</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #033293 -->
+      <div class="swatch animate-scale" style="--i:16">
+        <div class="swatch__color" style="background:#033293"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#033293">#033293</div>
+          <div class="swatch__name">blue-700</div>
+          <div class="swatch__purpose">Chart axis text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--blue-700)</span>
+              <span class="usage-tag">Chart axis labels, deep brand text</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #022777 -->
+      <div class="swatch animate-scale" style="--i:17">
+        <div class="swatch__color" style="background:#022777"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#022777">#022777</div>
+          <div class="swatch__name">blue-800</div>
+          <div class="swatch__purpose">Darkest brand</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--blue-800)</span>
+              <span class="usage-tag">Deep brand emphasis text</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #0340A8 -->
+      <div class="swatch animate-scale" style="--i:18">
+        <div class="swatch__color" style="background:#0340A8"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#0340A8">#0340A8</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Dark button bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.cb-name-prompt button:hover bg</span>
+              <span class="usage-tag">.cb-send-btn:hover bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">3 desktop files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #0440A8 -->
+      <div class="swatch animate-scale" style="--i:19">
+        <div class="swatch__color" style="background:#0440A8"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#0440A8">#0440A8</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Dark mode variant</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Near-duplicate of #0340A8</span>
+              <span class="usage-tag">Likely dark-mode button bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">desktop files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #011C5A -->
+      <div class="swatch animate-scale" style="--i:20">
+        <div class="swatch__color" style="background:#011C5A"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#011C5A">#011C5A</div>
+          <div class="swatch__name">blue-900</div>
+          <div class="swatch__purpose">Darkest navy</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--blue-900)</span>
+              <span class="usage-tag">Dark background accents</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">3 desktop files only</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #6395FF -->
+      <div class="swatch animate-scale" style="--i:21">
+        <div class="swatch__color" style="background:#6395FF"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#6395FF">#6395FF</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Sparkline color</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Radar section span inline bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">prototype-detail</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #93B4FF -->
+      <div class="swatch animate-scale" style="--i:22">
+        <div class="swatch__color" style="background:#93B4FF"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#93B4FF">#93B4FF</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Light blue dark-mode text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.radar-pill inline color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">prototype-detail</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #1D4ED8 -->
+      <div class="swatch animate-scale" style="--i:23">
+        <div class="swatch__color" style="background:#1D4ED8"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#1D4ED8">#1D4ED8</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Tag text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Status/category tag text color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #2563EB -->
+      <div class="swatch animate-scale" style="--i:24">
+        <div class="swatch__color" style="background:#2563EB"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#2563EB">#2563EB</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Tag text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Status/category tag text color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #0284C7 -->
+      <div class="swatch animate-scale" style="--i:25">
+        <div class="swatch__color" style="background:#0284C7"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#0284C7">#0284C7</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Sky tag</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Sky-colored category tag text</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #EFF6FF -->
+      <div class="swatch animate-scale" style="--i:26">
+        <div class="swatch__color swatch__color--light" style="background:#EFF6FF"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#EFF6FF">#EFF6FF</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Info card bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.cb-sb-item.active bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">3 desktop files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #BFDBFE -->
+      <div class="swatch animate-scale" style="--i:27">
+        <div class="swatch__color swatch__color--light" style="background:#BFDBFE"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#BFDBFE">#BFDBFE</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Info card border</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.cb-sb-item.active border</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">3 desktop files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #EEF2FF -->
+      <div class="swatch animate-scale" style="--i:28">
+        <div class="swatch__color swatch__color--light" style="background:#EEF2FF"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#EEF2FF">#EEF2FF</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Indigo tint</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Indigo-tinted tag background</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== NEUTRALS / SLATE ==================== -->
+  <section class="category animate" style="--i:15">
+    <div class="category__header">
+      <div class="category__dot" style="background:#6B7689"></div>
+      <h2 class="category__title">Neutrals / Slate</h2>
+      <span class="category__count">15 colors</span>
+    </div>
+    <div class="color-grid">
+      <!-- #F7F8FA -->
+      <div class="swatch animate-scale" style="--i:16">
+        <div class="swatch__color swatch__color--light" style="background:#F7F8FA"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#F7F8FA">#F7F8FA</div>
+          <div class="swatch__name">slate-50 &middot; --bg</div>
+          <div class="swatch__purpose">Subtle page bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--bg)</span>
+              <span class="usage-tag">Desktop page background</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #EFF1F5 -->
+      <div class="swatch animate-scale" style="--i:17">
+        <div class="swatch__color swatch__color--light" style="background:#EFF1F5"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#EFF1F5">#EFF1F5</div>
+          <div class="swatch__name">slate-100 &middot; --border-light</div>
+          <div class="swatch__purpose">Light borders, dividers</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--border-light)</span>
+              <span class="usage-tag">Section dividers, card inner borders</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #E0E4EB -->
+      <div class="swatch animate-scale" style="--i:18">
+        <div class="swatch__color swatch__color--light" style="background:#E0E4EB"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#E0E4EB">#E0E4EB</div>
+          <div class="swatch__name">slate-200 &middot; --border</div>
+          <div class="swatch__purpose">Primary border, chart grid</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--border)</span>
+              <span class="usage-tag">Card borders, table lines, chart grid</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #CCD2DB -->
+      <div class="swatch animate-scale" style="--i:19">
+        <div class="swatch__color" style="background:#CCD2DB"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#CCD2DB">#CCD2DB</div>
+          <div class="swatch__name">slate-300</div>
+          <div class="swatch__purpose">Secondary borders</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--slate-300)</span>
+              <span class="usage-tag">Input borders, secondary dividers</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #9AA3B4 -->
+      <div class="swatch animate-scale" style="--i:20">
+        <div class="swatch__color" style="background:#9AA3B4"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#9AA3B4">#9AA3B4</div>
+          <div class="swatch__name">slate-400 &middot; --text-muted</div>
+          <div class="swatch__purpose">Muted text, chart labels</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--text-muted)</span>
+              <span class="usage-tag">Placeholder text, chart tick labels, timestamps</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #6B7689 -->
+      <div class="swatch animate-scale" style="--i:21">
+        <div class="swatch__color" style="background:#6B7689"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#6B7689">#6B7689</div>
+          <div class="swatch__name">slate-500 &middot; --text-sub</div>
+          <div class="swatch__purpose">Sub-text, icon colors</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--text-sub)</span>
+              <span class="usage-tag">Secondary text, nav icons, descriptions</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #4A5567 -->
+      <div class="swatch animate-scale" style="--i:22">
+        <div class="swatch__color" style="background:#4A5567"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#4A5567">#4A5567</div>
+          <div class="swatch__name">slate-600</div>
+          <div class="swatch__purpose">Darker sub-text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--slate-600)</span>
+              <span class="usage-tag">Emphasized secondary labels</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #374151 -->
+      <div class="swatch animate-scale" style="--i:23">
+        <div class="swatch__color" style="background:#374151"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#374151">#374151</div>
+          <div class="swatch__name">slate-700</div>
+          <div class="swatch__purpose">Body text, chart ticks</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--slate-700)</span>
+              <span class="usage-tag">Body paragraph text, chart axis ticks</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #1F2937 -->
+      <div class="swatch animate-scale" style="--i:24">
+        <div class="swatch__color" style="background:#1F2937"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#1F2937">#1F2937</div>
+          <div class="swatch__name">slate-800</div>
+          <div class="swatch__purpose">Dark cards/headers</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--slate-800)</span>
+              <span class="usage-tag">Dark card surfaces, header bars</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #111827 -->
+      <div class="swatch animate-scale" style="--i:25">
+        <div class="swatch__color" style="background:#111827"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#111827">#111827</div>
+          <div class="swatch__name">slate-900 &middot; --text</div>
+          <div class="swatch__purpose">Primary text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--text)</span>
+              <span class="usage-tag">Headings, primary labels, nav items</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #4B5563 -->
+      <div class="swatch animate-scale" style="--i:26">
+        <div class="swatch__color" style="background:#4B5563"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#4B5563">#4B5563</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Alt gray-600</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.cb-sb-text color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">3 desktop files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #64748B -->
+      <div class="swatch animate-scale" style="--i:27">
+        <div class="swatch__color" style="background:#64748B"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#64748B">#64748B</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Alt slate-500</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Alternate muted text color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #F1F3F5 -->
+      <div class="swatch animate-scale" style="--i:28">
+        <div class="swatch__color swatch__color--light" style="background:#F1F3F5"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#F1F3F5">#F1F3F5</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Alt light bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.cb-sb-count bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">3 desktop files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #0A0F1E -->
+      <div class="swatch animate-scale" style="--i:29">
+        <div class="swatch__color" style="background:#0A0F1E"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#0A0F1E">#0A0F1E</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Near-black bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.radar-card bg</span>
+              <span class="usage-tag">.comp-radar-card bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">detail files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #283548 -->
+      <div class="swatch animate-scale" style="--i:30">
+        <div class="swatch__color" style="background:#283548"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#283548">#283548</div>
+          <div class="swatch__name">— (hardcoded)</div>
+          <div class="swatch__purpose">Dark surface</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.bloomberg-node:hover bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">prototype-detail</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SUCCESS / GREEN ==================== -->
+  <section class="category animate" style="--i:20">
+    <div class="category__header">
+      <div class="category__dot" style="background:#059669"></div>
+      <h2 class="category__title">Success / Green</h2>
+      <span class="category__count">9 colors</span>
+    </div>
+    <div class="color-grid">
+      <!-- #ECFDF5 -->
+      <div class="swatch animate-scale" style="--i:21">
+        <div class="swatch__color swatch__color--light" style="background:#ECFDF5"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#ECFDF5">#ECFDF5</div>
+          <div class="swatch__name">emerald-50</div>
+          <div class="swatch__purpose">Success bg tint</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--emerald-50)</span>
+              <span class="usage-tag">Positive metric card bg, success alert bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #6EE7B7 -->
+      <div class="swatch animate-scale" style="--i:22">
+        <div class="swatch__color swatch__color--light" style="background:#6EE7B7"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#6EE7B7">#6EE7B7</div>
+          <div class="swatch__name">emerald-300 (hardcoded)</div>
+          <div class="swatch__purpose">Success border</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.cb-action-btn.resolve:hover border</span>
+              <span class="usage-tag">.radar-pill inline color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">desktop files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #34D399 -->
+      <div class="swatch animate-scale" style="--i:23">
+        <div class="swatch__color" style="background:#34D399"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#34D399">#34D399</div>
+          <div class="swatch__name">emerald-400</div>
+          <div class="swatch__purpose">Chart green, sparkline</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--emerald-400)</span>
+              <span class="usage-tag">Chart series green, sparkline stroke</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">4 files (not mobile-search)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #10B981 -->
+      <div class="swatch animate-scale" style="--i:24">
+        <div class="swatch__color" style="background:#10B981"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#10B981">#10B981</div>
+          <div class="swatch__name">emerald-500</div>
+          <div class="swatch__purpose">Positive trend text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--emerald-500)</span>
+              <span class="usage-tag">Positive % change, up-arrow indicators</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #059669 -->
+      <div class="swatch animate-scale" style="--i:25">
+        <div class="swatch__color" style="background:#059669"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#059669">#059669</div>
+          <div class="swatch__name">emerald-600</div>
+          <div class="swatch__purpose">Success text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--emerald-600)</span>
+              <span class="usage-tag">Success status text, confirmed state</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #F0FDFA -->
+      <div class="swatch animate-scale" style="--i:26">
+        <div class="swatch__color swatch__color--light" style="background:#F0FDFA"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#F0FDFA">#F0FDFA</div>
+          <div class="swatch__name">teal-50</div>
+          <div class="swatch__purpose">Teal bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--teal-50)</span>
+              <span class="usage-tag">Teal tag background tint</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #2DD4BF -->
+      <div class="swatch animate-scale" style="--i:27">
+        <div class="swatch__color" style="background:#2DD4BF"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#2DD4BF">#2DD4BF</div>
+          <div class="swatch__name">teal-400</div>
+          <div class="swatch__purpose">Teal badge</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--teal-400)</span>
+              <span class="usage-tag">Badge accent, teal indicators</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">3 desktop files only</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #14B8A6 -->
+      <div class="swatch animate-scale" style="--i:28">
+        <div class="swatch__color" style="background:#14B8A6"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#14B8A6">#14B8A6</div>
+          <div class="swatch__name">teal-500</div>
+          <div class="swatch__purpose">Teal accent</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--teal-500)</span>
+              <span class="usage-tag">Teal category tag accent</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #0D9488 -->
+      <div class="swatch animate-scale" style="--i:29">
+        <div class="swatch__color" style="background:#0D9488"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#0D9488">#0D9488</div>
+          <div class="swatch__name">teal-600</div>
+          <div class="swatch__purpose">Teal tag text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--teal-600)</span>
+              <span class="usage-tag">Teal tag text on teal-50 bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== WARNING / AMBER-ORANGE ==================== -->
+  <section class="category animate" style="--i:25">
+    <div class="category__header">
+      <div class="category__dot" style="background:#D97706"></div>
+      <h2 class="category__title">Warning / Amber-Orange</h2>
+      <span class="category__count">11 colors</span>
+    </div>
+    <div class="color-grid">
+      <!-- #FFFBEB -->
+      <div class="swatch animate-scale" style="--i:26">
+        <div class="swatch__color swatch__color--light" style="background:#FFFBEB"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#FFFBEB">#FFFBEB</div>
+          <div class="swatch__name">amber-50</div>
+          <div class="swatch__purpose">Warning bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--amber-50)</span>
+              <span class="usage-tag">Warning alert bg, amber tag bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #FCD34D -->
+      <div class="swatch animate-scale" style="--i:27">
+        <div class="swatch__color swatch__color--light" style="background:#FCD34D"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#FCD34D">#FCD34D</div>
+          <div class="swatch__name">amber-300 (hardcoded)</div>
+          <div class="swatch__purpose">Light yellow</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.radar-pill inline color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">prototype-detail</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #FBBF24 -->
+      <div class="swatch animate-scale" style="--i:28">
+        <div class="swatch__color" style="background:#FBBF24"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#FBBF24">#FBBF24</div>
+          <div class="swatch__name">amber-400</div>
+          <div class="swatch__purpose">Chart yellow</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--amber-400)</span>
+              <span class="usage-tag">Chart series yellow</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">4 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #F59E0B -->
+      <div class="swatch animate-scale" style="--i:29">
+        <div class="swatch__color" style="background:#F59E0B"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#F59E0B">#F59E0B</div>
+          <div class="swatch__name">amber-500</div>
+          <div class="swatch__purpose">Warning indicator</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--amber-500)</span>
+              <span class="usage-tag">.cb-toggle-btn.active bg</span>
+              <span class="usage-tag">Warning status indicators</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #D97706 -->
+      <div class="swatch animate-scale" style="--i:30">
+        <div class="swatch__color" style="background:#D97706"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#D97706">#D97706</div>
+          <div class="swatch__name">amber-600</div>
+          <div class="swatch__purpose">Warning text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--amber-600)</span>
+              <span class="usage-tag">Warning label text on amber-50 bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">4 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #B45309 -->
+      <div class="swatch animate-scale" style="--i:31">
+        <div class="swatch__color" style="background:#B45309"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#B45309">#B45309</div>
+          <div class="swatch__name">amber-700</div>
+          <div class="swatch__purpose">Dark amber text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--amber-700)</span>
+              <span class="usage-tag">Deep warning text emphasis</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #FFF7ED -->
+      <div class="swatch animate-scale" style="--i:32">
+        <div class="swatch__color swatch__color--light" style="background:#FFF7ED"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#FFF7ED">#FFF7ED</div>
+          <div class="swatch__name">orange-50</div>
+          <div class="swatch__purpose">Orange bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--orange-50)</span>
+              <span class="usage-tag">Orange tag background tint</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">detail files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #FB923C -->
+      <div class="swatch animate-scale" style="--i:33">
+        <div class="swatch__color" style="background:#FB923C"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#FB923C">#FB923C</div>
+          <div class="swatch__name">orange-400</div>
+          <div class="swatch__purpose">Chart accent</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--orange-400)</span>
+              <span class="usage-tag">Chart accent series</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #F97316 -->
+      <div class="swatch animate-scale" style="--i:34">
+        <div class="swatch__color" style="background:#F97316"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#F97316">#F97316</div>
+          <div class="swatch__name">orange-500</div>
+          <div class="swatch__purpose">Orange accent</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--orange-500)</span>
+              <span class="usage-tag">.nav-avatar bg</span>
+              <span class="usage-tag">Nav avatar circle background</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">detail files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #EA580C -->
+      <div class="swatch animate-scale" style="--i:35">
+        <div class="swatch__color" style="background:#EA580C"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#EA580C">#EA580C</div>
+          <div class="swatch__name">orange-600</div>
+          <div class="swatch__purpose">Orange text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--orange-600)</span>
+              <span class="usage-tag">Orange tag text on orange-50 bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">detail files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #C2410C -->
+      <div class="swatch animate-scale" style="--i:36">
+        <div class="swatch__color" style="background:#C2410C"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#C2410C">#C2410C</div>
+          <div class="swatch__name">orange-700</div>
+          <div class="swatch__purpose">Deep orange</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--orange-700)</span>
+              <span class="usage-tag">Deep orange text emphasis</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DANGER / RED ==================== -->
+  <section class="category animate" style="--i:30">
+    <div class="category__header">
+      <div class="category__dot" style="background:#DC2626"></div>
+      <h2 class="category__title">Danger / Red</h2>
+      <span class="category__count">7 colors</span>
+    </div>
+    <div class="color-grid">
+      <!-- #FEF2F2 -->
+      <div class="swatch animate-scale" style="--i:31">
+        <div class="swatch__color swatch__color--light" style="background:#FEF2F2"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#FEF2F2">#FEF2F2</div>
+          <div class="swatch__name">red-50</div>
+          <div class="swatch__purpose">Danger bg tint</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--red-50)</span>
+              <span class="usage-tag">Error alert bg, negative metric card bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #FECACA -->
+      <div class="swatch animate-scale" style="--i:32">
+        <div class="swatch__color swatch__color--light" style="background:#FECACA"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#FECACA">#FECACA</div>
+          <div class="swatch__name">red-200 (hardcoded)</div>
+          <div class="swatch__purpose">Error border</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.ie-btn.exc-active border</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">mobile-search</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #FCA5A5 -->
+      <div class="swatch animate-scale" style="--i:33">
+        <div class="swatch__color" style="background:#FCA5A5"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#FCA5A5">#FCA5A5</div>
+          <div class="swatch__name">red-300 (hardcoded)</div>
+          <div class="swatch__purpose">Danger border</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.cb-action-btn.delete:hover border</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">3 desktop files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #F87171 -->
+      <div class="swatch animate-scale" style="--i:34">
+        <div class="swatch__color" style="background:#F87171"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#F87171">#F87171</div>
+          <div class="swatch__name">red-400</div>
+          <div class="swatch__purpose">Chart red</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--red-400)</span>
+              <span class="usage-tag">Chart series red, negative sparkline</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">4 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #EF4444 -->
+      <div class="swatch animate-scale" style="--i:35">
+        <div class="swatch__color" style="background:#EF4444"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#EF4444">#EF4444</div>
+          <div class="swatch__name">red-500</div>
+          <div class="swatch__purpose">Error accent</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--red-500)</span>
+              <span class="usage-tag">Error state accent, delete hover</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #DC2626 -->
+      <div class="swatch animate-scale" style="--i:36">
+        <div class="swatch__color" style="background:#DC2626"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#DC2626">#DC2626</div>
+          <div class="swatch__name">red-600</div>
+          <div class="swatch__purpose">Negative trend, danger</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--red-600)</span>
+              <span class="usage-tag">Negative % change, down-arrow indicators</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #E11D48 -->
+      <div class="swatch animate-scale" style="--i:37">
+        <div class="swatch__color" style="background:#E11D48"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#E11D48">#E11D48</div>
+          <div class="swatch__name">rose-600 (hardcoded)</div>
+          <div class="swatch__purpose">Rose tag</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Rose-colored category tag text</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ACCENT / PURPLE ==================== -->
+  <section class="category animate" style="--i:35">
+    <div class="category__header">
+      <div class="category__dot" style="background:#8B5CF6"></div>
+      <h2 class="category__title">Accent / Purple</h2>
+      <span class="category__count">9 colors</span>
+    </div>
+    <div class="color-grid">
+      <!-- #F5F3FF -->
+      <div class="swatch animate-scale" style="--i:36">
+        <div class="swatch__color swatch__color--light" style="background:#F5F3FF"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#F5F3FF">#F5F3FF</div>
+          <div class="swatch__name">purple-50</div>
+          <div class="swatch__purpose">Purple bg</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--purple-50)</span>
+              <span class="usage-tag">Purple tag background tint</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #A78BFA -->
+      <div class="swatch animate-scale" style="--i:37">
+        <div class="swatch__color" style="background:#A78BFA"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#A78BFA">#A78BFA</div>
+          <div class="swatch__name">purple-400</div>
+          <div class="swatch__purpose">Chart purple</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--purple-400)</span>
+              <span class="usage-tag">Chart series purple</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">4 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #8B5CF6 -->
+      <div class="swatch animate-scale" style="--i:38">
+        <div class="swatch__color" style="background:#8B5CF6"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#8B5CF6">#8B5CF6</div>
+          <div class="swatch__name">purple-500</div>
+          <div class="swatch__purpose">Purple accent</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag usage-tag--token">var(--purple-500)</span>
+              <span class="usage-tag">Purple category tag accent</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--all">All 5 files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #6366F1 -->
+      <div class="swatch animate-scale" style="--i:39">
+        <div class="swatch__color" style="background:#6366F1"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#6366F1">#6366F1</div>
+          <div class="swatch__name">indigo-500 (hardcoded)</div>
+          <div class="swatch__purpose">Gradient, tags</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">.radar-header-icon bg</span>
+              <span class="usage-tag">.comp-radar-header-icon bg</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span> <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">detail files</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #4F46E5 -->
+      <div class="swatch animate-scale" style="--i:40">
+        <div class="swatch__color" style="background:#4F46E5"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#4F46E5">#4F46E5</div>
+          <div class="swatch__name">indigo-600 (hardcoded)</div>
+          <div class="swatch__purpose">Tag text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Indigo category tag text color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #7C3AED -->
+      <div class="swatch animate-scale" style="--i:41">
+        <div class="swatch__color" style="background:#7C3AED"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#7C3AED">#7C3AED</div>
+          <div class="swatch__name">violet-600 (hardcoded)</div>
+          <div class="swatch__purpose">Tag text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Violet category tag text color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #9333EA -->
+      <div class="swatch animate-scale" style="--i:42">
+        <div class="swatch__color" style="background:#9333EA"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#9333EA">#9333EA</div>
+          <div class="swatch__name">purple-600 (hardcoded)</div>
+          <div class="swatch__purpose">Tag text</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Purple category tag text color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #F472B6 -->
+      <div class="swatch animate-scale" style="--i:43">
+        <div class="swatch__color" style="background:#F472B6"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#F472B6">#F472B6</div>
+          <div class="swatch__name">pink-400 (hardcoded)</div>
+          <div class="swatch__purpose">Chart pink</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Chart series pink, pink tag accent</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #0891B2 -->
+      <div class="swatch animate-scale" style="--i:44">
+        <div class="swatch__color" style="background:#0891B2"></div>
+        <div class="swatch__info">
+          <div class="swatch__hex" data-hex="#0891B2">#0891B2</div>
+          <div class="swatch__name">cyan-600 (hardcoded)</div>
+          <div class="swatch__purpose">Cyan tag</div>
+          <div class="swatch__usage">
+            <div class="swatch__usage-label">Used in</div>
+            <div class="usage-tags">
+              <span class="usage-tag">Cyan category tag text color</span>
+            </div>
+            <div class="usage-files"><span class="file-badge file-badge--d">D</span> <span class="file-badge file-badge--m">M</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer animate" style="--i:45">
+    CookieDeal Design System &middot; 71 colors &middot; Extracted from berry-nam/design-overhaul prototypes &middot; 2026-03-20
+    <br>Files analyzed: prototype-list.html, prototype-detail.html, prototype-search.html, mobile-detail.html, mobile-search.html
+  </div>
+
+</div>
+
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+  document.querySelectorAll('.swatch__hex').forEach(el => {
+    el.addEventListener('click', async () => {
+      const hex = el.dataset.hex;
+      try {
+        await navigator.clipboard.writeText(hex);
+        el.classList.add('copied');
+        el.textContent = 'Copied!';
+        const toast = document.getElementById('toast');
+        toast.textContent = hex + ' copied';
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          el.classList.remove('copied');
+          el.textContent = hex;
+        }, 1200);
+      } catch {
+        el.textContent = hex;
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
