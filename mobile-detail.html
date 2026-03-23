@@ -187,6 +187,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .m-sim-metric-val{font-weight:600}
 .m-sim-chips{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
 .m-sim-chip{padding:2px 6px;border-radius:8px;font-size:10px;font-weight:500;background:var(--blue-50);color:var(--brand)}
+.m-similar-context{font-size:12px;color:var(--text-sub);background:var(--slate-50);padding:6px 12px;border-radius:var(--radius);margin-bottom:10px}
+.m-similar-context strong{color:var(--text);font-weight:600}
+.m-sim-card{position:relative}
+.m-sim-best-badge{position:absolute;top:-1px;right:10px;background:var(--brand);color:#fff;font-size:9px;font-weight:600;padding:2px 8px 3px;border-radius:0 0 6px 6px}
+.m-sim-card.best-match,.m-card.best-match{border-color:var(--brand);border-width:2px}
 
 /* ── Community post ── */
 .m-post{padding:14px 0;border-bottom:1px solid var(--border-light)}
@@ -386,7 +391,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 
   <!-- 3. 매출 구성 워터폴 -->
   <div class="m-section">
-    <div class="m-section-title"><span class="icon">🏗️</span> 매출 구성</div>
+    <div class="m-section-title"><span class="icon">🏗️</span> 매출 구성 워터폴</div>
     <div class="m-toggle-row">
       <button class="m-toggle-btn active" onclick="drawMWaterfall('2024',this)">2024</button>
       <button class="m-toggle-btn" onclick="drawMWaterfall('2023',this)">2023</button>
@@ -395,20 +400,50 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
     <div class="m-chart-wrap"><canvas id="mWaterfallChart" height="220"></canvas></div>
   </div>
 
-  <!-- 4. 주요 구매처·판매처 (list view instead of network graph) -->
+  <!-- 4. 주요 구매처·판매처 네트워크 -->
   <div class="m-section">
-    <div class="m-section-title"><span class="icon">🔗</span> 주요 구매처 · 판매처</div>
-    <div class="m-supply-group">
-      <div class="m-supply-header"><span style="color:var(--emerald-600)">●</span> 구매처</div>
-      <div class="m-supply-item"><div class="m-supply-name">도쿄정밀</div><div class="m-supply-pct">32%</div></div>
-      <div class="m-supply-item"><div class="m-supply-name">한국소재</div><div class="m-supply-pct">25%</div></div>
-      <div class="m-supply-item"><div class="m-supply-name">글로벌테크</div><div class="m-supply-pct">20%</div></div>
+    <div class="m-section-title"><span class="icon">🔗</span> 주요 구매처 · 판매처 네트워크</div>
+    <div class="m-toggle-row">
+      <button class="m-toggle-btn active" onclick="toggleMobileSupplyView('graph',this)">그래프</button>
+      <button class="m-toggle-btn" onclick="toggleMobileSupplyView('table',this)">테이블</button>
     </div>
-    <div class="m-supply-group">
-      <div class="m-supply-header"><span style="color:var(--brand)">●</span> 판매처</div>
-      <div class="m-supply-item"><div class="m-supply-name">삼성전자</div><div class="m-supply-pct">35%</div></div>
-      <div class="m-supply-item"><div class="m-supply-name">SK하이닉스</div><div class="m-supply-pct">28%</div></div>
-      <div class="m-supply-item"><div class="m-supply-name">마이크론</div><div class="m-supply-pct">18%</div></div>
+    <!-- Graph view (default) -->
+    <div id="mSupplyGraph">
+      <div class="m-supply-group">
+        <div class="m-supply-header"><span style="color:var(--emerald-600)">●</span> 구매처</div>
+        <div class="m-supply-item"><div class="m-supply-name">도쿄정밀</div><div class="m-supply-pct">32%</div></div>
+        <div class="m-supply-item"><div class="m-supply-name">한국소재</div><div class="m-supply-pct">25%</div></div>
+        <div class="m-supply-item"><div class="m-supply-name">글로벌테크</div><div class="m-supply-pct">20%</div></div>
+      </div>
+      <div class="m-supply-group">
+        <div class="m-supply-header"><span style="color:var(--brand)">●</span> 판매처</div>
+        <div class="m-supply-item"><div class="m-supply-name">삼성전자</div><div class="m-supply-pct">35%</div></div>
+        <div class="m-supply-item"><div class="m-supply-name">SK하이닉스</div><div class="m-supply-pct">28%</div></div>
+        <div class="m-supply-item"><div class="m-supply-name">마이크론</div><div class="m-supply-pct">18%</div></div>
+      </div>
+    </div>
+    <!-- Table view -->
+    <div id="mSupplyTable" style="display:none">
+      <div class="m-table-scroll" style="margin-bottom:10px">
+        <table class="m-table">
+          <thead><tr><th>구매처</th><th>비중</th></tr></thead>
+          <tbody>
+            <tr><td>도쿄정밀</td><td>32%</td></tr>
+            <tr><td>한국소재</td><td>25%</td></tr>
+            <tr><td>글로벌테크</td><td>20%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="m-table-scroll">
+        <table class="m-table">
+          <thead><tr><th>판매처</th><th>비중</th></tr></thead>
+          <tbody>
+            <tr><td>삼성전자</td><td>35%</td></tr>
+            <tr><td>SK하이닉스</td><td>28%</td></tr>
+            <tr><td>마이크론</td><td>18%</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -487,6 +522,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
   <!-- 11. 유사 기업 추천 -->
   <div class="m-section">
     <div class="m-section-title"><span class="icon">🏭</span> 유사 기업 추천 <span class="m-section-link" onclick="switchTab('similar')">전체보기 →</span></div>
+    <div class="m-similar-context"><strong>에이치비테크놀로지</strong> 기준 · 매출 342억 · 영업이익 28억 · 반도체 장비 · 비상장</div>
     <div class="m-sim-scroll" id="mSimPreview"></div>
   </div>
 </div>
@@ -725,6 +761,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 <div class="m-panel" id="panel-similar">
   <div class="m-section">
     <div class="m-section-title"><span class="icon">🏭</span> 유사 기업 추천</div>
+    <div class="m-similar-context"><strong>에이치비테크놀로지</strong> 기준 · 매출 342억 · 영업이익 28억 · 반도체 장비 · 비상장</div>
     <div id="mSimilarList"></div>
   </div>
 
@@ -955,7 +992,7 @@ var EXECS = [
 ];
 
 var SIMILAR = [
-  {name:'세미텍인스트루먼트',desc:'반도체 테스트 솔루션',revenue:287,profit:22,profitG:6.8,color:'#059669',chips:['동일 업종','유사 규모']},
+  {name:'세미텍인스트루먼트',desc:'반도체 테스트 솔루션',revenue:287,profit:22,profitG:6.8,color:'#059669',chips:['동일 업종','유사 규모'],best:true},
   {name:'프로브앤텍',desc:'프로브카드·소켓 제조',revenue:198,profit:15,profitG:8.7,color:'#D97706',chips:['동일 업종','같은 지역']},
   {name:'케이반도체장비',desc:'반도체 후공정 장비',revenue:456,profit:38,profitG:3.2,color:'#0549CC',chips:['동일 업종','유사 매출']},
   {name:'테크윈시스템즈',desc:'전자부품 검사장비',revenue:312,profit:26,profitG:5.4,color:'#8B5CF6',chips:['유사 규모','같은 지역']},
@@ -1044,6 +1081,13 @@ function drawMRevenueChart() {
 }
 
 // ══ CHART: Waterfall ══
+function toggleMobileSupplyView(mode, btn) {
+  document.getElementById('mSupplyGraph').style.display = mode === 'graph' ? '' : 'none';
+  document.getElementById('mSupplyTable').style.display = mode === 'table' ? '' : 'none';
+  btn.parentElement.querySelectorAll('.m-toggle-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
 function drawMWaterfall(year, btn) {
   year = year || '2024';
   if (btn) {
@@ -1402,7 +1446,8 @@ function renderNews(containerId, count) {
 function renderSimPreview() {
   var el = document.getElementById('mSimPreview');
   el.innerHTML = SIMILAR.slice(0, 5).map(function(s) {
-    return '<div class="m-sim-card">' +
+    return '<div class="m-sim-card' + (s.best ? ' best-match' : '') + '">' +
+      (s.best ? '<div class="m-sim-best-badge">Top 추천</div>' : '') +
       '<div class="m-sim-logo" style="background:' + s.color + '">' + s.name.substring(0, 2) + '</div>' +
       '<div class="m-sim-name">' + s.name + '</div>' +
       '<div class="m-sim-desc">' + s.desc + '</div>' +
@@ -1415,7 +1460,9 @@ function renderSimPreview() {
 function renderSimilarFull() {
   var el = document.getElementById('mSimilarList');
   el.innerHTML = SIMILAR.map(function(s) {
-    return '<div class="m-card" style="margin-bottom:8px"><div class="m-card-row">' +
+    return '<div class="m-card' + (s.best ? ' best-match' : '') + '" style="margin-bottom:8px;position:relative">' +
+      (s.best ? '<div class="m-sim-best-badge">Top 추천</div>' : '') +
+      '<div class="m-card-row">' +
       '<div class="m-card-avatar" style="background:' + s.color + ';border-radius:var(--radius-sm)">' + s.name.substring(0, 2) + '</div>' +
       '<div class="m-card-info"><div class="m-card-name">' + s.name + '</div><div class="m-card-sub">' + s.desc + '</div></div>' +
       '<div class="m-card-right"><div style="font-size:13px;font-weight:600">' + s.revenue + '억</div><div style="font-size:11px" class="text-up">+' + s.profitG + '%</div></div>' +

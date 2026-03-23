@@ -1,0 +1,11 @@
+# Flutter
+.dart_tool/
+.fvm/
+build/
+*.iml
+
+# IDE
+.idea/
+
+# macOS
+.DS_Store
